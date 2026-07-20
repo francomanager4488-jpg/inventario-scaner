@@ -152,14 +152,9 @@ document.getElementById("resultado").innerHTML=
 }
 function iniciarCamara(){
 
-  alert("Entró a iniciarCamara");
-  alert("VERSION NUEVA");
-
   document.getElementById("reader").innerHTML="Preparando cámara...";
 
   const html5QrCode = new Html5Qrcode("reader");
-
-  alert("Antes de start");
 
   html5QrCode.start(
   {
