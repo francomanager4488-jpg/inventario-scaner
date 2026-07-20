@@ -153,58 +153,48 @@ document.getElementById("resultado").innerHTML=
 function iniciarCamara(){
 
   alert("Entró a iniciarCamara");
-  alert(typeof Html5Qrcode);
 
   document.getElementById("reader").innerHTML="";
 
   const html5QrCode = new Html5Qrcode("reader");
 
-  navigator.mediaDevices.getUserMedia({
-    video:{
-      facingMode:"environment"
+  html5QrCode.start(
+    {
+      facingMode:{
+        ideal:"environment"
+      }
+    },
+    {
+      fps:10,
+      qrbox:{
+        width:280,
+        height:120
+      },
+      formatsToSupport:[
+        Html5QrcodeSupportedFormats.CODE_128,
+        Html5QrcodeSupportedFormats.EAN_13,
+        Html5QrcodeSupportedFormats.EAN_8,
+        Html5QrcodeSupportedFormats.CODE_39,
+        Html5QrcodeSupportedFormats.UPC_A,
+        Html5QrcodeSupportedFormats.UPC_E
+      ]
+    },
+
+    (codigo)=>{
+
+      document.getElementById("codigo").value=codigo;
+
+      html5QrCode.stop();
+
+      alert("Código leído: " + codigo);
+
+    },
+
+    (error)=>{
+
     }
-  })
-  .then(stream => {
 
-    alert("Cámara autorizada");
-
-    stream.getTracks().forEach(track => track.stop());
-
-    // AQUÍ recién iniciamos html5-qrcode
-
-    html5QrCode.start(
-      {
-        facingMode:{
-          ideal:"environment"
-        }
-      },
-      {
-        fps:10,
-        qrbox:{width:280,height:120},
-        formatsToSupport:[
-          Html5QrcodeSupportedFormats.CODE_128,
-          Html5QrcodeSupportedFormats.EAN_13,
-          Html5QrcodeSupportedFormats.EAN_8,
-          Html5QrcodeSupportedFormats.CODE_39,
-          Html5QrcodeSupportedFormats.UPC_A,
-          Html5QrcodeSupportedFormats.UPC_E
-        ]
-      },
-
-      (codigo)=>{
-        document.getElementById("codigo").value=codigo;
-        html5QrCode.stop();
-        buscar();
-      },
-
-      (error)=>{}
-
-    );
-
-  })
-  .catch(error=>{
-    alert("Permiso rechazado: " + error.name);
-  });
+  );
 
 }
 </script>
