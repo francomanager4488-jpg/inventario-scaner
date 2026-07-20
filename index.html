@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <base target="_top">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <script src="https://unpkg.com/html5-qrcode"></script>
+
+  <style>
+
+    body{
+      font-family:Arial;
+      background:#f3f3f3;
+      margin:0;
+      padding:20px;
+    }
+
+    .card{
+      max-width:500px;
+      margin:auto;
+      background:white;
+      border-radius:12px;
+      padding:20px;
+      box-shadow:0 2px 12px rgba(0,0,0,.2);
+    }
+
+    h2{
+      text-align:center;
+      margin-top:0;
+    }
+
+    input{
+
+      width:100%;
+      padding:15px;
+      font-size:22px;
+      box-sizing:border-box;
+      margin-top:10px;
+
+    }
+
+    button{
+
+      width:100%;
+      padding:15px;
+      margin-top:12px;
+      font-size:20px;
+      border:none;
+      border-radius:8px;
+      cursor:pointer;
+
+    }
+
+    #buscar{
+      background:#1976d2;
+      color:white;
+    }
+
+    #camara{
+      background:#43a047;
+      color:white;
+    }
+
+    #resultado{
+
+      margin-top:20px;
+      font-size:20px;
+      line-height:1.7;
+
+    }
+
+    #reader{
+
+      margin-top:20px;
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+<h2>📦 INVENTARIO</h2>
+
+<input
+id="codigo"
+placeholder="Código de barras">
+
+<button
+id="camara"
+onclick="iniciarCamara()">
+📷 Escanear
+</button>
+
+<button
+id="buscar"
+onclick="buscar()">
+Buscar
+</button>
+
+<div id="reader"></div>
+
+<div id="resultado"></div>
+
+</div>
+
+<script>
+
+function buscar(){
+
+const codigo=document.getElementById("codigo").value;
+
+google.script.run
+
+.withSuccessHandler(mostrar)
+
+.buscarProducto(codigo);
+
+}
+
+function mostrar(p){
+
+if(!p){
+
+document.getElementById("resultado").innerHTML=
+"<h3>Producto no encontrado</h3>";
+
+return;
+
+}
+
+document.getElementById("resultado").innerHTML=
+
+"<h2>"+p.descripcion+"</h2>"+
+
+"<b>Categoría:</b> "+p.categoria+"<br>"+
+
+"<b>Marca:</b> "+p.marca+"<br>"+
+
+"<b>Color:</b> "+p.color+"<br>"+
+
+"<b>Talle:</b> "+p.talle+"<br>"+
+
+"<b>Precio:</b> $"+p.precio+"<br>"+
+
+"<b>Stock:</b> "+p.stock;
+}
+function iniciarCamara(){
+
+  alert("Entró a iniciarCamara");
+  alert(typeof Html5Qrcode);
+
+  document.getElementById("reader").innerHTML="";
+
+  const html5QrCode = new Html5Qrcode("reader");
+
+  navigator.mediaDevices.getUserMedia({
+    video:{
+      facingMode:"environment"
+    }
+  })
+  .then(stream => {
+
+    alert("Cámara autorizada");
+
+    stream.getTracks().forEach(track => track.stop());
+
+    // AQUÍ recién iniciamos html5-qrcode
+
+    html5QrCode.start(
+      {
+        facingMode:{
+          ideal:"environment"
+        }
+      },
+      {
+        fps:10,
+        qrbox:{width:280,height:120},
+        formatsToSupport:[
+          Html5QrcodeSupportedFormats.CODE_128,
+          Html5QrcodeSupportedFormats.EAN_13,
+          Html5QrcodeSupportedFormats.EAN_8,
+          Html5QrcodeSupportedFormats.CODE_39,
+          Html5QrcodeSupportedFormats.UPC_A,
+          Html5QrcodeSupportedFormats.UPC_E
+        ]
+      },
+
+      (codigo)=>{
+        document.getElementById("codigo").value=codigo;
+        html5QrCode.stop();
+        buscar();
+      },
+
+      (error)=>{}
+
+    );
+
+  })
+  .catch(error=>{
+    alert("Permiso rechazado: " + error.name);
+  });
+
+}
+</script>
+
+</body>
+
+</html>
