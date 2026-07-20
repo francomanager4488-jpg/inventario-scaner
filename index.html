@@ -153,11 +153,13 @@ document.getElementById("resultado").innerHTML=
 function iniciarCamara(){
 
   alert("Entró a iniciarCamara");
-  alert("version nueva");
+  alert("VERSION NUEVA");
 
-  document.getElementById("reader").innerHTML="";
+  document.getElementById("reader").innerHTML="Preparando cámara...";
 
   const html5QrCode = new Html5Qrcode("reader");
+
+  alert("Antes de start");
 
   html5QrCode.start(
     {
@@ -195,7 +197,14 @@ function iniciarCamara(){
 
     }
 
-  );
+  )
+  .then(()=>{
+      alert("Cámara iniciada correctamente");
+  })
+  .catch(err=>{
+      alert("ERROR START: " + err);
+      console.log(err);
+  });
 
 }
 </script>
