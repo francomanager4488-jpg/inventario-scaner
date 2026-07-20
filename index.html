@@ -115,11 +115,21 @@ function buscar(){
 
 const codigo=document.getElementById("codigo").value;
 
-google.script.run
+fetch("https://script.google.com/macros/s/AKfycbwsBLmhm8xSx3vsfYEurnFM9m7D4S8WVLrGRBKRmnsx6uHLRAhEHMvzTUXlCW_kFnpC/exec?codigo=" + encodeURIComponent(codigo))
 
-.withSuccessHandler(mostrar)
+.then(res => res.json())
 
-.buscarProducto(codigo);
+.then(producto => {
+
+  mostrar(producto);
+
+})
+
+.catch(error => {
+
+  alert("Error buscando producto: " + error);
+
+});
 
 }
 
@@ -178,22 +188,20 @@ function iniciarCamara(){
 
     (codigo)=>{
 
-      document.getElementById("codigo").value=codigo;
+  document.getElementById("codigo").value=codigo;
 
-      html5QrCode.stop();
+  html5QrCode.stop();
 
-      alert("Código leído: " + codigo);
+  buscar();
 
-    },
+},
 
     (error)=>{
 
     }
 
   )
-  .then(()=>{
-      alert("Cámara iniciada correctamente");
-  })
+ 
   .catch(err=>{
       alert("ERROR START: " + err);
       console.log(err);
