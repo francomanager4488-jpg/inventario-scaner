@@ -2,82 +2,73 @@
 <html>
 
 <head>
-  <base target="_top">
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <script src="https://unpkg.com/html5-qrcode"></script>
+<script src="https://unpkg.com/html5-qrcode"></script>
 
-  <style>
+<style>
 
-    body{
-      font-family:Arial;
-      background:#f3f3f3;
-      margin:0;
-      padding:20px;
-    }
+body{
+font-family:Arial;
+background:#f3f3f3;
+margin:0;
+padding:20px;
+}
 
-    .card{
-      max-width:500px;
-      margin:auto;
-      background:white;
-      border-radius:12px;
-      padding:20px;
-      box-shadow:0 2px 12px rgba(0,0,0,.2);
-    }
+.card{
+max-width:500px;
+margin:auto;
+background:white;
+border-radius:12px;
+padding:20px;
+box-shadow:0 2px 12px rgba(0,0,0,.2);
+}
 
-    h2{
-      text-align:center;
-      margin-top:0;
-    }
+h2{
+text-align:center;
+margin-top:0;
+}
 
-    input{
+input{
+width:100%;
+padding:15px;
+font-size:22px;
+box-sizing:border-box;
+margin-top:10px;
+}
 
-      width:100%;
-      padding:15px;
-      font-size:22px;
-      box-sizing:border-box;
-      margin-top:10px;
+button{
+width:100%;
+padding:15px;
+margin-top:12px;
+font-size:20px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+}
 
-    }
+#buscar{
+background:#1976d2;
+color:white;
+}
 
-    button{
+#camara{
+background:#43a047;
+color:white;
+}
 
-      width:100%;
-      padding:15px;
-      margin-top:12px;
-      font-size:20px;
-      border:none;
-      border-radius:8px;
-      cursor:pointer;
+#resultado{
+margin-top:20px;
+font-size:20px;
+line-height:1.7;
+}
 
-    }
+#reader{
+margin-top:20px;
+}
 
-    #buscar{
-      background:#1976d2;
-      color:white;
-    }
-
-    #camara{
-      background:#43a047;
-      color:white;
-    }
-
-    #resultado{
-
-      margin-top:20px;
-      font-size:20px;
-      line-height:1.7;
-
-    }
-
-    #reader{
-
-      margin-top:20px;
-
-    }
-
-  </style>
+</style>
 
 </head>
 
@@ -111,23 +102,30 @@ Buscar
 
 <script>
 
+const URL_SCRIPT =
+"https://script.google.com/macros/s/AKfycbwsBLmhm8xSx3vsfYEurnFM9m7D4S8WVLrGRBKRmnsx6uHLRAhEHMvzTUXlCW_kFnpC/exec";
+
 function buscar(){
 
 const codigo=document.getElementById("codigo").value;
 
-fetch("https://script.google.com/macros/s/AKfycbwsBLmhm8xSx3vsfYEurnFM9m7D4S8WVLrGRBKRmnsx6uHLRAhEHMvzTUXlCW_kFnpC/exec?codigo=" + encodeURIComponent(codigo))
+fetch(
+URL_SCRIPT +
+"?accion=buscar&codigo=" +
+encodeURIComponent(codigo)
+)
 
-.then(res => res.json())
+.then(res=>res.json())
 
-.then(producto => {
+.then(producto=>{
 
-  mostrar(producto);
+mostrar(producto);
 
 })
 
-.catch(error => {
+.catch(error=>{
 
-  alert("Error buscando producto: " + error);
+alert("Error buscando producto: " + error);
 
 });
 
@@ -146,70 +144,81 @@ return;
 
 document.getElementById("resultado").innerHTML=
 
-"<h2>"+p.descripcion+"</h2>"+
+"<h2>"+(p.descripcion || p.tipo || "")+"</h2>"+
 
-"<b>Categoría:</b> "+p.categoria+"<br>"+
+"<b>Categoría:</b> "+(p.categoria || "")+"<br>"+
 
-"<b>Marca:</b> "+p.marca+"<br>"+
+"<b>Marca:</b> "+(p.marca || "")+"<br>"+
 
-"<b>Color:</b> "+p.color+"<br>"+
+"<b>Color:</b> "+(p.color || "")+"<br>"+
 
-"<b>Talle:</b> "+p.talle+"<br>"+
+"<b>Talle:</b> "+(p.talle || "")+"<br>"+
 
-"<b>Precio:</b> $"+p.precio+"<br>"+
+"<b>Precio:</b> $"+(p.precio || "")+"<br>"+
 
-"<b>Stock:</b> "+p.stock;
+"<b>Stock:</b> "+(p.stock || "");
+
 }
+
 function iniciarCamara(){
 
-  document.getElementById("reader").innerHTML="Preparando cámara...";
+document.getElementById("reader").innerHTML="Preparando cámara...";
 
-  const html5QrCode = new Html5Qrcode("reader");
+const html5QrCode = new Html5Qrcode("reader");
 
-  html5QrCode.start(
-  {
-    facingMode: "environment"
-  },
-  {
-    fps:10,
-    qrbox:{
-      width:280,
-      height:120
-    },
-    formatsToSupport:[
-      Html5QrcodeSupportedFormats.CODE_128,
-      Html5QrcodeSupportedFormats.EAN_13,
-      Html5QrcodeSupportedFormats.EAN_8,
-      Html5QrcodeSupportedFormats.CODE_39,
-      Html5QrcodeSupportedFormats.UPC_A,
-      Html5QrcodeSupportedFormats.UPC_E
-    ]
-  },
+html5QrCode.start(
 
-    (codigo)=>{
+{
+facingMode:"environment"
+},
 
-  document.getElementById("codigo").value=codigo;
+{
 
-  html5QrCode.stop();
+fps:10,
 
-  buscar();
+qrbox:{
+width:280,
+height:120
+},
+
+formatsToSupport:[
+
+Html5QrcodeSupportedFormats.CODE_128,
+Html5QrcodeSupportedFormats.EAN_13,
+Html5QrcodeSupportedFormats.EAN_8,
+Html5QrcodeSupportedFormats.CODE_39,
+Html5QrcodeSupportedFormats.UPC_A,
+Html5QrcodeSupportedFormats.UPC_E
+
+]
 
 },
 
-    (error)=>{
+(codigo)=>{
 
-    }
+document.getElementById("codigo").value=codigo;
 
-  )
- 
-  .catch(err=>{
-      alert("ERROR START: " + err);
-      console.log(err);
-  });
+html5QrCode.stop();
+
+buscar();
+
+},
+
+(error)=>{}
+
+)
+
+.catch(err=>{
+
+alert("ERROR START: " + err);
+
+console.log(err);
+
+});
 
 }
+
 </script>
 
 </body>
-
 </html>
