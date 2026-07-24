@@ -3,69 +3,106 @@
 
 <head>
 
+<meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Inventario</title>
 
 <script src="https://unpkg.com/html5-qrcode"></script>
 
 <style>
 
 body{
-font-family:Arial;
-background:#f3f3f3;
-margin:0;
-padding:20px;
+    font-family:Arial;
+    background:#f3f3f3;
+    margin:0;
+    padding:20px;
 }
 
 .card{
-max-width:500px;
-margin:auto;
-background:white;
-border-radius:12px;
-padding:20px;
-box-shadow:0 2px 12px rgba(0,0,0,.2);
+    max-width:520px;
+    margin:auto;
+    background:white;
+    border-radius:12px;
+    padding:20px;
+    box-shadow:0 2px 12px rgba(0,0,0,.2);
 }
 
 h2{
-text-align:center;
-margin-top:0;
+    text-align:center;
+    margin-top:0;
 }
 
 input{
-width:100%;
-padding:15px;
-font-size:22px;
-box-sizing:border-box;
-margin-top:10px;
+    width:100%;
+    padding:15px;
+    font-size:22px;
+    box-sizing:border-box;
+    margin-top:10px;
 }
 
 button{
-width:100%;
-padding:15px;
-margin-top:12px;
-font-size:20px;
-border:none;
-border-radius:8px;
-cursor:pointer;
-}
-
-#buscar{
-background:#1976d2;
-color:white;
+    width:100%;
+    padding:15px;
+    margin-top:12px;
+    font-size:20px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
 }
 
 #camara{
-background:#43a047;
-color:white;
+    background:#43a047;
+    color:white;
 }
 
-#resultado{
-margin-top:20px;
-font-size:20px;
-line-height:1.7;
+#buscar{
+    background:#1976d2;
+    color:white;
 }
 
 #reader{
-margin-top:20px;
+    margin-top:20px;
+}
+
+#resultado{
+    margin-top:20px;
+}
+
+.ficha{
+
+    border:1px solid #ddd;
+    border-radius:10px;
+    padding:15px;
+    background:#fafafa;
+
+}
+
+.nombre{
+
+    font-size:28px;
+    font-weight:bold;
+    color:#1976d2;
+    margin-bottom:15px;
+
+}
+
+.dato{
+
+    font-size:20px;
+    margin:8px 0;
+
+}
+
+.stock-ok{
+    color:green;
+    font-weight:bold;
+}
+
+.stock-cero{
+    color:red;
+    font-weight:bold;
 }
 
 </style>
@@ -80,7 +117,7 @@ margin-top:20px;
 
 <input
 id="codigo"
-placeholder="Código de barras">
+placeholder="Escanear o escribir código">
 
 <button
 id="camara"
@@ -107,114 +144,128 @@ const URL_SCRIPT =
 
 function buscar(){
 
-const codigo=document.getElementById("codigo").value;
+    const codigo =
+    document.getElementById("codigo").value.trim();
 
-fetch(
-URL_SCRIPT +
-"?accion=buscar&codigo=" +
-encodeURIComponent(codigo)
-)
+    if(codigo==""){
+        alert("Ingrese un código.");
+        return;
+    }
 
-.then(res=>res.json())
+    fetch(
+        URL_SCRIPT +
+        "?accion=buscar&codigo=" +
+        encodeURIComponent(codigo)
+    )
 
-.then(producto=>{
+    .then(r=>r.json())
 
-mostrar(producto);
+    .then(producto=>{
 
-})
+        mostrar(producto);
 
-.catch(error=>{
+    })
 
-alert("Error buscando producto: " + error);
+    .catch(error=>{
 
-});
+        alert("Error: "+error);
 
-}
+    });
 
-function mostrar(p){
+  function mostrar(p){
 
-if(!p){
+    if(!p){
 
-document.getElementById("resultado").innerHTML=
-"<h3>Producto no encontrado</h3>";
+        document.getElementById("resultado").innerHTML=
+        "<h3>❌ Producto no encontrado</h3>";
 
-return;
+        return;
 
-}
+    }
 
-document.getElementById("resultado").innerHTML=
+    document.getElementById("resultado").innerHTML=`
 
-"<h2>"+(p.descripcion || p.tipo || "")+"</h2>"+
+    <div class="ficha">
 
-"<b>Categoría:</b> "+(p.categoria || "")+"<br>"+
+        <div class="nombre">${p.tipo}</div>
 
-"<b>Marca:</b> "+(p.marca || "")+"<br>"+
+        <div class="dato">
+            <b>Código:</b> ${p.codigo}
+        </div>
 
-"<b>Color:</b> "+(p.color || "")+"<br>"+
+        <div class="dato">
+            <b>Categoría:</b> ${p.categoria}
+        </div>
 
-"<b>Talle:</b> "+(p.talle || "")+"<br>"+
+        <div class="dato">
+            <b>Marca:</b> ${p.marca}
+        </div>
 
-"<b>Precio:</b> $"+(p.precio || "")+"<br>"+
+        <div class="dato">
+            <b>Precio:</b> $${p.precio}
+        </div>
 
-"<b>Stock:</b> "+(p.stock || "");
+        <div class="dato">
+            <b>Estado:</b> ${p.estado}
+        </div>
+
+    </div>
+
+    `;
 
 }
 
 function iniciarCamara(){
 
-document.getElementById("reader").innerHTML="Preparando cámara...";
+    document.getElementById("reader").innerHTML="";
 
-const html5QrCode = new Html5Qrcode("reader");
+    const html5QrCode = new Html5Qrcode("reader");
 
-html5QrCode.start(
+    html5QrCode.start(
 
-{
-facingMode:"environment"
-},
+        {
+            facingMode:"environment"
+        },
 
-{
+        {
+            fps:10,
+            qrbox:{
+                width:280,
+                height:120
+            },
+            formatsToSupport:[
+                Html5QrcodeSupportedFormats.CODE_128,
+                Html5QrcodeSupportedFormats.EAN_13,
+                Html5QrcodeSupportedFormats.EAN_8,
+                Html5QrcodeSupportedFormats.CODE_39,
+                Html5QrcodeSupportedFormats.UPC_A,
+                Html5QrcodeSupportedFormats.UPC_E
+            ]
+        },
 
-fps:10,
+        function(decodedText){
 
-qrbox:{
-width:280,
-height:120
-},
+            document.getElementById("codigo").value=decodedText;
 
-formatsToSupport:[
+            html5QrCode.stop().then(function(){
 
-Html5QrcodeSupportedFormats.CODE_128,
-Html5QrcodeSupportedFormats.EAN_13,
-Html5QrcodeSupportedFormats.EAN_8,
-Html5QrcodeSupportedFormats.CODE_39,
-Html5QrcodeSupportedFormats.UPC_A,
-Html5QrcodeSupportedFormats.UPC_E
+                buscar();
 
-]
+            });
 
-},
+        },
 
-(codigo)=>{
+        function(errorMessage){
 
-document.getElementById("codigo").value=codigo;
+        }
 
-html5QrCode.stop();
+    ).catch(function(err){
 
-buscar();
+        alert("No fue posible abrir la cámara.");
 
-},
+        console.log(err);
 
-(error)=>{}
-
-)
-
-.catch(err=>{
-
-alert("ERROR START: " + err);
-
-console.log(err);
-
-});
+    });
 
 }
 
@@ -222,3 +273,5 @@ console.log(err);
 
 </body>
 </html>
+
+}
