@@ -14,7 +14,7 @@
 <style>
 
 body{
-    font-family:Arial;
+    font-family:Arial, sans-serif;
     background:#f3f3f3;
     margin:0;
     padding:20px;
@@ -43,6 +43,7 @@ input{
 }
 
 button{
+
     width:100%;
     padding:15px;
     margin-top:12px;
@@ -50,25 +51,38 @@ button{
     border:none;
     border-radius:8px;
     cursor:pointer;
+
 }
 
 #camara{
+
     background:#43a047;
     color:white;
+
 }
+
 
 #buscar{
+
     background:#1976d2;
     color:white;
+
 }
+
 
 #reader{
+
     margin-top:20px;
+
 }
 
+
 #resultado{
+
     margin-top:20px;
+
 }
+
 
 .ficha{
 
@@ -79,6 +93,7 @@ button{
 
 }
 
+
 .nombre{
 
     font-size:28px;
@@ -88,6 +103,7 @@ button{
 
 }
 
+
 .dato{
 
     font-size:20px;
@@ -95,62 +111,87 @@ button{
 
 }
 
+
 .stock-ok{
+
     color:green;
     font-weight:bold;
+
 }
 
+
 .stock-cero{
+
     color:red;
     font-weight:bold;
+
 }
 
 </style>
 
 </head>
 
+
 <body>
+
 
 <div class="card">
 
+
 <h2>📦 INVENTARIO</h2>
+
 
 <input
 id="codigo"
 placeholder="Escanear o escribir código">
 
+
 <button
 id="camara"
 onclick="iniciarCamara()">
+
 📷 Escanear
+
 </button>
+
 
 <button
 id="buscar"
 onclick="buscar()">
+
 Buscar
+
 </button>
+
 
 <div id="reader"></div>
 
+
 <div id="resultado"></div>
+
 
 </div>
 
 <script>
-
+    
 const URL_SCRIPT =
 "https://script.google.com/macros/s/AKfycbwsBLmhm8xSx3vsfYEurnFM9m7D4S8WVLrGRBKRmnsx6uHLRAhEHMvzTUXlCW_kFnpC/exec";
+
 
 function buscar(){
 
     const codigo =
     document.getElementById("codigo").value.trim();
 
-    if(codigo==""){
+
+    if(codigo === ""){
+
         alert("Ingrese un código.");
+
         return;
+
     }
+
 
     fetch(
         URL_SCRIPT +
@@ -158,120 +199,260 @@ function buscar(){
         encodeURIComponent(codigo)
     )
 
-    .then(r=>r.json())
 
-    .then(producto=>{
+    .then(r => r.json())
+
+
+    .then(producto => {
 
         mostrar(producto);
 
     })
 
-    .catch(error=>{
 
-        alert("Error: "+error);
+    .catch(error => {
+
+        console.log(error);
+
+        document.getElementById("resultado").innerHTML =
+        "<h3>⚠️ Error de conexión</h3>";
 
     });
 
-  function mostrar(p){
-
-    if(!p){
-
-        document.getElementById("resultado").innerHTML=
-        "<h3>❌ Producto no encontrado</h3>";
-
-        return;
-
-    }
-
-    document.getElementById("resultado").innerHTML=`
-
-    <div class="ficha">
-
-        <div class="nombre">${p.tipo}</div>
-
-        <div class="dato">
-            <b>Código:</b> ${p.codigo}
-        </div>
-
-        <div class="dato">
-            <b>Categoría:</b> ${p.categoria}
-        </div>
-
-        <div class="dato">
-            <b>Marca:</b> ${p.marca}
-        </div>
-
-        <div class="dato">
-            <b>Precio:</b> $${p.precio}
-        </div>
-
-        <div class="dato">
-            <b>Estado:</b> ${p.estado}
-        </div>
-
-    </div>
-
-    `;
 
 }
 
+
+
+function mostrar(p){
+
+
+    if(!p){
+
+
+        document.getElementById("resultado").innerHTML =
+
+        "<div class='ficha'>" +
+        "<h3>❌ Producto no encontrado</h3>" +
+        "</div>";
+
+
+        return;
+
+
+    }
+
+
+
+    let stockClase = "";
+
+
+    if(p.stock !== undefined){
+
+
+        if(Number(p.stock) > 0){
+
+            stockClase="stock-ok";
+
+        }else{
+
+            stockClase="stock-cero";
+
+        }
+
+    }
+
+
+
+    document.getElementById("resultado").innerHTML = `
+
+
+    <div class="ficha">
+
+
+        <div class="nombre">
+
+            ${p.tipo || ""}
+
+        </div>
+
+
+
+        <div class="dato">
+
+            <b>Código:</b> ${p.codigo || ""}
+
+        </div>
+
+
+
+        <div class="dato">
+
+            <b>Categoría:</b> ${p.categoria || ""}
+
+        </div>
+
+
+
+        <div class="dato">
+
+            <b>Marca:</b> ${p.marca || ""}
+
+        </div>
+
+
+
+        <div class="dato">
+
+            <b>Precio:</b> $${p.precio || ""}
+
+        </div>
+
+
+
+        <div class="dato">
+
+            <b>Estado:</b> ${p.estado || ""}
+
+        </div>
+
+
+
+        ${
+            p.stock !== undefined ?
+
+            `<div class="dato ${stockClase}">
+            <b>Stock:</b> ${p.stock}
+            </div>`
+
+            :
+
+            ""
+
+        }
+
+
+    </div>
+
+
+    `;
+
+
+}
+
+
+
+
 function iniciarCamara(){
+
 
     document.getElementById("reader").innerHTML="";
 
-    const html5QrCode = new Html5Qrcode("reader");
+
+    const html5QrCode =
+    new Html5Qrcode("reader");
+
+
 
     html5QrCode.start(
+
 
         {
             facingMode:"environment"
         },
 
+
         {
+
+
             fps:10,
+
+
             qrbox:{
+
                 width:280,
+
                 height:120
+
             },
+
+
             formatsToSupport:[
-                Html5QrcodeSupportedFormats.CODE_128,
-                Html5QrcodeSupportedFormats.EAN_13,
-                Html5QrcodeSupportedFormats.EAN_8,
-                Html5QrcodeSupportedFormats.CODE_39,
-                Html5QrcodeSupportedFormats.UPC_A,
-                Html5QrcodeSupportedFormats.UPC_E
+
+
+                Html5QrCodeSupportedFormats.CODE_128,
+
+
+                Html5QrCodeSupportedFormats.EAN_13,
+
+
+                Html5QrCodeSupportedFormats.EAN_8,
+
+
+                Html5QrCodeSupportedFormats.CODE_39,
+
+
+                Html5QrCodeSupportedFormats.UPC_A,
+
+
+                Html5QrCodeSupportedFormats.UPC_E
+
+
             ]
+
+
         },
+
 
         function(decodedText){
 
-            document.getElementById("codigo").value=decodedText;
 
-            html5QrCode.stop().then(function(){
+            document
+            .getElementById("codigo")
+            .value = decodedText;
+
+
+
+            html5QrCode.stop()
+
+            .then(function(){
+
 
                 buscar();
 
+
             });
+
 
         },
 
+
         function(errorMessage){
+
 
         }
 
-    ).catch(function(err){
+
+    )
+
+
+    .catch(function(err){
+
 
         alert("No fue posible abrir la cámara.");
 
+
         console.log(err);
+
 
     });
 
+
 }
 
-</script>
+    </script>
 
 </body>
-</html>
 
-}
+</html>
+<script>
