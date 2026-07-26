@@ -137,6 +137,27 @@ button{
 
 <div class="card">
 
+<div id="menuPrincipal">
+
+<h2>📦 ROPITA DE CUENTO</h2>
+
+<button id="buscar" onclick="abrirBusqueda()">
+🔍 Buscar prenda
+</button>
+
+<button id="camara" onclick="abrirNuevaCompra()">
+📦 Nueva compra
+</button>
+
+<button onclick="alert('Próximamente')" style="background:#757575;color:white;">
+⚙ Configuración
+</button>
+
+</div>
+
+<div id="pantallaBusqueda" style="display:none;">
+
+
 
 <h2>📦 INVENTARIO</h2>
 
@@ -166,18 +187,56 @@ Buscar
 
 <div id="reader"></div>
 
-
 <div id="resultado"></div>
 
+<button
+style="margin-top:20px;background:#757575;color:white;"
+onclick="volverMenu()">
+
+← Volver
+
+</button>
 
 </div>
+
+</div>
+
 
 <script>
     
 const URL_SCRIPT =
 "https://script.google.com/macros/s/AKfycbwsBLmhm8xSx3vsfYEurnFM9m7D4S8WVLrGRBKRmnsx6uHLRAhEHMvzTUXlCW_kFnpC/exec";
 
+function abrirBusqueda(){
 
+    document.getElementById("menuPrincipal").style.display="none";
+
+    document.getElementById("pantallaBusqueda").style.display="block";
+
+}
+
+function volverMenu(){
+
+    document.getElementById("pantallaBusqueda").style.display="none";
+
+    document.getElementById("menuPrincipal").style.display="block";
+
+    document.getElementById("resultado").innerHTML="";
+
+    document.getElementById("codigo").value="";
+
+    document.getElementById("reader").innerHTML="";
+
+}
+
+function abrirNuevaCompra(){
+
+    alert("Módulo Nueva Compra\n\nVersión 1.0 en desarrollo.");
+
+}
+
+
+    
 function buscar(){
 
     const codigo =
