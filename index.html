@@ -418,16 +418,16 @@ function volverMenu(){
 
 }
 
-
 function crearCompra(){
 
     const fecha=
     document.getElementById("fechaCompra").value;
 
-
     const proveedor=
     document.getElementById("proveedor").value.trim();
 
+    const obs=
+    document.getElementById("obsCompra").value.trim();
 
     if(fecha==""){
 
@@ -436,7 +436,6 @@ function crearCompra(){
 
     }
 
-
     if(proveedor==""){
 
         alert("Ingrese el proveedor.");
@@ -444,19 +443,13 @@ function crearCompra(){
 
     }
 
-
     localStorage.setItem("fechaCompra",fecha);
-
     localStorage.setItem("proveedor",proveedor);
-
-    localStorage.setItem(
-        "obsCompra",
-        document.getElementById("obsCompra").value
-    );
-
+    localStorage.setItem("obsCompra",obs);
 
     document.getElementById("opcionesCompra").style.display="block";
 
+    document.getElementById("selectorCurva").style.display="none";
 
 }
 
