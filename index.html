@@ -1,496 +1,60 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="es">
 <head>
-
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>Inventario</title>
-
+<title>Ropita de Cuento - Inventario v1.0.1</title>
 <script src="https://unpkg.com/html5-qrcode"></script>
-
 <style>
-
-body{
-    font-family:Arial, sans-serif;
-    background:#f3f3f3;
-    margin:0;
-    padding:20px;
-}
-
-.card{
-    max-width:520px;
-    margin:auto;
-    background:white;
-    border-radius:12px;
-    padding:20px;
-    box-shadow:0 2px 12px rgba(0,0,0,.2);
-}
-
-h2{
-    text-align:center;
-    margin-top:0;
-}
-
-input{
-    width:100%;
-    padding:15px;
-    font-size:22px;
-    box-sizing:border-box;
-    margin-top:10px;
-}
-
-button{
-
-    width:100%;
-    padding:15px;
-    margin-top:12px;
-    font-size:20px;
-    border:none;
-    border-radius:8px;
-    cursor:pointer;
-
-}
-
-#camara{
-
-    background:#43a047;
-    color:white;
-
-}
-
-
-#buscar{
-
-    background:#1976d2;
-    color:white;
-
-}
-
-
-#reader{
-
-    margin-top:20px;
-
-}
-
-
-#resultado{
-
-    margin-top:20px;
-
-}
-
-
-.ficha{
-
-    border:1px solid #ddd;
-    border-radius:10px;
-    padding:15px;
-    background:#fafafa;
-
-}
-
-
-.nombre{
-
-    font-size:28px;
-    font-weight:bold;
-    color:#1976d2;
-    margin-bottom:15px;
-
-}
-
-
-.dato{
-
-    font-size:20px;
-    margin:8px 0;
-
-}
-
-
-.stock-ok{
-
-    color:green;
-    font-weight:bold;
-
-}
-
-
-.stock-cero{
-
-    color:red;
-    font-weight:bold;
-
-}
-
+body{font-family:Arial,sans-serif;background:#f3f3f3;margin:0;padding:20px}
+.card{max-width:520px;margin:auto;background:#fff;border-radius:12px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,.2)}
+button,input{width:100%;padding:14px;margin-top:10px;box-sizing:border-box;font-size:18px}
+button{border:none;border-radius:8px;cursor:pointer}
+.prim{background:#1976d2;color:#fff}.sec{background:#43a047;color:#fff}.gris{background:#757575;color:#fff}
+#pantallaBusqueda,#pantallaNuevaCompra{display:none}
 </style>
-
 </head>
-
-
 <body>
-
-
 <div class="card">
 
 <div id="menuPrincipal">
-
 <h2>📦 ROPITA DE CUENTO</h2>
-
-<button id="buscar" onclick="abrirBusqueda()">
-🔍 Buscar prenda
-</button>
-
-<button id="camara" onclick="abrirNuevaCompra()">
-📦 Nueva compra
-</button>
-
-<button onclick="alert('Próximamente')" style="background:#757575;color:white;">
-⚙ Configuración
-</button>
-
+<button class="prim" onclick="abrirBusqueda()">🔍 Buscar prenda</button>
+<button class="sec" onclick="abrirNuevaCompra()">📦 Nueva compra</button>
+<button class="gris" onclick="alert('Próximamente')">⚙ Configuración</button>
 </div>
 
-<div id="pantallaBusqueda" style="display:none;">
-
-
-
-<h2>📦 INVENTARIO</h2>
-
-
-<input
-id="codigo"
-placeholder="Escanear o escribir código">
-
-
-<button
-id="camara"
-onclick="iniciarCamara()">
-
-📷 Escanear
-
-</button>
-
-
-<button
-id="buscar"
-onclick="buscar()">
-
-Buscar
-
-</button>
-
-
+<div id="pantallaBusqueda">
+<h2>Buscar prenda</h2>
+<input id="codigo" placeholder="Escanear o escribir código">
+<button class="sec" onclick="iniciarCamara()">📷 Escanear</button>
+<button class="prim" onclick="buscar()">Buscar</button>
 <div id="reader"></div>
-
 <div id="resultado"></div>
+<button class="gris" onclick="volverMenu()">← Volver</button>
+</div>
 
-<button
-style="margin-top:20px;background:#757575;color:white;"
-onclick="volverMenu()">
-
-← Volver
-
-</button>
-
+<div id="pantallaNuevaCompra">
+<h2>📦 Nueva compra</h2>
+<input type="date" id="fechaCompra">
+<input id="proveedor" placeholder="Proveedor">
+<input id="obsCompra" placeholder="Observaciones">
+<button class="sec" onclick="crearCompra()">Crear compra</button>
+<button class="gris" onclick="volverMenu()">← Volver</button>
 </div>
 
 </div>
-
 
 <script>
-    
-const URL_SCRIPT =
-"https://script.google.com/macros/s/AKfycbwsBLmhm8xSx3vsfYEurnFM9m7D4S8WVLrGRBKRmnsx6uHLRAhEHMvzTUXlCW_kFnpC/exec";
-
-function abrirBusqueda(){
-
-    document.getElementById("menuPrincipal").style.display="none";
-
-    document.getElementById("pantallaBusqueda").style.display="block";
-
-}
-
-function volverMenu(){
-
-    document.getElementById("pantallaBusqueda").style.display="none";
-
-    document.getElementById("menuPrincipal").style.display="block";
-
-    document.getElementById("resultado").innerHTML="";
-
-    document.getElementById("codigo").value="";
-
-    document.getElementById("reader").innerHTML="";
-
-}
-
-function abrirNuevaCompra(){
-
-    alert("Módulo Nueva Compra\n\nVersión 1.0 en desarrollo.");
-
-}
-
-
-    
-function buscar(){
-
-    const codigo =
-    document.getElementById("codigo").value.trim();
-
-
-    if(codigo === ""){
-
-        alert("Ingrese un código.");
-
-        return;
-
-    }
-
-
-    fetch(
-        URL_SCRIPT +
-        "?accion=buscar&codigo=" +
-        encodeURIComponent(codigo)
-    )
-
-
-    .then(r => r.json())
-
-
-    .then(producto => {
-
-        mostrar(producto);
-
-    })
-
-
-    .catch(error => {
-
-        console.log(error);
-
-        document.getElementById("resultado").innerHTML =
-        "<h3>⚠️ Error de conexión</h3>";
-
-    });
-
-
-}
-
-
-
-function mostrar(p){
-
-
-    if(!p){
-
-
-        document.getElementById("resultado").innerHTML =
-
-        "<div class='ficha'>" +
-        "<h3>❌ Producto no encontrado</h3>" +
-        "</div>";
-
-
-        return;
-
-
-    }
-
-
-
-    let stockClase = "";
-
-
-    if(p.stock !== undefined){
-
-
-        if(Number(p.stock) > 0){
-
-            stockClase="stock-ok";
-
-        }else{
-
-            stockClase="stock-cero";
-
-        }
-
-    }
-
-
-
-    document.getElementById("resultado").innerHTML = `
-
-
-    <div class="ficha">
-
-
-        <div class="nombre">
-
-            ${p.tipo || ""}
-
-        </div>
-
-
-
-        <div class="dato">
-
-            <b>Código:</b> ${p.codigo || ""}
-
-        </div>
-
-
-
-        <div class="dato">
-
-            <b>Categoría:</b> ${p.categoria || ""}
-
-        </div>
-
-
-
-        <div class="dato">
-
-            <b>Marca:</b> ${p.marca || ""}
-
-        </div>
-
-
-
-        <div class="dato">
-
-            <b>Precio:</b> $${p.precio || ""}
-
-        </div>
-
-
-
-        <div class="dato">
-
-            <b>Estado:</b> ${p.estado || ""}
-
-        </div>
-
-
-
-        ${
-            p.stock !== undefined ?
-
-            `<div class="dato ${stockClase}">
-            <b>Stock:</b> ${p.stock}
-            </div>`
-
-            :
-
-            ""
-
-        }
-
-
-    </div>
-
-
-    `;
-
-
-}
-
-
-
-
-function iniciarCamara(){
-
-
-    document.getElementById("reader").innerHTML="";
-
-
-    const html5QrCode =
-    new Html5Qrcode("reader");
-
-
-
-    html5QrCode.start(
-
-
-        {
-            facingMode:"environment"
-        },
-
-
-        {
-
-
-            fps:15,
-
-
-            qrbox:{
-
-                width:200,
-
-                height:100
-
-            },
-       aspectRatio:1.777,
-       formatsToSupport:[
-    Html5QrcodeSupportedFormats.CODE_128,
-    Html5QrcodeSupportedFormats.CODE_39
-]
-
-        },
-
-
-        function(decodedText){
-
-            console.log("Código leído:",decodedText);
-            document
-            .getElementById("codigo")
-            .value = decodedText;
-
-
-
-            html5QrCode.stop()
-
-            .then(function(){
-
-
-                buscar();
-
-
-            });
-
-
-        },
-
-
-        function(errorMessage){
-
-
-        }
-
-
-    )
-
-
-    .catch(function(err){
-
-
-        alert("No fue posible abrir la cámara.");
-
-
-        console.log(err);
-
-
-    });
-
-
-}
-
-    </script>
-
+const URL_SCRIPT="https://script.google.com/macros/s/AKfycbwsBLmhm8xSx3vsfYEurnFM9m7D4S8WVLrGRBKRmnsx6uHLRAhEHMvzTUXlCW_kFnpC/exec";
+function abrirBusqueda(){menuPrincipal.style.display="none";pantallaNuevaCompra.style.display="none";pantallaBusqueda.style.display="block";}
+function abrirNuevaCompra(){menuPrincipal.style.display="none";pantallaBusqueda.style.display="none";pantallaNuevaCompra.style.display="block";}
+function volverMenu(){menuPrincipal.style.display="block";pantallaBusqueda.style.display="none";pantallaNuevaCompra.style.display="none";resultado.innerHTML="";reader.innerHTML="";codigo.value="";}
+function crearCompra(){alert("Formulario listo. En el próximo paso quedará conectado con Google Sheets.");}
+function buscar(){const c=codigo.value.trim();if(!c){alert("Ingrese un código");return;}
+fetch(URL_SCRIPT+"?accion=buscar&codigo="+encodeURIComponent(c)).then(r=>r.json()).then(p=>{resultado.innerHTML=p?`<pre>${JSON.stringify(p,null,2)}</pre>`:"Producto no encontrado";}).catch(()=>resultado.innerHTML="Error");}
+function iniciarCamara(){const qr=new Html5Qrcode("reader");reader.innerHTML="";
+qr.start({facingMode:"environment"},{fps:15,qrbox:{width:220,height:100}},t=>{codigo.value=t;qr.stop().then(buscar);},()=>{});}
+</script>
 </body>
-
 </html>
