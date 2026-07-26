@@ -506,41 +506,41 @@ function abrirGrupo(grupo){
     document.getElementById("tituloGrupo").innerHTML=
     "Grupo: "+grupo;
 
-    let html="";
+    let talles=[];
 
     if(grupo=="BEBE"){
 
-        const talles=["0","1","2","3","4","5"];
-
-        for(let i=0;i<talles.length;i++){
-
-            html+=
-            "<button class='azul' onclick=\"seleccionarTalle('"+
-            talles[i]+"')\">Talle "+
-            talles[i]+
-            "</button>";
-
-        }
+        talles=["0","1","2","3","4","5","6"];
 
     }else{
 
-        const talles=["4","6","8","10","12","14","16"];
-
-        for(let i=0;i<talles.length;i++){
-
-            html+=
-            "<button class='verde' onclick=\"seleccionarTalle('"+
-            talles[i]+"')\">Talle "+
-            talles[i]+
-            "</button>";
-
-        }
+        talles=["4","6","8","10","12","14","16"];
 
     }
+
+    let html="";
+
+    for(let i=0;i<talles.length;i++){
+
+        html+=
+
+        "<label style='display:block;padding:10px;font-size:20px;'>"+
+        "<input type='checkbox' class='chkTalle' value='"+talles[i]+"'> "+
+        "Talle "+talles[i]+
+        "</label>";
+
+    }
+
+    html+=
+
+    "<button class='verde' onclick='continuarTalles()'>"+
+    "Continuar"+
+    "</button>";
 
     document.getElementById("listaTalles").innerHTML=html;
 
 }
+            
 
 function volverCurvas(){
 
@@ -549,36 +549,103 @@ function volverCurvas(){
 
 }
 
-function seleccionarTalle(talle){
+function continuarTalles(){
 
-    talleSeleccionado=talle;
+    const checks=
+    document.querySelectorAll(".chkTalle:checked");
+
+    if(checks.length==0){
+
+        alert("Seleccione al menos un talle.");
+
+        return;
+
+    }
+
+    let talles=[];
+
+    checks.forEach(function(c){
+
+        talles.push(c.value);
+
+    });
+
+    localStorage.setItem(
+
+        "tallesSeleccionados",
+
+        JSON.stringify(talles)
+
+    );
 
     document.getElementById("pantallaTalles").style.display="none";
+
     document.getElementById("pantallaCarga").style.display="block";
 
     document.getElementById("tituloCarga").innerHTML=
-    "Curva "+grupoSeleccionado+
-    " - Talle "+talleSeleccionado;
 
-    document.getElementById("datosCurva").innerHTML=
+    "Carga de curva";
 
-    "<b>Fecha:</b> "+
-    localStorage.getItem("fechaCompra")+
+let html="";
+
+html+="<b>Proveedor:</b> "+
+localStorage.getItem("proveedor");
+
+html+="<br><br>";
+
+html+="<b>Grupo:</b> "+
+grupoSeleccionado;
+
+html+="<hr>";
+
+for(let i=0;i<talles.length;i++){
+
+    html+=
+
+    "<div style='border:1px solid #ddd;padding:12px;margin-top:10px;border-radius:8px;'>"+
+
+    "<b>Talle "+talles[i]+"</b>"+
+
     "<br><br>"+
 
-    "<b>Proveedor:</b> "+
-    localStorage.getItem("proveedor")+
-    "<br><br>"+
+    ""<button class='azul' onclick=\"abrirCargaTalle('"+talles[i]+"')\">Agregar prendas</button>"
 
-    "<b>Grupo:</b> "+
-    grupoSeleccionado+
-    "<br><br>"+
-
-    "<b>Talle:</b> "+
-    talleSeleccionado;
+    "</div>";
 
 }
 
+document.getElementById("datosCurva").innerHTML=html;
+
+}
+function abrirCargaTalle(talle){
+
+    localStorage.setItem("talleActual",talle);
+
+    let html="";
+
+    html+="<h3>Talle "+talle+"</h3>";
+
+    html+="<label>Género</label>";
+
+    html+="<select id='genero'>";
+
+    html+="<option value='NENA'>Nena</option>";
+
+    html+="<option value='NENE'>Nene</option>";
+
+    html+="</select>";
+
+    html+="<br><br>";
+
+    html+="<button class='verde' onclick='continuarGenero()'>Continuar</button>";
+
+    html+="<br>";
+
+    html+="<button class='gris' onclick='continuarTalles()'>Volver</button>";
+
+    document.getElementById("datosCurva").innerHTML=html;
+
+}
 function volverTalles(){
 
     document.getElementById("pantallaCarga").style.display="none";
