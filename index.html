@@ -226,6 +226,7 @@ onclick="alert('Próximamente')">
 
 </div>
 
+
 <!-- ================= BUSQUEDA ================= -->
 
 <div id="pantallaBusqueda">
@@ -233,15 +234,11 @@ onclick="alert('Próximamente')">
 <h2>Buscar prenda</h2>
 
 <input
-
 id="codigo"
-
 placeholder="Escanear o escribir código">
 
 <button
-
 class="verde"
-
 onclick="iniciarCamara()">
 
 📷 Escanear
@@ -249,9 +246,7 @@ onclick="iniciarCamara()">
 </button>
 
 <button
-
 class="azul"
-
 onclick="buscar()">
 
 Buscar
@@ -263,9 +258,7 @@ Buscar
 <div id="resultado"></div>
 
 <button
-
 class="gris"
-
 onclick="volverMenu()">
 
 ← Volver
@@ -273,6 +266,7 @@ onclick="volverMenu()">
 </button>
 
 </div>
+
 
 <!-- ================= NUEVA COMPRA ================= -->
 
@@ -287,9 +281,7 @@ Fecha
 </label>
 
 <input
-
 type="date"
-
 id="fechaCompra">
 
 <label>
@@ -299,9 +291,7 @@ Proveedor
 </label>
 
 <input
-
 id="proveedor"
-
 placeholder="Proveedor">
 
 <label>
@@ -311,25 +301,67 @@ Observaciones
 </label>
 
 <input
-
 id="obsCompra"
-
 placeholder="Opcional">
 
 <button
-
 class="verde"
-
 onclick="crearCompra()">
 
 Continuar
 
 </button>
 
+<div id="opcionesCompra" style="display:none;">
+
+<hr>
+
+<h3>¿Qué desea cargar?</h3>
+
 <button
+class="azul"
+onclick="mostrarCurva()">
 
+📚 Cargar curva completa
+
+</button>
+
+<button
+class="verde"
+onclick="mostrarIndividual()">
+
+👕 Cargar una sola prenda
+
+</button>
+
+</div>
+
+<div id="selectorCurva" style="display:none;">
+
+<hr>
+
+<h3>Seleccione el grupo</h3>
+
+<button
+class="azul"
+onclick="seleccionarGrupo('BEBE')">
+
+👶 Bebé
+
+</button>
+
+<button
+class="azul"
+onclick="seleccionarGrupo('NENE')">
+
+🧒 Nene
+
+</button>
+
+</div>
+
+<button
 class="gris"
-
 onclick="volverMenu()">
 
 ← Volver
@@ -338,11 +370,10 @@ onclick="volverMenu()">
 
 </div>
 
-</div>
-
 <script>
 
 const URL_SCRIPT="https://script.google.com/macros/s/AKfycbwsBLmhm8xSx3vsfYEurnFM9m7D4S8WVLrGRBKRmnsx6uHLRAhEHMvzTUXlCW_kFnpC/exec";
+
 
 function abrirBusqueda(){
 
@@ -351,6 +382,7 @@ function abrirBusqueda(){
     document.getElementById("pantallaBusqueda").style.display="block";
 
 }
+
 
 function abrirNuevaCompra(){
 
@@ -371,6 +403,7 @@ function abrirNuevaCompra(){
 
 }
 
+
 function volverMenu(){
 
     document.getElementById("menuPrincipal").style.display="block";
@@ -385,16 +418,16 @@ function volverMenu(){
 
 }
 
+
 function crearCompra(){
 
     const fecha=
     document.getElementById("fechaCompra").value;
 
+
     const proveedor=
     document.getElementById("proveedor").value.trim();
 
-    const obs=
-    document.getElementById("obsCompra").value.trim();
 
     if(fecha==""){
 
@@ -403,6 +436,7 @@ function crearCompra(){
 
     }
 
+
     if(proveedor==""){
 
         alert("Ingrese el proveedor.");
@@ -410,23 +444,29 @@ function crearCompra(){
 
     }
 
-    localStorage.setItem("fechaCompra",fecha);
-    localStorage.setItem("proveedor",proveedor);
-    localStorage.setItem("obsCompra",obs);
 
-    alert(
-        "Compra creada correctamente.\n\n"+
-        "Proveedor: "+proveedor+
-        "\nFecha: "+fecha+
-        "\n\nEn la próxima versión aparecerá la pantalla para cargar prendas."
+    localStorage.setItem("fechaCompra",fecha);
+
+    localStorage.setItem("proveedor",proveedor);
+
+    localStorage.setItem(
+        "obsCompra",
+        document.getElementById("obsCompra").value
     );
 
+
+    document.getElementById("opcionesCompra").style.display="block";
+
+
 }
+
+
 
 function buscar(){
 
     const codigo=
     document.getElementById("codigo").value.trim();
+
 
     if(codigo==""){
 
@@ -435,15 +475,19 @@ function buscar(){
 
     }
 
+
     fetch(
         URL_SCRIPT+
         "?accion=buscar&codigo="+
         encodeURIComponent(codigo)
     )
 
+
     .then(r=>r.json())
 
+
     .then(p=>mostrar(p))
+
 
     .catch(()=>{
 
@@ -457,7 +501,10 @@ function buscar(){
 
 }
 
+
+
 function mostrar(p){
+
 
     if(!p){
 
@@ -471,11 +518,15 @@ function mostrar(p){
 
     }
 
+
     let stock="";
+
 
     if(p.stock!==undefined){
 
+
         if(Number(p.stock)>0){
+
 
             stock=
 
@@ -483,7 +534,9 @@ function mostrar(p){
             "<b>Stock:</b> "+p.stock+
             "</div>";
 
+
         }else{
+
 
             stock=
 
@@ -495,105 +548,177 @@ function mostrar(p){
 
     }
 
+
+
     document.getElementById("resultado").innerHTML=
 
+
     "<div class='ficha'>"+
+
 
     "<div class='nombre'>"+
     (p.tipo||"")+
     "</div>"+
 
+
     "<div class='dato'><b>Código:</b> "+
     (p.codigo||"")+
     "</div>"+
+
 
     "<div class='dato'><b>Categoría:</b> "+
     (p.categoria||"")+
     "</div>"+
 
+
     "<div class='dato'><b>Marca:</b> "+
     (p.marca||"")+
     "</div>"+
+
 
     "<div class='dato'><b>Precio:</b> $"+
     (p.precio||"")+
     "</div>"+
 
+
     "<div class='dato'><b>Estado:</b> "+
     (p.estado||"")+
     "</div>"+
 
+
     stock+
+
 
     "</div>";
 
 }
 
+
+
 function iniciarCamara(){
 
+
     document.getElementById("reader").innerHTML="";
+
 
     const html5QrCode=
     new Html5Qrcode("reader");
 
+
+
     html5QrCode.start(
+
 
         {
             facingMode:"environment"
         },
 
+
         {
 
             fps:15,
+
 
             qrbox:{
                 width:220,
                 height:100
             },
 
+
             aspectRatio:1.777,
+
 
             formatsToSupport:[
 
-                Html5QrcodeSupportedFormats.CODE_128,
-                Html5QrcodeSupportedFormats.CODE_39
+                Html5QrCodeSupportedFormats.CODE_128,
+
+                Html5QrCodeSupportedFormats.CODE_39
 
             ]
 
         },
 
+
         function(decodedText){
+
 
             document
             .getElementById("codigo")
             .value=decodedText;
 
+
+
             html5QrCode.stop()
+
 
             .then(function(){
 
+
                 buscar();
+
 
             });
 
+
         },
+
 
         function(errorMessage){}
 
+
     )
+
 
     .catch(function(err){
 
+
         alert("No fue posible abrir la cámara.");
+
 
         console.log(err);
 
+
     });
+
 
 }
 
+
+
+
+function mostrarCurva(){
+
+    document.getElementById("selectorCurva").style.display="block";
+
+}
+
+
+
+function mostrarIndividual(){
+
+    alert("Próximamente.");
+
+}
+
+
+
+function seleccionarGrupo(grupo){
+
+    alert(
+
+        "Grupo seleccionado: "+grupo+
+        "\n\nEn el próximo paso construiremos la pantalla de talles."
+
+    );
+
+}
+
+
 </script>
+
 
 </body>
 
 </html>
+
+    
