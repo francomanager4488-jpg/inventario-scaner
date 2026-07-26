@@ -1,60 +1,599 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ropita de Cuento - Inventario v1.0.1</title>
+
+<title>Ropita de Cuento</title>
+
 <script src="https://unpkg.com/html5-qrcode"></script>
+
 <style>
-body{font-family:Arial,sans-serif;background:#f3f3f3;margin:0;padding:20px}
-.card{max-width:520px;margin:auto;background:#fff;border-radius:12px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,.2)}
-button,input{width:100%;padding:14px;margin-top:10px;box-sizing:border-box;font-size:18px}
-button{border:none;border-radius:8px;cursor:pointer}
-.prim{background:#1976d2;color:#fff}.sec{background:#43a047;color:#fff}.gris{background:#757575;color:#fff}
-#pantallaBusqueda,#pantallaNuevaCompra{display:none}
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+
+    margin:0;
+    padding:20px;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f3f3f3;
+
+}
+
+.card{
+
+    max-width:600px;
+    margin:auto;
+    background:#fff;
+    border-radius:12px;
+    box-shadow:0 2px 12px rgba(0,0,0,.2);
+    padding:20px;
+
+}
+
+h1,h2,h3{
+
+    text-align:center;
+    margin-top:0;
+
+}
+
+button{
+
+    width:100%;
+    padding:15px;
+    margin-top:12px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:20px;
+
+}
+
+input,select{
+
+    width:100%;
+    padding:14px;
+    margin-top:8px;
+    font-size:18px;
+
+}
+
+label{
+
+    display:block;
+    margin-top:15px;
+    font-weight:bold;
+
+}
+
+#reader{
+
+    margin-top:20px;
+
+}
+
+#resultado{
+
+    margin-top:20px;
+
+}
+
+.ficha{
+
+    border:1px solid #ddd;
+    border-radius:10px;
+    padding:15px;
+    background:#fafafa;
+
+}
+
+.nombre{
+
+    font-size:28px;
+    font-weight:bold;
+    color:#1565c0;
+    margin-bottom:15px;
+
+}
+
+.dato{
+
+    font-size:19px;
+    margin:8px 0;
+
+}
+
+.stock-ok{
+
+    color:green;
+    font-weight:bold;
+
+}
+
+.stock-cero{
+
+    color:red;
+    font-weight:bold;
+
+}
+
+#menuPrincipal{
+
+    display:block;
+
+}
+
+#pantallaBusqueda{
+
+    display:none;
+
+}
+
+#pantallaNuevaCompra{
+
+    display:none;
+
+}
+
+.azul{
+
+    background:#1976d2;
+    color:white;
+
+}
+
+.verde{
+
+    background:#43a047;
+    color:white;
+
+}
+
+.gris{
+
+    background:#757575;
+    color:white;
+
+}
+
+.rojo{
+
+    background:#c62828;
+    color:white;
+
+}
+
 </style>
+
 </head>
+
 <body>
+
 <div class="card">
 
+<!-- ================= MENU PRINCIPAL ================= -->
+
 <div id="menuPrincipal">
+
 <h2>📦 ROPITA DE CUENTO</h2>
-<button class="prim" onclick="abrirBusqueda()">🔍 Buscar prenda</button>
-<button class="sec" onclick="abrirNuevaCompra()">📦 Nueva compra</button>
-<button class="gris" onclick="alert('Próximamente')">⚙ Configuración</button>
+
+<button
+class="azul"
+onclick="abrirBusqueda()">
+
+🔍 Buscar prenda
+
+</button>
+
+<button
+class="verde"
+onclick="abrirNuevaCompra()">
+
+📦 Nueva compra
+
+</button>
+
+<button
+class="gris"
+onclick="alert('Próximamente')">
+
+🏷 Imprimir etiquetas
+
+</button>
+
+<button
+class="gris"
+onclick="alert('Próximamente')">
+
+📊 Inventario
+
+</button>
+
+<button
+class="gris"
+onclick="alert('Próximamente')">
+
+⚙ Configuración
+
+</button>
+
 </div>
+
+<!-- ================= BUSQUEDA ================= -->
 
 <div id="pantallaBusqueda">
+
 <h2>Buscar prenda</h2>
-<input id="codigo" placeholder="Escanear o escribir código">
-<button class="sec" onclick="iniciarCamara()">📷 Escanear</button>
-<button class="prim" onclick="buscar()">Buscar</button>
+
+<input
+
+id="codigo"
+
+placeholder="Escanear o escribir código">
+
+<button
+
+class="verde"
+
+onclick="iniciarCamara()">
+
+📷 Escanear
+
+</button>
+
+<button
+
+class="azul"
+
+onclick="buscar()">
+
+Buscar
+
+</button>
+
 <div id="reader"></div>
+
 <div id="resultado"></div>
-<button class="gris" onclick="volverMenu()">← Volver</button>
+
+<button
+
+class="gris"
+
+onclick="volverMenu()">
+
+← Volver
+
+</button>
+
 </div>
 
+<!-- ================= NUEVA COMPRA ================= -->
+
 <div id="pantallaNuevaCompra">
-<h2>📦 Nueva compra</h2>
-<input type="date" id="fechaCompra">
-<input id="proveedor" placeholder="Proveedor">
-<input id="obsCompra" placeholder="Observaciones">
-<button class="sec" onclick="crearCompra()">Crear compra</button>
-<button class="gris" onclick="volverMenu()">← Volver</button>
+
+<h2>Nueva compra</h2>
+
+<label>
+
+Fecha
+
+</label>
+
+<input
+
+type="date"
+
+id="fechaCompra">
+
+<label>
+
+Proveedor
+
+</label>
+
+<input
+
+id="proveedor"
+
+placeholder="Proveedor">
+
+<label>
+
+Observaciones
+
+</label>
+
+<input
+
+id="obsCompra"
+
+placeholder="Opcional">
+
+<button
+
+class="verde"
+
+onclick="crearCompra()">
+
+Continuar
+
+</button>
+
+<button
+
+class="gris"
+
+onclick="volverMenu()">
+
+← Volver
+
+</button>
+
 </div>
 
 </div>
 
 <script>
+
 const URL_SCRIPT="https://script.google.com/macros/s/AKfycbwsBLmhm8xSx3vsfYEurnFM9m7D4S8WVLrGRBKRmnsx6uHLRAhEHMvzTUXlCW_kFnpC/exec";
-function abrirBusqueda(){menuPrincipal.style.display="none";pantallaNuevaCompra.style.display="none";pantallaBusqueda.style.display="block";}
-function abrirNuevaCompra(){menuPrincipal.style.display="none";pantallaBusqueda.style.display="none";pantallaNuevaCompra.style.display="block";}
-function volverMenu(){menuPrincipal.style.display="block";pantallaBusqueda.style.display="none";pantallaNuevaCompra.style.display="none";resultado.innerHTML="";reader.innerHTML="";codigo.value="";}
-function crearCompra(){alert("Formulario listo. En el próximo paso quedará conectado con Google Sheets.");}
-function buscar(){const c=codigo.value.trim();if(!c){alert("Ingrese un código");return;}
-fetch(URL_SCRIPT+"?accion=buscar&codigo="+encodeURIComponent(c)).then(r=>r.json()).then(p=>{resultado.innerHTML=p?`<pre>${JSON.stringify(p,null,2)}</pre>`:"Producto no encontrado";}).catch(()=>resultado.innerHTML="Error");}
-function iniciarCamara(){const qr=new Html5Qrcode("reader");reader.innerHTML="";
-qr.start({facingMode:"environment"},{fps:15,qrbox:{width:220,height:100}},t=>{codigo.value=t;qr.stop().then(buscar);},()=>{});}
+
+function abrirBusqueda(){
+
+    document.getElementById("menuPrincipal").style.display="none";
+    document.getElementById("pantallaNuevaCompra").style.display="none";
+    document.getElementById("pantallaBusqueda").style.display="block";
+
+}
+
+function abrirNuevaCompra(){
+
+    document.getElementById("menuPrincipal").style.display="none";
+    document.getElementById("pantallaBusqueda").style.display="none";
+    document.getElementById("pantallaNuevaCompra").style.display="block";
+
+    const hoy=new Date();
+
+    const yyyy=hoy.getFullYear();
+
+    const mm=String(hoy.getMonth()+1).padStart(2,"0");
+
+    const dd=String(hoy.getDate()).padStart(2,"0");
+
+    document.getElementById("fechaCompra").value=
+    yyyy+"-"+mm+"-"+dd;
+
+}
+
+function volverMenu(){
+
+    document.getElementById("menuPrincipal").style.display="block";
+    document.getElementById("pantallaBusqueda").style.display="none";
+    document.getElementById("pantallaNuevaCompra").style.display="none";
+
+    document.getElementById("resultado").innerHTML="";
+    document.getElementById("reader").innerHTML="";
+
+    if(document.getElementById("codigo"))
+        document.getElementById("codigo").value="";
+
+}
+
+function crearCompra(){
+
+    const fecha=
+    document.getElementById("fechaCompra").value;
+
+    const proveedor=
+    document.getElementById("proveedor").value.trim();
+
+    const obs=
+    document.getElementById("obsCompra").value.trim();
+
+    if(fecha==""){
+
+        alert("Seleccione la fecha.");
+        return;
+
+    }
+
+    if(proveedor==""){
+
+        alert("Ingrese el proveedor.");
+        return;
+
+    }
+
+    localStorage.setItem("fechaCompra",fecha);
+    localStorage.setItem("proveedor",proveedor);
+    localStorage.setItem("obsCompra",obs);
+
+    alert(
+        "Compra creada correctamente.\n\n"+
+        "Proveedor: "+proveedor+
+        "\nFecha: "+fecha+
+        "\n\nEn la próxima versión aparecerá la pantalla para cargar prendas."
+    );
+
+}
+
+function buscar(){
+
+    const codigo=
+    document.getElementById("codigo").value.trim();
+
+    if(codigo==""){
+
+        alert("Ingrese un código.");
+        return;
+
+    }
+
+    fetch(
+        URL_SCRIPT+
+        "?accion=buscar&codigo="+
+        encodeURIComponent(codigo)
+    )
+
+    .then(r=>r.json())
+
+    .then(p=>mostrar(p))
+
+    .catch(()=>{
+
+        document.getElementById("resultado").innerHTML=
+
+        "<div class='ficha'>"+
+        "<h3>Error de conexión</h3>"+
+        "</div>";
+
+    });
+
+}
+
+function mostrar(p){
+
+    if(!p){
+
+        document.getElementById("resultado").innerHTML=
+
+        "<div class='ficha'>"+
+        "<h3>Producto no encontrado</h3>"+
+        "</div>";
+
+        return;
+
+    }
+
+    let stock="";
+
+    if(p.stock!==undefined){
+
+        if(Number(p.stock)>0){
+
+            stock=
+
+            "<div class='dato stock-ok'>"+
+            "<b>Stock:</b> "+p.stock+
+            "</div>";
+
+        }else{
+
+            stock=
+
+            "<div class='dato stock-cero'>"+
+            "<b>Stock:</b> "+p.stock+
+            "</div>";
+
+        }
+
+    }
+
+    document.getElementById("resultado").innerHTML=
+
+    "<div class='ficha'>"+
+
+    "<div class='nombre'>"+
+    (p.tipo||"")+
+    "</div>"+
+
+    "<div class='dato'><b>Código:</b> "+
+    (p.codigo||"")+
+    "</div>"+
+
+    "<div class='dato'><b>Categoría:</b> "+
+    (p.categoria||"")+
+    "</div>"+
+
+    "<div class='dato'><b>Marca:</b> "+
+    (p.marca||"")+
+    "</div>"+
+
+    "<div class='dato'><b>Precio:</b> $"+
+    (p.precio||"")+
+    "</div>"+
+
+    "<div class='dato'><b>Estado:</b> "+
+    (p.estado||"")+
+    "</div>"+
+
+    stock+
+
+    "</div>";
+
+}
+
+function iniciarCamara(){
+
+    document.getElementById("reader").innerHTML="";
+
+    const html5QrCode=
+    new Html5Qrcode("reader");
+
+    html5QrCode.start(
+
+        {
+            facingMode:"environment"
+        },
+
+        {
+
+            fps:15,
+
+            qrbox:{
+                width:220,
+                height:100
+            },
+
+            aspectRatio:1.777,
+
+            formatsToSupport:[
+
+                Html5QrcodeSupportedFormats.CODE_128,
+                Html5QrcodeSupportedFormats.CODE_39
+
+            ]
+
+        },
+
+        function(decodedText){
+
+            document
+            .getElementById("codigo")
+            .value=decodedText;
+
+            html5QrCode.stop()
+
+            .then(function(){
+
+                buscar();
+
+            });
+
+        },
+
+        function(errorMessage){}
+
+    )
+
+    .catch(function(err){
+
+        alert("No fue posible abrir la cámara.");
+
+        console.log(err);
+
+    });
+
+}
+
 </script>
+
 </body>
+
 </html>
