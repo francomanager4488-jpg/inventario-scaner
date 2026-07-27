@@ -805,7 +805,7 @@ function mostrarFormularioPrenda(){
 
     if(indicePrenda>=colaPrendas.length){
 
-        finalizarCarga();
+         enviarCompraCompleta();
 
         return;
 
@@ -860,33 +860,62 @@ function guardarPrendaActual(){
     let indice =
     Number(localStorage.getItem("indicePrenda"));
 
-    const talle = cola[indice];
+    let prendas =
+    JSON.parse(localStorage.getItem("prendasCurva") || "[]");
 
-    const datos = {
+    prendas.push({
 
-        compraId: Date.now(),
+        proveedor:localStorage.getItem("proveedor"),
 
-        genero: grupoSeleccionado,
+        fecha:localStorage.getItem("fechaCompra"),
 
-        categoria: localStorage.getItem("tipoPrenda"),
+        grupo:grupoSeleccionado,
 
-        subcategoria: "",
+        tipo:localStorage.getItem("tipoPrenda"),
 
-        talle: talle,
+        marca:localStorage.getItem("marcaCompra"),
 
-        color: color,
+        precioCompra:localStorage.getItem("precioCompra"),
 
-        diseno: "",
+        talle:cola[indice],
 
-        precioCompra: localStorage.getItem("precioCompra"),
+        color:color
 
-        precioVenta: "",
+    });
 
-        observaciones: "",
+    localStorage.setItem(
 
-        estado: "DISPONIBLE"
+        "prendasCurva",
 
-    };
+        JSON.stringify(prendas)
+
+    );
+
+    indice++;
+
+    localStorage.setItem(
+
+        "indicePrenda",
+
+        indice
+
+    );
+
+    mostrarFormularioPrenda();
+
+}
+function enviarCompraCompleta(){
+
+    const prendas =
+    JSON.parse(localStorage.getItem("prendasCurva") || "[]");
+
+    if(prendas.length==0){
+
+        alert("No hay prendas para guardar.");
+
+        return;
+
+    }
 
     fetch(URL_SCRIPT,{
 
@@ -894,9 +923,9 @@ function guardarPrendaActual(){
 
         body:new URLSearchParams({
 
-            accion:"guardarProducto",
+            accion:"guardarCompra",
 
-            ...datos
+            prendas:JSON.stringify(prendas)
 
         })
 
@@ -906,31 +935,27 @@ function guardarPrendaActual(){
 
     .then(resp=>{
 
-        if(!resp.ok){
+        if(resp.ok){
 
-            alert("Error al guardar la prenda.");
+            localStorage.removeItem("prendasCurva");
+            localStorage.removeItem("colaPrendas");
+            localStorage.removeItem("indicePrenda");
+            localStorage.removeItem("cantidadesCurva");
+            localStorage.removeItem("tallesSeleccionados");
 
-            return;
+            finalizarCarga();
+
+        }else{
+
+            alert(resp.mensaje || "Error al guardar la compra.");
 
         }
-
-        indice++;
-
-        localStorage.setItem(
-
-            "indicePrenda",
-
-            indice
-
-        );
-
-        mostrarFormularioPrenda();
 
     })
 
     .catch(()=>{
 
-        alert("No fue posible guardar la prenda.");
+        alert("No fue posible conectar con el servidor.");
 
     });
 
