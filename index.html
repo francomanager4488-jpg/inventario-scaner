@@ -938,31 +938,53 @@ function finalizarCarga(){
 
 function enviarPrendasGoogle(){
 
-    /*
-        En el próximo paso conectaremos
-        este punto con Apps Script.
+    fetch(
 
-        prendasGuardadas contiene TODA
-        la compra lista para enviarse.
-    */
+        URL_SCRIPT,
 
-    console.log(prendasGuardadas);
+        {
 
-    alert(
+            method:"POST",
 
-        "Se prepararon "+
-        prendasGuardadas.length+
-        " prendas para guardar."
+            headers:{
 
-    );
+                "Content-Type":"application/json"
 
-    volverMenu();
+            },
+
+            body:JSON.stringify({
+
+                accion:"guardarCompra",
+
+                prendas:prendasGuardadas
+
+            })
+
+        }
+
+    )
+
+    .then(r=>r.text())
+
+    .then(function(res){
+
+        alert("Compra guardada correctamente.");
+
+        console.log(res);
+
+        volverMenu();
+
+    })
+
+    .catch(function(err){
+
+        console.error(err);
+
+        alert("Error al guardar la compra.");
+
+    });
 
 }
-
-/* ========================= */
-/* BUSCADOR */
-/* ========================= */
 
 function buscar(){
 
