@@ -496,4 +496,569 @@ let colaPrendas=[];
 let indicePrenda=0;
 let prendasGuardadas=[];
 
+function ocultarPantallas(){
+
+    document.getElementById("menuPrincipal").style.display="none";
+    document.getElementById("pantallaBusqueda").style.display="none";
+    document.getElementById("pantallaNuevaCompra").style.display="none";
+    document.getElementById("pantallaCantidades").style.display="none";
+    document.getElementById("pantallaResumen").style.display="none";
+    document.getElementById("pantallaCarga").style.display="none";
+
+}
+
+function abrirBusqueda(){
+
+    ocultarPantallas();
+
+    document.getElementById("pantallaBusqueda").style.display="block";
+
+}
+
+function abrirNuevaCompra(){
+
+    ocultarPantallas();
+
+    document.getElementById("pantallaNuevaCompra").style.display="block";
+
+    const hoy=new Date();
+
+    document.getElementById("fechaCompra").value=
+    hoy.toISOString().substring(0,10);
+
+}
+
+function volverMenu(){
+
+    ocultarPantallas();
+
+    document.getElementById("menuPrincipal").style.display="block";
+
+}
+
+function volverNuevaCompra(){
+
+    ocultarPantallas();
+
+    document.getElementById("pantallaNuevaCompra").style.display="block";
+
+}
+
+function volverCantidades(){
+
+    ocultarPantallas();
+
+    document.getElementById("pantallaCantidades").style.display="block";
+
+}
+
+function volverResumen(){
+
+    ocultarPantallas();
+
+    document.getElementById("pantallaResumen").style.display="block";
+
+}
+
+function crearCompra(){
+
+    const fecha=
+    document.getElementById("fechaCompra").value;
+
+    const proveedor=
+    document.getElementById("proveedor").value.trim();
+
+    const marca=
+    document.getElementById("marcaCompra").value.trim();
+
+    const grupo=
+    document.getElementById("grupoCompra").value;
+
+    const precio=
+    document.getElementById("precioCompra").value;
+
+    const tipo=
+    document.getElementById("tipoPrenda").value.trim();
+
+    const obs=
+    document.getElementById("obsCompra").value.trim();
+
+    if(proveedor==""){
+
+        alert("Ingrese el proveedor.");
+        return;
+
+    }
+
+    if(grupo==""){
+
+        alert("Seleccione el género.");
+        return;
+
+    }
+
+    if(precio==""){
+
+        alert("Ingrese el precio de compra.");
+        return;
+
+    }
+
+    if(tipo==""){
+
+        alert("Ingrese el tipo de prenda.");
+        return;
+
+    }
+
+    grupoSeleccionado=grupo;
+
+    localStorage.setItem("fechaCompra",fecha);
+    localStorage.setItem("proveedor",proveedor);
+    localStorage.setItem("marcaCompra",marca);
+    localStorage.setItem("precioCompra",precio);
+    localStorage.setItem("tipoPrenda",tipo);
+    localStorage.setItem("obsCompra",obs);
+
+    mostrarCantidades();
+
+}
+
+function mostrarCantidades(){
+
+    ocultarPantallas();
+
+    document.getElementById("pantallaCantidades").style.display="block";
+
+    let talles=[];
+
+    if(
+        grupoSeleccionado=="BEBE" ||
+        grupoSeleccionado=="BEBA" ||
+        grupoSeleccionado=="UNISEX_BEBE"
+    ){
+
+        talles=["0","1","2","3","4","5","6"];
+
+    }else{
+
+        talles=["4","6","8","10","12","14","16"];
+
+    }
+
+    let html="";
+
+    html+="<table class='tablaTalles'>";
+
+    for(let i=0;i<talles.length;i++){
+
+        html+="<tr>";
+
+        html+="<td>";
+
+        html+="Talle <b>"+talles[i]+"</b>";
+
+        html+="</td>";
+
+        html+="<td class='celdaCantidad'>";
+
+        html+="<input";
+
+        html+=" type='number'";
+
+        html+=" min='0'";
+
+        html+=" value='1'";
+
+        html+=" data-talle='"+talles[i]+"'";
+
+        html+=" class='cantidadTalle'>";
+
+        html+="</td>";
+
+        html+="</tr>";
+
+    }
+
+    html+="</table>";
+
+    document.getElementById("listaCantidades").innerHTML=html;
+
+}
+
+function continuarCantidades(){
+
+    const cantidades=[];
+    const inputs=
+    document.querySelectorAll(".cantidadTalle");
+
+    inputs.forEach(function(input){
+
+        const cantidad=
+        Number(input.value);
+
+        if(cantidad>0){
+
+            cantidades.push({
+
+                talle:input.dataset.talle,
+                cantidad:cantidad
+
+            });
+
+        }
+
+    });
+
+    if(cantidades.length==0){
+
+        alert("Debe ingresar al menos una cantidad.");
+
+        return;
+
+    }
+
+    localStorage.setItem(
+        "cantidadesCurva",
+        JSON.stringify(cantidades)
+    );
+
+    mostrarResumen();
+
+}
+
+function mostrarResumen(){
+
+    ocultarPantallas();
+
+    document.getElementById("pantallaResumen").style.display="block";
+
+    const cantidades=
+    JSON.parse(localStorage.getItem("cantidadesCurva"));
+
+    let html="";
+
+    html+="<b>Proveedor:</b> ";
+    html+=localStorage.getItem("proveedor");
+    html+="<br>";
+
+    html+="<b>Marca:</b> ";
+    html+=(localStorage.getItem("marcaCompra")||"-");
+    html+="<br>";
+
+    html+="<b>Grupo:</b> ";
+    html+=grupoSeleccionado;
+    html+="<br>";
+
+    html+="<b>Tipo:</b> ";
+    html+=localStorage.getItem("tipoPrenda");
+    html+="<br>";
+
+    html+="<b>Precio compra:</b> $";
+    html+=localStorage.getItem("precioCompra");
+
+    html+="<hr>";
+
+    cantidades.forEach(function(item){
+
+        html+="Talle <b>";
+        html+=item.talle;
+        html+="</b>: ";
+        html+=item.cantidad;
+        html+=" unidad(es)<br>";
+
+    });
+
+    document.getElementById("datosResumen").innerHTML=html;
+
+}
+
+function iniciarCargaPrendas(){
+
+    colaPrendas=[];
+
+    const cantidades=
+    JSON.parse(localStorage.getItem("cantidadesCurva"));
+
+    cantidades.forEach(function(item){
+
+        for(let i=0;i<item.cantidad;i++){
+
+            colaPrendas.push(item.talle);
+
+        }
+
+    });
+
+    indicePrenda=0;
+    prendasGuardadas=[];
+
+    mostrarFormularioPrenda();
+
+}
+
+function mostrarFormularioPrenda(){
+
+    ocultarPantallas();
+
+    document.getElementById("pantallaCarga").style.display="block";
+
+    if(indicePrenda>=colaPrendas.length){
+
+        finalizarCarga();
+
+        return;
+
+    }
+
+    const talle=
+    colaPrendas[indicePrenda];
+
+    document.getElementById("tituloCarga").innerHTML=
+
+    "Prenda "+(indicePrenda+1)+" de "+colaPrendas.length;
+
+    let html="";
+
+    html+="<b>Talle:</b> ";
+    html+=talle;
+
+    html+="<br><br>";
+
+    html+="<label>Color</label>";
+
+    html+="<input";
+
+    html+=" id='colorPrenda'";
+
+    html+=" placeholder='Opcional'>";
+
+    html+="<br><br>";
+
+    html+="<button";
+
+    html+=" class='verde'";
+
+    html+=" onclick='guardarPrendaActual()'>";
+
+    html+="Guardar y continuar";
+
+    html+="</button>";
+
+    document.getElementById("datosCarga").innerHTML=html;
+
+}
+
+function guardarPrendaActual(){
+
+    const color=
+    document.getElementById("colorPrenda").value.trim();
+
+    prendasGuardadas.push({
+
+        fecha:
+        localStorage.getItem("fechaCompra"),
+
+        proveedor:
+        localStorage.getItem("proveedor"),
+
+        marca:
+        localStorage.getItem("marcaCompra"),
+
+        grupo:
+        grupoSeleccionado,
+
+        tipo:
+        localStorage.getItem("tipoPrenda"),
+
+        precioCompra:
+        localStorage.getItem("precioCompra"),
+
+        talle:
+        colaPrendas[indicePrenda],
+
+        color:
+        color,
+
+        observaciones:
+        localStorage.getItem("obsCompra")
+
+    });
+
+    indicePrenda++;
+
+    mostrarFormularioPrenda();
+
+}
+
+function finalizarCarga(){
+
+    let html="";
+
+    html+="<h2>✅ Carga finalizada</h2>";
+
+    html+="<p>";
+
+    html+="Se cargaron <b>";
+
+    html+=prendasGuardadas.length;
+
+    html+="</b> prendas.";
+
+    html+="</p>";
+
+    html+="<button";
+
+    html+=" class='verde'";
+
+    html+=" onclick='enviarPrendasGoogle()'>";
+
+    html+="Guardar definitivamente";
+
+    html+="</button>";
+
+    html+="<br>";
+
+    html+="<button";
+
+    html+=" class='gris'";
+
+    html+=" onclick='volverMenu()'>";
+
+    html+="Volver al menú";
+
+    html+="</button>";
+
+    document.getElementById("tituloCarga").innerHTML=
+    "Proceso terminado";
+
+    document.getElementById("datosCarga").innerHTML=html;
+
+}
+
+function enviarPrendasGoogle(){
+
+    /*
+        En el próximo paso conectaremos
+        este punto con Apps Script.
+
+        prendasGuardadas contiene TODA
+        la compra lista para enviarse.
+    */
+
+    console.log(prendasGuardadas);
+
+    alert(
+
+        "Se prepararon "+
+        prendasGuardadas.length+
+        " prendas para guardar."
+
+    );
+
+    volverMenu();
+
+}
+
+/* ========================= */
+/* BUSCADOR */
+/* ========================= */
+
+function buscar(){
+
+    const codigo=
+    document.getElementById("codigo").value.trim();
+
+    if(codigo==""){
+
+        alert("Ingrese un código.");
+
+        return;
+
+    }
+
+    fetch(
+
+        URL_SCRIPT+
+        "?accion=buscar&codigo="+
+        encodeURIComponent(codigo)
+
+    )
+
+    .then(r=>r.json())
+
+    .then(mostrar)
+
+    .catch(function(){
+
+        alert("Error de conexión.");
+
+    });
+
+}
+
+function mostrar(p){
+
+    if(!p){
+
+        document.getElementById("resultado").innerHTML=
+
+        "<div class='ficha'>Producto no encontrado.</div>";
+
+        return;
+
+    }
+
+    let html="";
+
+    html+="<div class='ficha'>";
+
+    html+="<div class='nombre'>";
+
+    html+=p.tipo||"";
+
+    html+="</div>";
+
+    html+="<div class='dato'><b>Código:</b> ";
+
+    html+=p.codigo||"";
+
+    html+="</div>";
+
+    html+="<div class='dato'><b>Marca:</b> ";
+
+    html+=p.marca||"";
+
+    html+="</div>";
+
+    html+="<div class='dato'><b>Precio:</b> $";
+
+    html+=p.precio||"";
+
+    html+="</div>";
+
+    html+="<div class='dato'><b>Stock:</b> ";
+
+    html+=p.stock||0;
+
+    html+="</div>";
+
+    html+="</div>";
+
+    document.getElementById("resultado").innerHTML=html;
+
+}
+
+function iniciarCamara(){
+
+    alert("La función de escaneo será incorporada nuevamente al finalizar la depuración del flujo de compras.");
+
+}
+
+</script>
+
+</body>
+
+</html>
+
     
