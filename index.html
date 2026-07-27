@@ -851,45 +851,91 @@ function mostrarFormularioPrenda(){
 
 function guardarPrendaActual(){
 
-    const color=
+    const color =
     document.getElementById("colorPrenda").value.trim();
 
-    prendasGuardadas.push({
+    const cola =
+    JSON.parse(localStorage.getItem("colaPrendas"));
 
-        fecha:
-        localStorage.getItem("fechaCompra"),
+    let indice =
+    Number(localStorage.getItem("indicePrenda"));
 
-        proveedor:
-        localStorage.getItem("proveedor"),
+    const talle = cola[indice];
 
-        marca:
-        localStorage.getItem("marcaCompra"),
+    const datos = {
 
-        grupo:
-        grupoSeleccionado,
+        compraId: Date.now(),
 
-        tipo:
-        localStorage.getItem("tipoPrenda"),
+        genero: grupoSeleccionado,
 
-        precioCompra:
-        localStorage.getItem("precioCompra"),
+        categoria: localStorage.getItem("tipoPrenda"),
 
-        talle:
-        colaPrendas[indicePrenda],
+        subcategoria: "",
 
-        color:
-        color,
+        talle: talle,
 
-        observaciones:
-        localStorage.getItem("obsCompra")
+        color: color,
+
+        diseno: "",
+
+        precioCompra: localStorage.getItem("precioCompra"),
+
+        precioVenta: "",
+
+        observaciones: "",
+
+        estado: "DISPONIBLE"
+
+    };
+
+    fetch(URL_SCRIPT,{
+
+        method:"POST",
+
+        body:new URLSearchParams({
+
+            accion:"guardarProducto",
+
+            ...datos
+
+        })
+
+    })
+
+    .then(r=>r.json())
+
+    .then(resp=>{
+
+        if(!resp.ok){
+
+            alert("Error al guardar la prenda.");
+
+            return;
+
+        }
+
+        indice++;
+
+        localStorage.setItem(
+
+            "indicePrenda",
+
+            indice
+
+        );
+
+        mostrarFormularioPrenda();
+
+    })
+
+    .catch(()=>{
+
+        alert("No fue posible guardar la prenda.");
 
     });
 
-    indicePrenda++;
-
-    mostrarFormularioPrenda();
-
 }
+
 
 function finalizarCarga(){
 
