@@ -4,9 +4,7 @@
 <head>
 
 <meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <title>Ropita de Cuento</title>
 
@@ -19,52 +17,41 @@ content="width=device-width, initial-scale=1">
 }
 
 body{
-
     margin:0;
     padding:20px;
     background:#f3f3f3;
     font-family:Arial,Helvetica,sans-serif;
-
 }
 
 .card{
-
     max-width:700px;
     margin:auto;
-    background:white;
+    background:#fff;
     border-radius:12px;
     padding:20px;
     box-shadow:0 2px 12px rgba(0,0,0,.20);
-
 }
 
 h2,h3{
-
     text-align:center;
     margin-top:0;
-
 }
 
 label{
-
     display:block;
     margin-top:15px;
     font-weight:bold;
-
 }
 
 input,
 select{
-
     width:100%;
     padding:14px;
     margin-top:8px;
     font-size:18px;
-
 }
 
 button{
-
     width:100%;
     padding:15px;
     margin-top:12px;
@@ -72,130 +59,94 @@ button{
     border-radius:8px;
     font-size:20px;
     cursor:pointer;
-
 }
 
 .azul{
-
     background:#1976d2;
-    color:white;
-
+    color:#fff;
 }
 
 .verde{
-
     background:#43a047;
-    color:white;
-
+    color:#fff;
 }
 
 .gris{
-
     background:#757575;
-    color:white;
-
+    color:#fff;
 }
 
 .rojo{
-
     background:#c62828;
-    color:white;
-
+    color:#fff;
 }
 
 #reader{
-
     margin-top:20px;
-
 }
 
 #resultado{
-
     margin-top:20px;
-
 }
 
 .ficha{
-
     border:1px solid #ddd;
     border-radius:10px;
     padding:15px;
     background:#fafafa;
-
 }
 
 .nombre{
-
     font-size:28px;
     font-weight:bold;
     color:#1565c0;
     margin-bottom:15px;
-
 }
 
 .dato{
-
     font-size:19px;
     margin:8px 0;
-
 }
 
 .stock-ok{
-
     color:green;
     font-weight:bold;
-
 }
 
 .stock-cero{
-
     color:red;
     font-weight:bold;
-
 }
 
 #menuPrincipal,
 #pantallaBusqueda,
 #pantallaNuevaCompra,
 #pantallaCantidades,
-#pantallaDatos,
 #pantallaResumen,
 #pantallaCarga{
-
     display:none;
-
 }
 
 #menuPrincipal{
-
     display:block;
-
 }
 
 .tablaTalles{
-
     width:100%;
     border-collapse:collapse;
-
 }
 
 .tablaTalles td{
-
     padding:10px;
     border-bottom:1px solid #ddd;
-
 }
 
 .celdaCantidad{
-
     width:90px;
-
 }
 
 .celdaCantidad input{
-
     text-align:center;
-
 }
 
 </style>
@@ -206,59 +157,39 @@ button{
 
 <div class="card">
 
-<!-- ========================================= -->
-<!-- MENU PRINCIPAL -->
-<!-- ========================================= -->
+<!-- =========================== -->
+<!-- MENU -->
+<!-- =========================== -->
 
 <div id="menuPrincipal">
 
 <h2>📦 ROPITA DE CUENTO</h2>
 
-<button
-class="azul"
-onclick="abrirBusqueda()">
-
+<button class="azul" onclick="abrirBusqueda()">
 🔍 Buscar prenda
-
 </button>
 
-<button
-class="verde"
-onclick="abrirNuevaCompra()">
-
+<button class="verde" onclick="abrirNuevaCompra()">
 📦 Nueva compra
-
 </button>
 
-<button
-class="gris"
-onclick="alert('Próximamente')">
-
+<button class="gris" onclick="alert('Próximamente')">
 🏷 Imprimir etiquetas
-
 </button>
 
-<button
-class="gris"
-onclick="alert('Próximamente')">
-
+<button class="gris" onclick="alert('Próximamente')">
 📊 Inventario
-
 </button>
 
-<button
-class="gris"
-onclick="alert('Próximamente')">
-
+<button class="gris" onclick="alert('Próximamente')">
 ⚙ Configuración
-
 </button>
 
 </div>
 
-<!-- ========================================= -->
-<!-- BUSQUEDA -->
-<!-- ========================================= -->
+<!-- =========================== -->
+<!-- BUSCAR -->
+<!-- =========================== -->
 
 <div id="pantallaBusqueda">
 
@@ -271,17 +202,13 @@ placeholder="Escanear o escribir código">
 <button
 class="verde"
 onclick="iniciarCamara()">
-
 📷 Escanear
-
 </button>
 
 <button
 class="azul"
 onclick="buscar()">
-
 Buscar
-
 </button>
 
 <div id="reader"></div>
@@ -291,16 +218,14 @@ Buscar
 <button
 class="gris"
 onclick="volverMenu()">
-
 ← Volver
-
 </button>
 
 </div>
 
-<!-- ========================================= -->
+<!-- =========================== -->
 <!-- NUEVA COMPRA -->
-<!-- ========================================= -->
+<!-- =========================== -->
 
 <div id="pantallaNuevaCompra">
 
@@ -315,14 +240,12 @@ id="fechaCompra">
 <label>Proveedor</label>
 
 <input
-id="proveedor"
-placeholder="Proveedor">
+id="proveedor">
 
 <label>Marca (opcional)</label>
 
 <input
-id="marcaCompra"
-placeholder="Marca">
+id="marcaCompra">
 
 <label>Género</label>
 
@@ -349,8 +272,7 @@ placeholder="Marca">
 <input
 id="precioCompra"
 type="number"
-step="0.01"
-placeholder="0">
+step="0.01">
 
 <label>Tipo de prenda</label>
 
@@ -361,8 +283,7 @@ placeholder="Ej.: Remera">
 <label>Observaciones</label>
 
 <input
-id="obsCompra"
-placeholder="Opcional">
+id="obsCompra">
 
 <button
 class="verde"
@@ -382,21 +303,15 @@ onclick="volverMenu()">
 
 </div>
 
-<!-- ========================================= -->
-<!-- CANTIDAD POR TALLE -->
-<!-- ========================================= -->
+<!-- =========================== -->
+<!-- CANTIDADES -->
+<!-- =========================== -->
 
 <div id="pantallaCantidades">
 
-<h2 id="tituloCantidades">
+<h2>Cantidad por talle</h2>
 
-Cantidad por talle
-
-</h2>
-
-<div id="listaCantidades">
-
-</div>
+<div id="listaCantidades"></div>
 
 <button
 class="verde"
@@ -416,9 +331,9 @@ onclick="volverNuevaCompra()">
 
 </div>
 
-<!-- ========================================= -->
+<!-- =========================== -->
 <!-- RESUMEN -->
-<!-- ========================================= -->
+<!-- =========================== -->
 
 <div id="pantallaResumen">
 
@@ -426,12 +341,7 @@ onclick="volverNuevaCompra()">
 
 <div
 id="datosResumen"
-style="
-background:#f5f5f5;
-padding:15px;
-border-radius:10px;
-">
-
+style="background:#f5f5f5;padding:15px;border-radius:10px;">
 </div>
 
 <button
@@ -452,9 +362,9 @@ onclick="volverCantidades()">
 
 </div>
 
-<!-- ========================================= -->
-<!-- CARGA DE PRENDAS -->
-<!-- ========================================= -->
+<!-- =========================== -->
+<!-- CARGA -->
+<!-- =========================== -->
 
 <div id="pantallaCarga">
 
@@ -466,21 +376,8 @@ Carga de prendas
 
 <div
 id="datosCarga"
-style="
-background:#f5f5f5;
-padding:15px;
-border-radius:10px;
-">
-
+style="background:#f5f5f5;padding:15px;border-radius:10px;">
 </div>
-
-<button
-class="gris"
-onclick="volverResumen()">
-
-← Volver
-
-</button>
 
 </div>
 
@@ -650,13 +547,13 @@ function mostrarCantidades(){
 
     html+="<table class='tablaTalles'>";
 
-    for(let i=0;i<talles.length;i++){
+    talles.forEach(function(talle){
 
         html+="<tr>";
 
         html+="<td>";
 
-        html+="Talle <b>"+talles[i]+"</b>";
+        html+="Talle <b>"+talle+"</b>";
 
         html+="</td>";
 
@@ -666,19 +563,21 @@ function mostrarCantidades(){
 
         html+=" type='number'";
 
-        html+=" min='0'";
-
         html+=" value='1'";
 
-        html+=" data-talle='"+talles[i]+"'";
+        html+=" min='0'";
 
-        html+=" class='cantidadTalle'>";
+        html+=" class='cantidadTalle'";
+
+        html+=" data-talle='"+talle+"'";
+
+        html+=">";
 
         html+="</td>";
 
         html+="</tr>";
 
-    }
+    });
 
     html+="</table>";
 
@@ -689,6 +588,7 @@ function mostrarCantidades(){
 function continuarCantidades(){
 
     const cantidades=[];
+
     const inputs=
     document.querySelectorAll(".cantidadTalle");
 
@@ -719,8 +619,11 @@ function continuarCantidades(){
     }
 
     localStorage.setItem(
+
         "cantidadesCurva",
+
         JSON.stringify(cantidades)
+
     );
 
     mostrarResumen();
@@ -777,6 +680,10 @@ function iniciarCargaPrendas(){
 
     colaPrendas=[];
 
+    prendasGuardadas=[];
+
+    indicePrenda=0;
+
     const cantidades=
     JSON.parse(localStorage.getItem("cantidadesCurva"));
 
@@ -790,9 +697,6 @@ function iniciarCargaPrendas(){
 
     });
 
-    indicePrenda=0;
-    prendasGuardadas=[];
-
     mostrarFormularioPrenda();
 
 }
@@ -805,7 +709,7 @@ function mostrarFormularioPrenda(){
 
     if(indicePrenda>=colaPrendas.length){
 
-         enviarCompraCompleta();
+        enviarCompraCompleta();
 
         return;
 
@@ -825,13 +729,13 @@ function mostrarFormularioPrenda(){
 
     html+="<br><br>";
 
-    html+="<label>Color</label>";
+    html+="<label>Color (opcional)</label>";
 
     html+="<input";
 
     html+=" id='colorPrenda'";
 
-    html+=" placeholder='Opcional'>";
+    html+=" placeholder='Color'>";
 
     html+="<br><br>";
 
@@ -851,97 +755,78 @@ function mostrarFormularioPrenda(){
 
 function guardarPrendaActual(){
 
-    const color =
+    const color=
     document.getElementById("colorPrenda").value.trim();
 
-    const cola =
-    JSON.parse(localStorage.getItem("colaPrendas"));
+    prendasGuardadas.push({
 
-    let indice =
-    Number(localStorage.getItem("indicePrenda"));
-
-    let prendas =
-    JSON.parse(localStorage.getItem("prendasCurva") || "[]");
-
-    prendas.push({
-
-        proveedor:localStorage.getItem("proveedor"),
-
-        fecha:localStorage.getItem("fechaCompra"),
-
-        grupo:grupoSeleccionado,
-
-        tipo:localStorage.getItem("tipoPrenda"),
-
-        marca:localStorage.getItem("marcaCompra"),
-
-        precioCompra:localStorage.getItem("precioCompra"),
-
-        talle:cola[indice],
+        talle:colaPrendas[indicePrenda],
 
         color:color
 
     });
 
-    localStorage.setItem(
-
-        "prendasCurva",
-
-        JSON.stringify(prendas)
-
-    );
-
-    indice++;
-
-    localStorage.setItem(
-
-        "indicePrenda",
-
-        indice
-
-    );
+    indicePrenda++;
 
     mostrarFormularioPrenda();
 
 }
+
 function enviarCompraCompleta(){
 
-    const prendas =
-    JSON.parse(localStorage.getItem("prendasCurva") || "[]");
+    const prendas=[];
 
-    if(prendas.length==0){
+    prendasGuardadas.forEach(function(p){
 
-        alert("No hay prendas para guardar.");
+        prendas.push({
 
-        return;
+            talle:p.talle,
 
-    }
+            color:p.color
 
-    fetch(URL_SCRIPT,{
+        });
 
-        method:"POST",
+    });
 
-        body:new URLSearchParams({
+    fetch(
 
-            accion:"guardarCompra",
+        URL_SCRIPT,
 
-            prendas:JSON.stringify(prendas)
+        {
 
-        })
+            method:"POST",
 
-    })
+            body:new URLSearchParams({
+
+                accion:"guardarCompra",
+
+                proveedor:localStorage.getItem("proveedor"),
+
+                fecha:localStorage.getItem("fechaCompra"),
+
+                marca:localStorage.getItem("marcaCompra"),
+
+                genero:grupoSeleccionado,
+
+                tipo:localStorage.getItem("tipoPrenda"),
+
+                precioCompra:localStorage.getItem("precioCompra"),
+
+                observaciones:localStorage.getItem("obsCompra"),
+
+                prendas:JSON.stringify(prendas)
+
+            })
+
+        }
+
+    )
 
     .then(r=>r.json())
 
-    .then(resp=>{
+    .then(function(resp){
 
         if(resp.ok){
-
-            localStorage.removeItem("prendasCurva");
-            localStorage.removeItem("colaPrendas");
-            localStorage.removeItem("indicePrenda");
-            localStorage.removeItem("cantidadesCurva");
-            localStorage.removeItem("tallesSeleccionados");
 
             finalizarCarga();
 
@@ -953,7 +838,7 @@ function enviarCompraCompleta(){
 
     })
 
-    .catch(()=>{
+    .catch(function(){
 
         alert("No fue posible conectar con el servidor.");
 
@@ -961,99 +846,23 @@ function enviarCompraCompleta(){
 
 }
 
-
 function finalizarCarga(){
 
-    let html="";
+    localStorage.removeItem("cantidadesCurva");
+    localStorage.removeItem("fechaCompra");
+    localStorage.removeItem("proveedor");
+    localStorage.removeItem("marcaCompra");
+    localStorage.removeItem("precioCompra");
+    localStorage.removeItem("tipoPrenda");
+    localStorage.removeItem("obsCompra");
 
-    html+="<h2>✅ Carga finalizada</h2>";
+    colaPrendas=[];
+    prendasGuardadas=[];
+    indicePrenda=0;
 
-    html+="<p>";
+    alert("✅ Compra guardada correctamente.");
 
-    html+="Se cargaron <b>";
-
-    html+=prendasGuardadas.length;
-
-    html+="</b> prendas.";
-
-    html+="</p>";
-
-    html+="<button";
-
-    html+=" class='verde'";
-
-    html+=" onclick='enviarPrendasGoogle()'>";
-
-    html+="Guardar definitivamente";
-
-    html+="</button>";
-
-    html+="<br>";
-
-    html+="<button";
-
-    html+=" class='gris'";
-
-    html+=" onclick='volverMenu()'>";
-
-    html+="Volver al menú";
-
-    html+="</button>";
-
-    document.getElementById("tituloCarga").innerHTML=
-    "Proceso terminado";
-
-    document.getElementById("datosCarga").innerHTML=html;
-
-}
-
-function enviarPrendasGoogle(){
-
-    fetch(
-
-        URL_SCRIPT,
-
-        {
-
-            method:"POST",
-
-            headers:{
-
-                "Content-Type":"application/json"
-
-            },
-
-            body:JSON.stringify({
-
-                accion:"guardarCompra",
-
-                prendas:prendasGuardadas
-
-            })
-
-        }
-
-    )
-
-    .then(r=>r.text())
-
-    .then(function(res){
-
-        alert("Compra guardada correctamente.");
-
-        console.log(res);
-
-        volverMenu();
-
-    })
-
-    .catch(function(err){
-
-        console.error(err);
-
-        alert("Error al guardar la compra.");
-
-    });
+    volverMenu();
 
 }
 
@@ -1107,33 +916,27 @@ function mostrar(p){
     html+="<div class='ficha'>";
 
     html+="<div class='nombre'>";
-
-    html+=p.tipo||"";
-
+    html+=(p.categoria||"");
     html+="</div>";
 
     html+="<div class='dato'><b>Código:</b> ";
-
-    html+=p.codigo||"";
-
+    html+=(p.codigo||"");
     html+="</div>";
 
     html+="<div class='dato'><b>Marca:</b> ";
+    html+=(p.marca||"-");
+    html+="</div>";
 
-    html+=p.marca||"";
+    html+="<div class='dato'><b>Talle:</b> ";
+    html+=(p.talle||"-");
+    html+="</div>";
 
+    html+="<div class='dato'><b>Color:</b> ";
+    html+=(p.color||"-");
     html+="</div>";
 
     html+="<div class='dato'><b>Precio:</b> $";
-
-    html+=p.precio||"";
-
-    html+="</div>";
-
-    html+="<div class='dato'><b>Stock:</b> ";
-
-    html+=p.stock||0;
-
+    html+=(p.precioVenta||p.precioCompra||0);
     html+="</div>";
 
     html+="</div>";
@@ -1144,7 +947,7 @@ function mostrar(p){
 
 function iniciarCamara(){
 
-    alert("La función de escaneo será incorporada nuevamente al finalizar la depuración del flujo de compras.");
+    alert("La función de escaneo será reincorporada cuando terminemos la carga de compras.");
 
 }
 
@@ -1153,5 +956,3 @@ function iniciarCamara(){
 </body>
 
 </html>
-
-    
