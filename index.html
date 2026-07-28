@@ -576,14 +576,14 @@ function inicializarFormulario(){
 
 function ocultarPantallas(){
 
-    document.getElementById("menuPrincipal").style.display="none";
-    document.getElementById("pantallaBusqueda").style.display="none";
-    document.getElementById("pantallaNuevaCompra").style.display="none";
-    document.getElementById("pantallaTipoCarga").style.display="none";
-    document.getElementById("pantallaCantidades").style.display="none";
-    document.getElementById("pantallaResumen").style.display="none";
-    document.getElementById("pantallaCarga").style.display="none";
-    document.getElementById("pantallaCarga").style.display="none";
+document.getElementById("menuPrincipal").style.display="none";
+document.getElementById("pantallaBusqueda").style.display="none";
+document.getElementById("pantallaNuevaCompra").style.display="none";
+document.getElementById("pantallaTipoCarga").style.display="none";
+document.getElementById("pantallaCantidades").style.display="none";
+document.getElementById("pantallaResumen").style.display="none";
+document.getElementById("pantallaCarga").style.display="none";
+document.getElementById("pantallaProveedor").style.display="none";
 
 }
 
@@ -611,6 +611,15 @@ function abrirNuevaCompra(){
 
 }
 
+function abrirNuevoProveedor(){
+
+    ocultarPantallas();
+
+    document.getElementById("pantallaProveedor").style.display="block";
+
+}
+
+    
 function volverNuevaCompra(){
 
     ocultarPantallas();
