@@ -5,145 +5,206 @@
 
 <meta charset="UTF-8">
 
-<meta
-name="viewport"
+<meta 
+name="viewport" 
 content="width=device-width, initial-scale=1">
 
 <title>Ropita de Cuento</title>
 
 <script src="https://unpkg.com/html5-qrcode"></script>
 
+
 <style>
 
 *{
-
     box-sizing:border-box;
-
 }
+
 
 body{
 
     margin:0;
     padding:20px;
-    background:#f3f3f3;
-    font-family:Arial,Helvetica,sans-serif;
+
+    background:#f2f2f2;
+
+    font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
 
 }
+
 
 .card{
 
     max-width:720px;
+
     margin:auto;
+
     background:white;
-    border-radius:12px;
+
+    border-radius:14px;
+
     padding:20px;
-    box-shadow:0 2px 12px rgba(0,0,0,.18);
+
+    box-shadow:
+    0 3px 15px rgba(0,0,0,.15);
 
 }
 
-h2,h3{
 
-    margin-top:0;
+
+h1,
+h2,
+h3{
+
     text-align:center;
 
+    margin-top:0;
+
 }
+
+
 
 label{
 
     display:block;
+
     margin-top:15px;
+
     font-weight:bold;
 
+    font-size:17px;
+
 }
+
+
 
 input,
 select{
 
     width:100%;
+
     padding:14px;
+
     margin-top:8px;
+
     font-size:18px;
 
+    border-radius:8px;
+
+    border:1px solid #ccc;
+
 }
+
+
 
 button{
 
     width:100%;
+
     padding:15px;
+
     margin-top:12px;
+
     font-size:20px;
+
     border:none;
-    border-radius:8px;
+
+    border-radius:10px;
+
     cursor:pointer;
 
 }
 
+
+
 .azul{
 
     background:#1976d2;
+
     color:white;
 
 }
+
+
 
 .verde{
 
     background:#43a047;
+
     color:white;
 
 }
+
+
 
 .gris{
 
     background:#757575;
+
     color:white;
 
 }
+
+
 
 .rojo{
 
     background:#c62828;
+
     color:white;
 
 }
 
+
+
 .ficha{
 
-    border:1px solid #ddd;
-    border-radius:10px;
     background:#fafafa;
+
+    border:1px solid #ddd;
+
+    border-radius:10px;
+
     padding:15px;
 
+    margin-top:15px;
+
 }
+
+
+
+.dato{
+
+    font-size:18px;
+
+    margin:8px 0;
+
+}
+
+
 
 .nombre{
 
     font-size:28px;
+
+    font-weight:bold;
+
     color:#1565c0;
-    font-weight:bold;
-    margin-bottom:15px;
 
 }
 
-.dato{
 
-    margin:8px 0;
-    font-size:19px;
 
-}
+.oculto{
 
-.stock-ok{
-
-    color:green;
-    font-weight:bold;
+    display:none;
 
 }
 
-.stock-cero{
 
-    color:red;
-    font-weight:bold;
-
-}
 
 #reader{
 
@@ -151,49 +212,87 @@ button{
 
 }
 
-.tablaTalles{
+
+
+.tabla{
 
     width:100%;
+
     border-collapse:collapse;
 
 }
 
-.tablaTalles td{
+
+
+.tabla td{
 
     padding:10px;
-    border-bottom:1px solid #ddd;
+
+    border-bottom:
+    1px solid #ddd;
 
 }
 
-.celdaCantidad{
+
+
+.cantidad{
 
     width:90px;
 
 }
 
-.celdaCantidad input{
+
+
+.cantidad input{
 
     text-align:center;
 
 }
 
-#menuPrincipal,
-#pantallaBusqueda,
-#pantallaNuevaCompra,
-#pantallaTipoCarga,
-#pantallaCantidades,
-#pantallaResumen,
-#pantallaCarga{
 
-    display:none;
+
+.opciones{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(2,1fr);
+
+    gap:10px;
+
+    margin-top:15px;
+
+}
+
+
+
+.opcion{
+
+    background:#eeeeee;
+
+    padding:15px;
+
+    border-radius:10px;
+
+    text-align:center;
+
+    font-size:18px;
+
+    cursor:pointer;
 
 }
 
-#menuPrincipal{
 
-    display:block;
+
+.opcion.activo{
+
+    background:#1976d2;
+
+    color:white;
 
 }
+
+
 
 </style>
 
@@ -201,19 +300,22 @@ button{
 
 <body>
 
+
 <div class="card">
 
-<!-- ======================= -->
+
+<!-- ================================= -->
 <!-- MENU PRINCIPAL -->
-<!-- ======================= -->
+<!-- ================================= -->
+
 
 <div id="menuPrincipal">
 
+
 <h2>
-
 📦 ROPITA DE CUENTO
-
 </h2>
+
 
 <button
 class="azul"
@@ -223,6 +325,7 @@ onclick="abrirBusqueda()">
 
 </button>
 
+
 <button
 class="verde"
 onclick="abrirNuevaCompra()">
@@ -231,12 +334,14 @@ onclick="abrirNuevaCompra()">
 
 </button>
 
+
 <button
 class="gris">
 
 🏷 Imprimir etiquetas
 
 </button>
+
 
 <button
 class="gris">
@@ -245,6 +350,7 @@ class="gris">
 
 </button>
 
+
 <button
 class="gris">
 
@@ -252,19 +358,27 @@ class="gris">
 
 </button>
 
+
 </div>
 
-<!-- ======================= -->
-<!-- BUSQUEDA -->
-<!-- ======================= -->
 
-<div id="pantallaBusqueda">
+
+
+
+<!-- ================================= -->
+<!-- BUSQUEDA -->
+<!-- ================================= -->
+
+
+<div
+id="pantallaBusqueda"
+class="oculto">
+
 
 <h2>
-
 Buscar prenda
-
 </h2>
+
 
 <input
 
@@ -272,15 +386,17 @@ id="codigo"
 
 placeholder="Escanear o escribir código">
 
+
 <button
 
 class="verde"
 
 onclick="iniciarCamara()">
 
-📷 Escanear
+📷 Escanear código
 
 </button>
+
 
 <button
 
@@ -292,9 +408,18 @@ Buscar
 
 </button>
 
+
+
 <div id="reader"></div>
 
-<div id="resultado"></div>
+
+
+<div
+id="resultado">
+
+</div>
+
+
 
 <button
 
@@ -306,13 +431,27 @@ onclick="volverMenu()">
 
 </button>
 
+
 </div>
 
-<!-- ======================= -->
-<!-- NUEVA COMPRA -->
-<!-- ======================= -->
 
-<div id="pantallaNuevaCompra">
+
+
+
+
+
+<!-- ================================= -->
+<!-- NUEVA COMPRA -->
+<!-- ================================= -->
+
+
+<div
+
+id="pantallaNuevaCompra"
+
+class="oculto">
+
+
 
 <h2>
 
@@ -320,91 +459,219 @@ Nueva compra
 
 </h2>
 
-<label>Fecha</label>
+
+
+<label>
+
+Fecha
+
+</label>
+
 
 <input
+
 type="date"
+
 id="fechaCompra">
 
-<label>Proveedor</label>
 
-<input
-id="proveedor"
-placeholder="Proveedor">
 
-<label>Marca (opcional)</label>
 
-<input
-id="marcaCompra"
-placeholder="Marca">
 
-<label>Género</label>
+<label>
+
+Proveedor
+
+</label>
+
 
 <select
-id="grupoCompra">
 
-<option value="">Seleccione...</option>
+id="proveedor">
 
-<option value="BEBE">👶 Bebé</option>
+<option value="">
 
-<option value="BEBA">👧 Beba</option>
+Seleccione proveedor...
 
-<option value="NENE">🧒 Nene</option>
-
-<option value="NENA">👧 Nena</option>
-
-<option value="UNISEX_BEBE">🍼 Unisex bebé</option>
-
-<option value="UNISEX_NENE">👕 Unisex nene</option>
+</option>
 
 </select>
 
-<label>Tipo de prenda</label>
+
+
+
+
+<label>
+
+Género
+
+</label>
+
 
 <select
-id="tipoPrenda">
 
-<option value="">Cargando...</option>
+id="generoCompra">
+
+
+<option value="">
+
+Seleccione...
+
+</option>
+
 
 </select>
 
-<label>Precio de compra</label>
 
-<input
-id="precioCompra"
-type="number"
-step="0.01"
-placeholder="0">
 
-<label>Observaciones</label>
 
-<input
-id="obsCompra"
-placeholder="Opcional">
 
-<button
-class="verde"
-onclick="crearCompra()">
+<label>
 
-Continuar
+Categoría
 
-</button>
+</label>
 
-<button
-class="gris"
-onclick="volverMenu()">
 
-← Volver
+<select
 
-</button>
+id="categoria"
+
+onchange="cargarSubcategorias()">
+
+
+<option value="">
+
+Seleccione categoría...
+
+</option>
+
+
+</select>
+
+
+
+
+
+<div
+
+id="contenedorSubcategoria"
+
+class="oculto">
+
+
+<label>
+
+Subcategoría
+
+</label>
+
+
+<select
+
+id="subcategoria">
+
+
+<option value="">
+
+Seleccione...
+
+</option>
+
+
+</select>
+
 
 </div>
 
-<!-- ======================= -->
-<!-- TIPO DE CARGA -->
-<!-- ======================= -->
 
-<div id="pantallaTipoCarga">
+
+
+
+
+
+<label>
+
+Precio de compra
+
+</label>
+
+
+<input
+
+type="number"
+
+id="precioCompra"
+
+step="0.01"
+
+placeholder="0">
+
+
+
+
+
+<label>
+
+Observaciones
+
+</label>
+
+
+<input
+
+id="obsCompra"
+
+placeholder="Opcional">
+
+
+
+
+
+
+<button
+
+class="verde"
+
+onclick="crearCompra()">
+
+
+Continuar
+
+
+</button>
+
+
+
+
+
+<button
+
+class="gris"
+
+onclick="volverMenu()">
+
+
+← Volver
+
+
+</button>
+
+
+
+</div>
+
+<!-- ================================= -->
+<!-- TIPO DE CARGA -->
+<!-- ================================= -->
+
+
+<div
+
+id="pantallaTipoCarga"
+
+class="oculto">
+
 
 <h2>
 
@@ -412,791 +679,365 @@ onclick="volverMenu()">
 
 </h2>
 
+
+
 <button
+
 class="azul"
+
 onclick="iniciarCargaIndividual()">
+
 
 👕 Prenda individual
 
+
 </button>
 
+
+
+
 <button
+
 class="verde"
-onclick="mostrarCantidades()">
+
+onclick="mostrarCurva()">
+
 
 📦 Compra por curva
 
+
 </button>
 
+
+
+
 <button
+
 class="gris"
+
 onclick="volverNuevaCompra()">
+
 
 ← Volver
 
+
 </button>
+
+
 
 </div>
 
-<!-- ======================= -->
-<!-- CANTIDAD POR TALLE -->
-<!-- ======================= -->
 
-<div id="pantallaCantidades">
+
+
+
+
+
+<!-- ================================= -->
+<!-- CARGA POR CURVA -->
+<!-- ================================= -->
+
+
+<div
+
+id="pantallaCurva"
+
+class="oculto">
+
 
 <h2>
 
-Cantidad por talle
+Carga por curva
 
 </h2>
 
+
+
 <div
-id="listaCantidades">
+
+class="ficha">
+
+
+<div>
+
+<b>
+
+Categoría:
+
+</b>
+
+<span id="resumenCategoriaCurva">
+
+</span>
 
 </div>
 
+
+
+<div>
+
+<b>
+
+Subcategoría:
+
+</b>
+
+<span id="resumenSubcategoriaCurva">
+
+</span>
+
+</div>
+
+
+</div>
+
+
+
+
+
+<h3>
+
+Seleccione cantidades
+
+</h3>
+
+
+
+
+<div
+
+id="listaTalles">
+
+
+</div>
+
+
+
+
+
 <button
+
 class="verde"
-onclick="continuarCantidades()">
+
+onclick="continuarCurva()">
+
 
 Continuar
 
+
 </button>
 
+
+
+
+
 <button
+
 class="gris"
+
 onclick="volverTipoCarga()">
+
 
 ← Volver
 
+
 </button>
+
+
 
 </div>
 
-<!-- ======================= -->
-<!-- RESUMEN -->
-<!-- ======================= -->
 
-<div id="pantallaResumen">
+
+
+
+
+
+
+
+<!-- ================================= -->
+<!-- RESUMEN COMPRA -->
+<!-- ================================= -->
+
+
+<div
+
+id="pantallaResumen"
+
+class="oculto">
+
 
 <h2>
 
-Resumen de la compra
+Resumen de compra
 
 </h2>
 
+
+
+
 <div
+
 id="datosResumen"
+
 class="ficha">
+
 
 </div>
 
+
+
+
+
 <button
+
 class="verde"
+
 onclick="iniciarCargaPrendas()">
+
 
 Comenzar carga
 
+
 </button>
+
+
+
 
 <button
-class="gris"
-onclick="volverCantidades()">
 
-← Volver
+class="gris"
+
+onclick="volverCurva()">
+
+
+← Modificar
+
 
 </button>
+
+
 
 </div>
 
-<!-- ======================= -->
-<!-- CARGA DE PRENDAS -->
-<!-- ======================= -->
 
-<div id="pantallaCarga">
+
+
+
+
+
+
+
+<!-- ================================= -->
+<!-- CARGA DE PRENDAS -->
+<!-- ================================= -->
+
+
+<div
+
+id="pantallaCarga"
+
+class="oculto">
+
 
 <h2
+
 id="tituloCarga">
 
 Carga de prendas
 
 </h2>
 
+
+
+
 <div
+
 id="datosCarga"
+
 class="ficha">
+
 
 </div>
 
+
+
+
+
 <button
+
 class="gris"
+
 onclick="volverResumen()">
+
 
 ← Volver
 
+
 </button>
 
-</div>
+
 
 </div>
+
+<!-- ================================= -->
+<!-- CONTENEDORES AUXILIARES -->
+<!-- ================================= -->
+
+
+<div id="contenedoresAuxiliares" class="oculto">
+
+
+<!--
+Estos contenedores no son visibles.
+JavaScript los utilizará para manejar
+datos dinámicos provenientes de Apps Script.
+-->
+
+
+<div id="datosProveedores"></div>
+
+
+<div id="datosGeneros"></div>
+
+
+<div id="datosCategorias"></div>
+
+
+<div id="datosSubcategorias"></div>
+
+
+<div id="datosColores"></div>
+
+
+<div id="datosDiseños"></div>
+
+
+
+</div>
+
+
+
+
+
+</div>
+<!-- FIN CARD -->
+
+
+
 
 <script>
 
-const URL_SCRIPT =
-"https://script.google.com/macros/s/AKfycbwsBLmhm8xSx3vsfYEurnFM9m7D4S8WVLrGRBKRmnsx6uHLRAhEHMvzTUXlCW_kFnpC/exec";
 
-let grupoSeleccionado="";
 
-let colaPrendas=[];
 
-let indicePrenda=0;
-
-let prendasGuardadas=[];
-
-let tiposPrenda=[];
-
-window.onload=function(){
-
-    volverMenu();
-
-    cargarTipos();
-
-};
-
-function ocultarPantallas(){
-
-    document.getElementById("menuPrincipal").style.display="none";
-    document.getElementById("pantallaBusqueda").style.display="none";
-    document.getElementById("pantallaNuevaCompra").style.display="none";
-    document.getElementById("pantallaTipoCarga").style.display="none";
-    document.getElementById("pantallaCantidades").style.display="none";
-    document.getElementById("pantallaResumen").style.display="none";
-    document.getElementById("pantallaCarga").style.display="none";
-
-}
-
-function volverMenu(){
-
-    ocultarPantallas();
-
-    document.getElementById("menuPrincipal").style.display="block";
-
-}
-
-function abrirBusqueda(){
-
-    ocultarPantallas();
-
-    document.getElementById("pantallaBusqueda").style.display="block";
-
-}
-
-function abrirNuevaCompra(){
-
-    ocultarPantallas();
-
-    document.getElementById("pantallaNuevaCompra").style.display="block";
-
-    const hoy=new Date();
-
-    document.getElementById("fechaCompra").value=
-    hoy.toISOString().substring(0,10);
-
-}
-
-function volverNuevaCompra(){
-
-    ocultarPantallas();
-
-    document.getElementById("pantallaNuevaCompra").style.display="block";
-
-}
-
-function volverTipoCarga(){
-
-    ocultarPantallas();
-
-    document.getElementById("pantallaTipoCarga").style.display="block";
-
-}
-
-function volverCantidades(){
-
-    ocultarPantallas();
-
-    document.getElementById("pantallaCantidades").style.display="block";
-
-}
-
-function volverResumen(){
-
-    ocultarPantallas();
-
-    document.getElementById("pantallaResumen").style.display="block";
-
-}
-
-function cargarTipos(){
-
-    fetch(
-        URL_SCRIPT+"?accion=tipos"
-    )
-
-    .then(r=>r.json())
-
-    .then(function(lista){
-
-        tiposPrenda=lista;
-
-        const combo=
-        document.getElementById("tipoPrenda");
-
-        combo.innerHTML="";
-
-        combo.innerHTML+=
-        "<option value=''>Seleccione...</option>";
-
-        lista.forEach(function(t){
-
-            combo.innerHTML+=
-            "<option value='"+t.codigo+"'>"+
-            t.nombre+
-            "</option>";
-
-        });
-
-    });
-
-}
-
-function crearCompra(){
-
-    const proveedor=
-    document.getElementById("proveedor").value.trim();
-
-    if(proveedor==""){
-
-        alert("Ingrese el proveedor.");
-        return;
-
-    }
-
-    grupoSeleccionado=
-    document.getElementById("grupoCompra").value;
-
-    if(grupoSeleccionado==""){
-
-        alert("Seleccione el género.");
-        return;
-
-    }
-
-    if(document.getElementById("tipoPrenda").value==""){
-
-        alert("Seleccione el tipo de prenda.");
-        return;
-
-    }
-
-    if(document.getElementById("precioCompra").value==""){
-
-        alert("Ingrese el precio de compra.");
-        return;
-
-    }
-
-    localStorage.setItem(
-        "proveedor",
-        proveedor
-    );
-
-    localStorage.setItem(
-        "fechaCompra",
-        document.getElementById("fechaCompra").value
-    );
-
-    localStorage.setItem(
-        "marcaCompra",
-        document.getElementById("marcaCompra").value.trim()
-    );
-
-    localStorage.setItem(
-        "precioCompra",
-        document.getElementById("precioCompra").value
-    );
-
-    localStorage.setItem(
-        "tipoCodigo",
-        document.getElementById("tipoPrenda").value
-    );
-
-    localStorage.setItem(
-        "tipoNombre",
-        document.getElementById("tipoPrenda").selectedOptions[0].text
-    );
-
-    localStorage.setItem(
-        "obsCompra",
-        document.getElementById("obsCompra").value.trim()
-    );
-
-    ocultarPantallas();
-
-    document.getElementById("pantallaTipoCarga").style.display="block";
-
-}
-
-function iniciarCargaIndividual(){
-
-    colaPrendas=[];
-
-    indicePrenda=0;
-
-    prendasGuardadas=[];
-
-    colaPrendas.push("");
-
-    mostrarFormularioPrenda();
-
-}
-
-function mostrarCantidades(){
-
-    ocultarPantallas();
-
-    document.getElementById("pantallaCantidades").style.display="block";
-
-    let talles=[];
-
-    if(
-        grupoSeleccionado=="BEBE" ||
-        grupoSeleccionado=="BEBA" ||
-        grupoSeleccionado=="UNISEX_BEBE"
-    ){
-
-        talles=["0","1","2","3","4","5","6"];
-
-    }
-
-    else{
-
-        talles=["4","6","8","10","12","14","16"];
-
-    }
-
-    let html="";
-
-    html+="<table class='tablaTalles'>";
-
-    talles.forEach(function(t){
-
-        html+="<tr>";
-
-        html+="<td><b>Talle "+t+"</b></td>";
-
-        html+="<td class='celdaCantidad'>";
-
-        html+="<input";
-
-        html+=" class='cantidadTalle'";
-
-        html+=" data-talle='"+t+"'";
-
-        html+=" type='number'";
-
-        html+=" value='1'";
-
-        html+=" min='0'>";
-
-        html+="</td>";
-
-        html+="</tr>";
-
-    });
-
-    html+="</table>";
-
-    document.getElementById("listaCantidades").innerHTML=html;
-
-}
-
-function continuarCantidades(){
-
-    let cantidades=[];
-
-    document.querySelectorAll(".cantidadTalle")
-
-    .forEach(function(c){
-
-        let cant=Number(c.value);
-
-        if(cant>0){
-
-            cantidades.push({
-
-                talle:c.dataset.talle,
-
-                cantidad:cant
-
-            });
-
-        }
-
-    });
-
-    if(cantidades.length==0){
-
-        alert("Debe ingresar al menos una cantidad.");
-
-        return;
-
-    }
-
-    localStorage.setItem(
-
-        "cantidadesCurva",
-
-        JSON.stringify(cantidades)
-
-    );
-
-    mostrarResumen();
-
-}
-
-function mostrarResumen(){
-
-    ocultarPantallas();
-
-    document.getElementById("pantallaResumen").style.display="block";
-
-    const cantidades=
-    JSON.parse(localStorage.getItem("cantidadesCurva"));
-
-    let html="";
-
-    html+="<b>Proveedor:</b> ";
-    html+=localStorage.getItem("proveedor");
-    html+="<br>";
-
-    html+="<b>Marca:</b> ";
-    html+=(localStorage.getItem("marcaCompra") || "-");
-    html+="<br>";
-
-    html+="<b>Grupo:</b> ";
-    html+=grupoSeleccionado;
-    html+="<br>";
-
-    html+="<b>Tipo:</b> ";
-    html+=localStorage.getItem("tipoNombre");
-    html+="<br>";
-
-    html+="<b>Precio compra:</b> $";
-    html+=localStorage.getItem("precioCompra");
-
-    html+="<hr>";
-
-    cantidades.forEach(function(item){
-
-        html+="Talle <b>";
-        html+=item.talle;
-        html+="</b>: ";
-        html+=item.cantidad;
-        html+=" unidad(es)<br>";
-
-    });
-
-    document.getElementById("datosResumen").innerHTML=html;
-
-}
-
-function iniciarCargaPrendas(){
-
-    colaPrendas=[];
-
-    indicePrenda=0;
-
-    prendasGuardadas=[];
-
-    const cantidades=
-    JSON.parse(localStorage.getItem("cantidadesCurva"));
-
-    cantidades.forEach(function(item){
-
-        for(let i=0;i<item.cantidad;i++){
-
-            colaPrendas.push(item.talle);
-
-        }
-
-    });
-
-    mostrarFormularioPrenda();
-
-}
-
-function mostrarFormularioPrenda(){
-
-    ocultarPantallas();
-
-    document.getElementById("pantallaCarga").style.display="block";
-
-    if(indicePrenda>=colaPrendas.length){
-
-        enviarCompraCompleta();
-
-        return;
-
-    }
-
-    const talle=colaPrendas[indicePrenda];
-
-    document.getElementById("tituloCarga").innerHTML=
-
-    "Prenda "+(indicePrenda+1)+" de "+colaPrendas.length;
-
-    let html="";
-
-    html+="<b>Talle:</b> "+talle;
-
-    html+="<br><br>";
-
-    html+="<label>Color</label>";
-
-    html+="<input id='colorPrenda' placeholder='Opcional'>";
-
-    html+="<br><br>";
-
-    html+="<button class='verde' onclick='guardarPrendaActual()'>";
-
-    html+="Guardar y continuar";
-
-    html+="</button>";
-
-    document.getElementById("datosCarga").innerHTML=html;
-
-}
-
-function guardarPrendaActual(){
-
-    prendasGuardadas.push({
-
-        talle:colaPrendas[indicePrenda],
-
-        color:document.getElementById("colorPrenda").value.trim()
-
-    });
-
-    indicePrenda++;
-
-    mostrarFormularioPrenda();
-
-}
-
-function enviarCompraCompleta(){
-
-    fetch(
-
-        URL_SCRIPT,
-
-        {
-
-            method:"POST",
-
-            body:new URLSearchParams({
-
-                accion:"guardarCompra",
-
-                proveedor:localStorage.getItem("proveedor"),
-
-                fecha:localStorage.getItem("fechaCompra"),
-
-                marca:localStorage.getItem("marcaCompra"),
-
-                genero:grupoSeleccionado,
-
-                tipoCodigo:localStorage.getItem("tipoCodigo"),
-
-                tipoNombre:localStorage.getItem("tipoNombre"),
-
-                precioCompra:localStorage.getItem("precioCompra"),
-
-                observaciones:localStorage.getItem("obsCompra"),
-
-                prendas:JSON.stringify(prendasGuardadas)
-
-            })
-
-        }
-
-    )
-
-    .then(r=>r.json())
-
-    .then(function(resp){
-
-        if(resp.ok){
-
-            finalizarCarga();
-
-        }else{
-
-            alert(resp.mensaje || "Error al guardar la compra.");
-
-        }
-
-    })
-
-    .catch(function(){
-
-        alert("No fue posible conectar con el servidor.");
-
-    });
-
-}
-
-function finalizarCarga(){
-
-    localStorage.removeItem("cantidadesCurva");
-    localStorage.removeItem("tipoCodigo");
-    localStorage.removeItem("tipoNombre");
-    localStorage.removeItem("proveedor");
-    localStorage.removeItem("fechaCompra");
-    localStorage.removeItem("marcaCompra");
-    localStorage.removeItem("precioCompra");
-    localStorage.removeItem("obsCompra");
-
-    colaPrendas=[];
-    prendasGuardadas=[];
-    indicePrenda=0;
-
-    ocultarPantallas();
-
-    document.getElementById("pantallaCarga").style.display="block";
-
-    document.getElementById("tituloCarga").innerHTML="Proceso terminado";
-
-    document.getElementById("datosCarga").innerHTML=
-
-    "<h2>✅ Compra guardada correctamente</h2>"+
-    "<br>"+
-    "<button class='verde' onclick='volverMenu()'>Volver al menú</button>";
-
-}
-
-function buscar(){
-
-    const codigo=
-    document.getElementById("codigo").value.trim();
-
-    if(codigo==""){
-
-        alert("Ingrese un código.");
-        return;
-
-    }
-
-    fetch(
-
-        URL_SCRIPT+
-        "?accion=buscar&codigo="+
-        encodeURIComponent(codigo)
-
-    )
-
-    .then(r=>r.json())
-
-    .then(mostrar)
-
-    .catch(function(){
-
-        alert("No fue posible buscar el producto.");
-
-    });
-
-}
-
-function mostrar(p){
-
-    if(!p){
-
-        document.getElementById("resultado").innerHTML=
-
-        "<div class='ficha'><h3>Producto no encontrado</h3></div>";
-
-        return;
-
-    }
-
-    let html="";
-
-    html+="<div class='ficha'>";
-
-    html+="<div class='nombre'>";
-
-    html+=p.subcategoria || "";
-
-    html+="</div>";
-
-    html+="<div class='dato'><b>Código:</b> "+(p.codigo||"")+"</div>";
-
-    html+="<div class='dato'><b>Color:</b> "+(p.color||"-")+"</div>";
-
-    html+="<div class='dato'><b>Talle:</b> "+(p.talle||"-")+"</div>";
-
-    html+="<div class='dato'><b>Precio:</b> $"+(p.precioVenta||0)+"</div>";
-
-    html+="<div class='dato'><b>Estado:</b> "+(p.estado||"-")+"</div>";
-
-    html+="</div>";
-
-    document.getElementById("resultado").innerHTML=html;
-
-}
-
-function iniciarCamara(){
-
-    document.getElementById("reader").innerHTML="";
-
-    const lector=new Html5Qrcode("reader");
-
-    lector.start(
-
-        {
-            facingMode:"environment"
-        },
-
-        {
-
-            fps:10,
-
-            qrbox:{
-                width:280,
-                height:120
-            }
-
-        },
-
-        function(texto){
-
-            document.getElementById("codigo").value=texto;
-
-            lector.stop().then(function(){
-
-                buscar();
-
-            });
-
-        },
-
-        function(error){}
-
-    );
-
-}
 
 </script>
+
+
+
 
 </body>
 
 </html>
+
