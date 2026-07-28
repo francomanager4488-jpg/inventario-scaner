@@ -463,6 +463,79 @@ onclick="volverResumen()">
 
 </div>
 
+<!-- ================= NUEVO PROVEEDOR ================= -->
+
+<div id="pantallaProveedor">
+
+<h2>
+
+Nuevo proveedor
+
+</h2>
+
+<label>Nombre</label>
+
+<input
+id="provNombre">
+
+<label>Teléfono</label>
+
+<input
+id="provTelefono">
+
+<label>WhatsApp</label>
+
+<input
+id="provWhatsapp">
+
+<label>Dirección</label>
+
+<input
+id="provDireccion">
+
+<label>Ciudad</label>
+
+<input
+id="provCiudad">
+
+<label>Galería</label>
+
+<input
+id="provGaleria">
+
+<label>Local</label>
+
+<input
+id="provLocal">
+
+<label>Instagram</label>
+
+<input
+id="provInstagram">
+
+<label>Observaciones</label>
+
+<input
+id="provObs">
+
+<button
+class="verde"
+onclick="guardarProveedor()">
+
+Guardar proveedor
+
+</button>
+
+<button
+class="gris"
+onclick="volverNuevaCompra()">
+
+← Cancelar
+
+</button>
+
+</div>
+
 <script>
 
 const URL_SCRIPT =
@@ -509,6 +582,7 @@ function ocultarPantallas(){
     document.getElementById("pantallaTipoCarga").style.display="none";
     document.getElementById("pantallaCantidades").style.display="none";
     document.getElementById("pantallaResumen").style.display="none";
+    document.getElementById("pantallaCarga").style.display="none";
     document.getElementById("pantallaCarga").style.display="none";
 
 }
