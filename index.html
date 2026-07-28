@@ -4,6 +4,7 @@
 <head>
 
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <title>Ropita de Cuento</title>
@@ -17,151 +18,109 @@
 }
 
 body{
-
     margin:0;
     padding:20px;
     background:#f3f3f3;
     font-family:Arial,Helvetica,sans-serif;
-
 }
 
 .card{
-
     max-width:760px;
     margin:auto;
     background:#fff;
     border-radius:12px;
     padding:20px;
-    box-shadow:0 2px 12px rgba(0,0,0,.18);
-
+    box-shadow:0 2px 12px rgba(0,0,0,.20);
 }
 
 h2,h3{
-
-    text-align:center;
     margin-top:0;
-
+    text-align:center;
 }
 
 label{
-
     display:block;
     margin-top:15px;
     font-weight:bold;
-
 }
 
 input,
 select{
-
     width:100%;
     padding:14px;
     margin-top:8px;
     font-size:18px;
-
 }
 
 button{
-
     width:100%;
     padding:15px;
     margin-top:12px;
+    font-size:20px;
     border:none;
     border-radius:8px;
-    font-size:20px;
     cursor:pointer;
-
 }
 
 .azul{
-
     background:#1976d2;
-    color:#fff;
-
+    color:white;
 }
 
 .verde{
-
     background:#43a047;
-    color:#fff;
-
+    color:white;
 }
 
 .gris{
-
     background:#757575;
-    color:#fff;
-
+    color:white;
 }
 
 .rojo{
-
     background:#c62828;
-    color:#fff;
-
+    color:white;
 }
 
 .ficha{
-
+    background:#fafafa;
     border:1px solid #ddd;
     border-radius:10px;
     padding:15px;
-    background:#fafafa;
-
 }
 
 .nombre{
-
     font-size:28px;
-    color:#1565c0;
     font-weight:bold;
-    margin-bottom:15px;
-
+    color:#1565c0;
+    margin-bottom:12px;
 }
 
 .dato{
-
-    font-size:18px;
+    font-size:19px;
     margin:8px 0;
-
 }
 
 .tablaTalles{
-
     width:100%;
     border-collapse:collapse;
-
 }
 
 .tablaTalles td{
-
     padding:10px;
     border-bottom:1px solid #ddd;
-
 }
 
 .celdaCantidad{
-
     width:100px;
-
 }
 
 .celdaCantidad input{
-
     text-align:center;
-
 }
 
 #reader{
-
     margin-top:20px;
-
-}
-
-#resultado{
-
-    margin-top:20px;
-
 }
 
 #menuPrincipal,
@@ -171,15 +130,11 @@ button{
 #pantallaCantidades,
 #pantallaResumen,
 #pantallaCarga{
-
     display:none;
-
 }
 
 #menuPrincipal{
-
     display:block;
-
 }
 
 </style>
@@ -190,39 +145,59 @@ button{
 
 <div class="card">
 
-<!-- ========================= -->
-<!-- MENÚ PRINCIPAL -->
-<!-- ========================= -->
+<!-- ===================================================== -->
+<!-- MENU PRINCIPAL -->
+<!-- ===================================================== -->
 
 <div id="menuPrincipal">
 
 <h2>📦 ROPITA DE CUENTO</h2>
 
-<button class="azul" onclick="abrirBusqueda()">
+<button
+class="azul"
+onclick="abrirBusqueda()">
+
 🔍 Buscar prenda
+
 </button>
 
-<button class="verde" onclick="abrirNuevaCompra()">
+<button
+class="verde"
+onclick="abrirNuevaCompra()">
+
 📦 Nueva compra
+
 </button>
 
-<button class="gris">
+<button
+class="gris"
+onclick="alert('Próximamente')">
+
 🏷 Imprimir etiquetas
+
 </button>
 
-<button class="gris">
+<button
+class="gris"
+onclick="alert('Próximamente')">
+
 📊 Inventario
+
 </button>
 
-<button class="gris">
+<button
+class="gris"
+onclick="alert('Próximamente')">
+
 ⚙ Configuración
+
 </button>
 
 </div>
 
-<!-- ========================= -->
-<!-- BÚSQUEDA -->
-<!-- ========================= -->
+<!-- ===================================================== -->
+<!-- BUSQUEDA -->
+<!-- ===================================================== -->
 
 <div id="pantallaBusqueda">
 
@@ -262,9 +237,9 @@ onclick="volverMenu()">
 
 </div>
 
-<!-- ========================= -->
+<!-- ===================================================== -->
 <!-- NUEVA COMPRA -->
-<!-- ========================= -->
+<!-- ===================================================== -->
 
 <div id="pantallaNuevaCompra">
 
@@ -278,32 +253,29 @@ id="fechaCompra">
 
 <label>Proveedor</label>
 
-<input
-id="proveedor">
+<select id="proveedor">
+
+<option value="">Cargando proveedores...</option>
+
+</select>
 
 <label>Marca</label>
 
 <input
-id="marcaCompra">
+id="marcaCompra"
+placeholder="Marca (opcional)">
 
 <label>Género</label>
 
 <select id="grupoCompra">
 
-<option value="">Seleccione...</option>
-
-<option value="BA">Beba</option>
-<option value="BE">Bebé</option>
-<option value="NA">Nena</option>
-<option value="NE">Nene</option>
-<option value="UB">Unisex bebé</option>
-<option value="UN">Unisex nene</option>
+<option value="">Cargando géneros...</option>
 
 </select>
 
 <label>Categoría</label>
 
-<select id="categoria">
+<select id="categoriaPrenda">
 
 <option value="">Cargando categorías...</option>
 
@@ -311,9 +283,9 @@ id="marcaCompra">
 
 <label>Subcategoría</label>
 
-<select id="subcategoria">
+<select id="subcategoriaPrenda">
 
-<option value="">Seleccione categoría...</option>
+<option value="">Seleccione una categoría</option>
 
 </select>
 
@@ -347,17 +319,13 @@ onclick="volverMenu()">
 
 </div>
 
-<!-- ========================= -->
+<!-- ===================================================== -->
 <!-- TIPO DE CARGA -->
-<!-- ========================= -->
+<!-- ===================================================== -->
 
 <div id="pantallaTipoCarga">
 
-<h2>
-
-Seleccione el tipo de carga
-
-</h2>
+<h2>Tipo de carga</h2>
 
 <button
 class="azul"
@@ -385,9 +353,9 @@ onclick="volverNuevaCompra()">
 
 </div>
 
-<!-- ========================= -->
-<!-- CANTIDADES POR TALLE -->
-<!-- ========================= -->
+<!-- ===================================================== -->
+<!-- CANTIDADES -->
+<!-- ===================================================== -->
 
 <div id="pantallaCantidades">
 
@@ -397,8 +365,7 @@ Cantidad por talle
 
 </h2>
 
-<div
-id="listaCantidades">
+<div id="listaCantidades">
 
 </div>
 
@@ -420,15 +387,15 @@ onclick="volverTipoCarga()">
 
 </div>
 
-<!-- ========================= -->
+<!-- ===================================================== -->
 <!-- RESUMEN -->
-<!-- ========================= -->
+<!-- ===================================================== -->
 
 <div id="pantallaResumen">
 
 <h2>
 
-Resumen de la compra
+Resumen de compra
 
 </h2>
 
@@ -456,9 +423,9 @@ onclick="volverCantidades()">
 
 </div>
 
-<!-- ========================= -->
+<!-- ===================================================== -->
 <!-- CARGA DE PRENDAS -->
-<!-- ========================= -->
+<!-- ===================================================== -->
 
 <div id="pantallaCarga">
 
@@ -489,31 +456,41 @@ onclick="volverResumen()">
 
 <script>
 
-const URL_SCRIPT="TU_URL_DEL_APPS_SCRIPT";
-
-let categorias=[];
-
-let subcategorias=[];
+const URL_SCRIPT =
+"https://script.google.com/macros/s/AKfycbwsBLmhm8xSx3vsfYEurnFM9m7D4S8WVLrGRBKRmnsx6uHLRAhEHMvzTUXlCW_kFnpC/exec";
 
 let grupoSeleccionado="";
-
 let categoriaSeleccionada="";
-
 let subcategoriaSeleccionada="";
 
 let colaPrendas=[];
-
+let prendasGuardadas=[];
 let indicePrenda=0;
 
-let prendasGuardadas=[];
+let listaGeneros=[];
+let listaCategorias=[];
+let listaSubcategorias=[];
 
 window.onload=function(){
 
     volverMenu();
 
-    cargarCategorias();
+    inicializarFormulario();
 
 };
+
+function inicializarFormulario(){
+
+    const hoy=new Date();
+
+    document.getElementById("fechaCompra").value=
+    hoy.toISOString().substring(0,10);
+
+    cargarGeneros();
+    cargarCategorias();
+    cargarProveedores();
+
+}
 
 function ocultarPantallas(){
 
@@ -549,11 +526,6 @@ function abrirNuevaCompra(){
 
     document.getElementById("pantallaNuevaCompra").style.display="block";
 
-    const hoy=new Date();
-
-    document.getElementById("fechaCompra").value=
-    hoy.toISOString().substring(0,10);
-
 }
 
 function volverNuevaCompra(){
@@ -588,38 +560,31 @@ function volverResumen(){
 
 }
 
-function cargarCategorias(){
+/* =====================================================
+   CARGA DE DESPLEGABLES
+===================================================== */
 
-    fetch(
+function cargarGeneros(){
 
-        URL_SCRIPT+"?accion=categorias"
-
-    )
+    fetch(URL_SCRIPT+"?accion=generos")
 
     .then(r=>r.json())
 
     .then(function(lista){
 
-        categorias=lista;
+        listaGeneros=lista;
 
-        const combo=
-
-        document.getElementById("categoria");
+        const combo=document.getElementById("grupoCompra");
 
         combo.innerHTML="";
 
-        combo.innerHTML+=
+        combo.innerHTML+="<option value=''>Seleccione...</option>";
 
-        "<option value=''>Seleccione...</option>";
-
-        lista.forEach(function(c){
+        lista.forEach(function(item){
 
             combo.innerHTML+=
-
-            "<option value='"+c.codigo+"'>"+
-
-            c.nombre+
-
+            "<option value='"+item.codigo+"'>"+
+            item.nombre+
             "</option>";
 
         });
@@ -628,19 +593,44 @@ function cargarCategorias(){
 
 }
 
-document.addEventListener("change",function(e){
 
-    if(e.target.id=="categoria"){
 
-        categoriaSeleccionada=e.target.value;
+function cargarCategorias(){
 
-        cargarSubcategorias(categoriaSeleccionada);
+    fetch(URL_SCRIPT+"?accion=categorias")
 
-    }
+    .then(r=>r.json())
 
-});
+    .then(function(lista){
+
+        listaCategorias=lista;
+
+        const combo=document.getElementById("categoriaPrenda");
+
+        combo.innerHTML="";
+
+        combo.innerHTML+="<option value=''>Seleccione...</option>";
+
+        lista.forEach(function(item){
+
+            combo.innerHTML+=
+            "<option value='"+item.codigo+"'>"+
+            item.nombre+
+            "</option>";
+
+        });
+
+    });
+
+}
+
+
 
 function cargarSubcategorias(categoria){
+
+    const combo=document.getElementById("subcategoriaPrenda");
+
+    combo.innerHTML="<option>Cargando...</option>";
 
     fetch(
 
@@ -656,26 +646,17 @@ function cargarSubcategorias(categoria){
 
     .then(function(lista){
 
-        subcategorias=lista;
-
-        const combo=
-
-        document.getElementById("subcategoria");
+        listaSubcategorias=lista;
 
         combo.innerHTML="";
 
-        combo.innerHTML+=
+        combo.innerHTML+="<option value=''>Seleccione...</option>";
 
-        "<option value=''>Seleccione...</option>";
-
-        lista.forEach(function(s){
+        lista.forEach(function(item){
 
             combo.innerHTML+=
-
-            "<option value='"+s.codigo+"'>"+
-
-            s.nombre+
-
+            "<option value='"+item.codigo+"'>"+
+            item.nombre+
             "</option>";
 
         });
@@ -684,25 +665,83 @@ function cargarSubcategorias(categoria){
 
 }
 
+
+
+function cargarProveedores(){
+
+    fetch(URL_SCRIPT+"?accion=proveedores")
+
+    .then(r=>r.json())
+
+    .then(function(lista){
+
+        const combo=document.getElementById("proveedor");
+
+        combo.innerHTML="";
+
+        combo.innerHTML+="<option value=''>Seleccione...</option>";
+
+        lista.forEach(function(item){
+
+            combo.innerHTML+=
+            "<option value='"+item.nombre+"'>"+
+            item.nombre+
+            "</option>";
+
+        });
+
+    });
+
+}
+
+
+
+/* =====================================================
+   EVENTOS DE LOS COMBOS
+===================================================== */
+
+document.addEventListener("change",function(e){
+
+    if(e.target.id=="categoriaPrenda"){
+
+        cargarSubcategorias(e.target.value);
+
+    }
+
+});
+
+
+
+/* =====================================================
+   NUEVA COMPRA
+===================================================== */
+
 function crearCompra(){
 
     const proveedor=
+    document.getElementById("proveedor").value;
 
-    document.getElementById("proveedor").value.trim();
+    const genero=
+    document.getElementById("grupoCompra").value;
+
+    const categoria=
+    document.getElementById("categoriaPrenda").value;
+
+    const subcategoria=
+    document.getElementById("subcategoriaPrenda").value;
+
+    const precio=
+    document.getElementById("precioCompra").value;
 
     if(proveedor==""){
 
-        alert("Ingrese el proveedor.");
+        alert("Seleccione el proveedor.");
 
         return;
 
     }
 
-    grupoSeleccionado=
-
-    document.getElementById("grupoCompra").value;
-
-    if(grupoSeleccionado==""){
+    if(genero==""){
 
         alert("Seleccione el género.");
 
@@ -710,7 +749,7 @@ function crearCompra(){
 
     }
 
-    if(document.getElementById("categoria").value==""){
+    if(categoria==""){
 
         alert("Seleccione la categoría.");
 
@@ -718,7 +757,7 @@ function crearCompra(){
 
     }
 
-    if(document.getElementById("subcategoria").value==""){
+    if(subcategoria==""){
 
         alert("Seleccione la subcategoría.");
 
@@ -726,7 +765,7 @@ function crearCompra(){
 
     }
 
-    if(document.getElementById("precioCompra").value==""){
+    if(precio==""){
 
         alert("Ingrese el precio.");
 
@@ -734,77 +773,22 @@ function crearCompra(){
 
     }
 
-    localStorage.setItem(
+    grupoSeleccionado=genero;
+    categoriaSeleccionada=categoria;
+    subcategoriaSeleccionada=subcategoria;
 
-        "fechaCompra",
+    localStorage.setItem("fechaCompra",
+        document.getElementById("fechaCompra").value);
 
-        document.getElementById("fechaCompra").value
+    localStorage.setItem("proveedor",proveedor);
 
-    );
+    localStorage.setItem("marcaCompra",
+        document.getElementById("marcaCompra").value.trim());
 
-    localStorage.setItem(
+    localStorage.setItem("precioCompra",precio);
 
-        "proveedor",
-
-        proveedor
-
-    );
-
-    localStorage.setItem(
-
-        "marcaCompra",
-
-        document.getElementById("marcaCompra").value.trim()
-
-    );
-
-    localStorage.setItem(
-
-        "precioCompra",
-
-        document.getElementById("precioCompra").value
-
-    );
-
-    localStorage.setItem(
-
-        "categoriaCodigo",
-
-        document.getElementById("categoria").value
-
-    );
-
-    localStorage.setItem(
-
-        "categoriaNombre",
-
-        document.getElementById("categoria").selectedOptions[0].text
-
-    );
-
-    localStorage.setItem(
-
-        "subcategoriaCodigo",
-
-        document.getElementById("subcategoria").value
-
-    );
-
-    localStorage.setItem(
-
-        "subcategoriaNombre",
-
-        document.getElementById("subcategoria").selectedOptions[0].text
-
-    );
-
-    localStorage.setItem(
-
-        "obsCompra",
-
-        document.getElementById("obsCompra").value.trim()
-
-    );
+    localStorage.setItem("observaciones",
+        document.getElementById("obsCompra").value.trim());
 
     ocultarPantallas();
 
@@ -812,17 +796,23 @@ function crearCompra(){
 
 }
 
+/* =====================================================
+   CARGA INDIVIDUAL / CARGA POR CURVA
+===================================================== */
+
 function iniciarCargaIndividual(){
 
-    colaPrendas=[""];
-
+    colaPrendas=[];
+    prendasGuardadas=[];
     indicePrenda=0;
 
-    prendasGuardadas=[];
+    colaPrendas.push("");
 
     mostrarFormularioPrenda();
 
 }
+
+
 
 function mostrarCantidades(){
 
@@ -833,9 +823,13 @@ function mostrarCantidades(){
     let talles=[];
 
     if(
-        grupoSeleccionado=="BE" ||
-        grupoSeleccionado=="BA" ||
-        grupoSeleccionado=="UB"
+
+        grupoSeleccionado=="BEBE" ||
+
+        grupoSeleccionado=="BEBA" ||
+
+        grupoSeleccionado=="UNISEX_BEBE"
+
     ){
 
         talles=["0","1","2","3","4","5","6"];
@@ -882,59 +876,49 @@ function mostrarCantidades(){
 
 }
 
+
+
 function continuarCantidades(){
 
-    let cantidades=[];
+    colaPrendas=[];
 
     document.querySelectorAll(".cantidadTalle")
 
-    .forEach(function(c){
+    .forEach(function(i){
 
-        const cant=Number(c.value);
+        const cantidad=Number(i.value);
 
-        if(cant>0){
+        for(let x=0;x<cantidad;x++){
 
-            cantidades.push({
-
-                talle:c.dataset.talle,
-
-                cantidad:cant
-
-            });
+            colaPrendas.push(i.dataset.talle);
 
         }
 
     });
 
-    if(cantidades.length==0){
+    if(colaPrendas.length==0){
 
-        alert("Debe ingresar al menos una cantidad.");
+        alert("Debe ingresar al menos una prenda.");
 
         return;
 
     }
 
-    localStorage.setItem(
-
-        "cantidadesCurva",
-
-        JSON.stringify(cantidades)
-
-    );
-
     mostrarResumen();
 
 }
+
+
+
+/* =====================================================
+   RESUMEN
+===================================================== */
 
 function mostrarResumen(){
 
     ocultarPantallas();
 
     document.getElementById("pantallaResumen").style.display="block";
-
-    const cantidades=
-
-    JSON.parse(localStorage.getItem("cantidadesCurva"));
 
     let html="";
 
@@ -946,7 +930,7 @@ function mostrarResumen(){
 
     html+="<b>Marca:</b> ";
 
-    html+=localStorage.getItem("marcaCompra")||"-";
+    html+=localStorage.getItem("marcaCompra") || "-";
 
     html+="<br>";
 
@@ -958,13 +942,13 @@ function mostrarResumen(){
 
     html+="<b>Categoría:</b> ";
 
-    html+=localStorage.getItem("categoriaNombre");
+    html+=document.getElementById("categoriaPrenda").selectedOptions[0].text;
 
     html+="<br>";
 
     html+="<b>Subcategoría:</b> ";
 
-    html+=localStorage.getItem("subcategoriaNombre");
+    html+=document.getElementById("subcategoriaPrenda").selectedOptions[0].text;
 
     html+="<br>";
 
@@ -974,49 +958,45 @@ function mostrarResumen(){
 
     html+="<hr>";
 
-    cantidades.forEach(function(t){
+    let contador={};
 
-        html+="Talle <b>";
+    colaPrendas.forEach(function(t){
 
-        html+=t.talle;
+        contador[t]=(contador[t]||0)+1;
 
-        html+="</b> : ";
+    });
 
-        html+=t.cantidad;
+    for(let t in contador){
+
+        html+="Talle <b>"+t+"</b>: ";
+
+        html+=contador[t];
 
         html+=" unidad(es)<br>";
 
-    });
+    }
 
     document.getElementById("datosResumen").innerHTML=html;
 
 }
 
+
+
+/* =====================================================
+   CARGA DE PRENDAS
+===================================================== */
+
 function iniciarCargaPrendas(){
-
-    colaPrendas=[];
-
-    indicePrenda=0;
 
     prendasGuardadas=[];
 
-    const cantidades=
-
-    JSON.parse(localStorage.getItem("cantidadesCurva"));
-
-    cantidades.forEach(function(t){
-
-        for(let i=0;i<t.cantidad;i++){
-
-            colaPrendas.push(t.talle);
-
-        }
-
-    });
+    indicePrenda=0;
 
     mostrarFormularioPrenda();
 
 }
+
+
 
 function mostrarFormularioPrenda(){
 
@@ -1032,7 +1012,7 @@ function mostrarFormularioPrenda(){
 
     }
 
-    const talle=colaPrendas[indicePrenda];
+    const talle=colaPrendas[indicePrenda] || "";
 
     document.getElementById("tituloCarga").innerHTML=
 
@@ -1040,15 +1020,19 @@ function mostrarFormularioPrenda(){
 
     let html="";
 
-    html+="<b>Talle:</b> ";
-
-    html+=talle;
+    html+="<b>Talle:</b> "+talle;
 
     html+="<br><br>";
 
     html+="<label>Color</label>";
 
     html+="<input id='colorPrenda' placeholder='Opcional'>";
+
+    html+="<br><br>";
+
+    html+="<label>Diseño</label>";
+
+    html+="<input id='disenoPrenda' placeholder='Opcional'>";
 
     html+="<br><br>";
 
@@ -1062,23 +1046,59 @@ function mostrarFormularioPrenda(){
 
 }
 
+
+/* =====================================================
+   GUARDAR PRENDA
+===================================================== */
+
 function guardarPrendaActual(){
 
     prendasGuardadas.push({
 
+        genero:grupoSeleccionado,
+
+        categoria:categoriaSeleccionada,
+
+        subcategoria:subcategoriaSeleccionada,
+
         talle:colaPrendas[indicePrenda],
 
-        color:document.getElementById("colorPrenda").value.trim()
+        color:document.getElementById("colorPrenda").value.trim(),
+
+        diseno:document.getElementById("disenoPrenda").value.trim(),
+
+        precioCompra:Number(localStorage.getItem("precioCompra")),
+
+        precioVenta:0,
+
+        observaciones:localStorage.getItem("observaciones") || ""
 
     });
 
+   
     indicePrenda++;
 
     mostrarFormularioPrenda();
 
 }
 
+
+
+/* =====================================================
+   ENVIAR COMPRA
+===================================================== */
+
 function enviarCompraCompleta(){
+
+    const compra={
+
+        fecha:localStorage.getItem("fechaCompra"),
+
+        proveedor:localStorage.getItem("proveedor"),
+
+        observaciones:localStorage.getItem("observaciones")
+
+    };
 
     fetch(
 
@@ -1088,31 +1108,19 @@ function enviarCompraCompleta(){
 
             method:"POST",
 
-            body:new URLSearchParams({
+            headers:{
+
+                "Content-Type":"application/json"
+
+            },
+
+            body:JSON.stringify({
 
                 accion:"guardarCompra",
 
-                proveedor:localStorage.getItem("proveedor"),
+                compra:compra,
 
-                fecha:localStorage.getItem("fechaCompra"),
-
-                marca:localStorage.getItem("marcaCompra"),
-
-                genero:grupoSeleccionado,
-
-                categoriaCodigo:localStorage.getItem("categoriaCodigo"),
-
-                categoriaNombre:localStorage.getItem("categoriaNombre"),
-
-                subcategoriaCodigo:localStorage.getItem("subcategoriaCodigo"),
-
-                subcategoriaNombre:localStorage.getItem("subcategoriaNombre"),
-
-                precioCompra:localStorage.getItem("precioCompra"),
-
-                observaciones:localStorage.getItem("obsCompra"),
-
-                prendas:JSON.stringify(prendasGuardadas)
+                prendas:prendasGuardadas
 
             })
 
@@ -1130,7 +1138,7 @@ function enviarCompraCompleta(){
 
         }else{
 
-            alert(resp.mensaje || "Error al guardar la compra.");
+            alert(resp.mensaje);
 
         }
 
@@ -1138,21 +1146,27 @@ function enviarCompraCompleta(){
 
     .catch(function(){
 
-        alert("No fue posible conectar con el servidor.");
+        alert("Error de conexión.");
 
     });
 
 }
 
+
+
+/* =====================================================
+   FINALIZAR
+===================================================== */
+
 function finalizarCarga(){
-
-    localStorage.clear();
-
-    colaPrendas=[];
 
     prendasGuardadas=[];
 
+    colaPrendas=[];
+
     indicePrenda=0;
+
+    localStorage.clear();
 
     ocultarPantallas();
 
@@ -1171,6 +1185,12 @@ function finalizarCarga(){
     "<button class='verde' onclick='volverMenu()'>Volver al menú</button>";
 
 }
+
+
+
+/* =====================================================
+   BUSCADOR
+===================================================== */
 
 function buscar(){
 
@@ -1208,6 +1228,8 @@ function buscar(){
 
 }
 
+
+
 function mostrar(p){
 
     if(!p){
@@ -1226,7 +1248,7 @@ function mostrar(p){
 
     html+="<div class='nombre'>";
 
-    html+=p.subcategoria || "";
+    html+=p.subcategoria;
 
     html+="</div>";
 
@@ -1266,6 +1288,12 @@ function mostrar(p){
 
 }
 
+
+
+/* =====================================================
+   ESCANER
+===================================================== */
+
 function iniciarCamara(){
 
     document.getElementById("reader").innerHTML="";
@@ -1274,23 +1302,13 @@ function iniciarCamara(){
 
     lector.start(
 
-        {
-
-            facingMode:"environment"
-
-        },
+        {facingMode:"environment"},
 
         {
 
             fps:10,
 
-            qrbox:{
-
-                width:260,
-
-                height:110
-
-            }
+            qrbox:{width:260,height:110}
 
         },
 
