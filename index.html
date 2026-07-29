@@ -1382,8 +1382,8 @@ function mostrar(p){
 
 function guardarProveedor(){
 
-alert("Entró a guardarProveedor");
-    
+    alert("Entró a guardarProveedor");
+
     const proveedor={
 
         nombre:document.getElementById("provNombre").value.trim(),
@@ -1398,6 +1398,7 @@ alert("Entró a guardarProveedor");
 
     };
 
+
     if(proveedor.nombre==""){
 
         alert("Ingrese el nombre del proveedor.");
@@ -1405,52 +1406,76 @@ alert("Entró a guardarProveedor");
 
     }
 
-    fetch(URL_SCRIPT,{
-    method:"POST",
-    mode:"no-cors",
-    headers:{
-        "Content-Type":"application/json"
-    },
-    body:JSON.stringify({
 
-        accion:"guardarProveedor",
-        proveedor:proveedor
+    fetch(URL_SCRIPT,{
+
+        method:"POST",
+
+        headers:{
+            "Content-Type":"text/plain;charset=utf-8"
+        },
+
+        body:JSON.stringify({
+
+            accion:"guardarProveedor",
+            proveedor:proveedor
+
+        })
 
     })
-})
 
 
-    .then(r=>r.json())
+    .then(function(r){
 
-    .then(function(resp){
+        return r.text();
+
+    })
+
+
+    .then(function(texto){
+
+        console.log("Respuesta servidor:",texto);
+
+
+        const resp = JSON.parse(texto);
+
 
         if(resp.ok){
 
+
             alert("Proveedor guardado correctamente.");
+
 
             cargarProveedores();
 
-            document.getElementById("proveedor").value=proveedor.nombre;
+
+            document.getElementById("proveedor").value =
+            proveedor.nombre;
+
 
             volverNuevaCompra();
 
+
         }else{
+
 
             alert(resp.mensaje);
 
+
         }
+
 
     })
 
-   .catch(function(error){
 
-    alert("Error real: " + error);
+    .catch(function(error){
 
-});
+        alert("Error real: " + error);
+
+    });
 
 
 }
-
 
 
 /* =====================================================
