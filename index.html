@@ -1384,6 +1384,7 @@ function guardarProveedor(){
 
     alert("Entró a guardarProveedor");
 
+
     const proveedor={
 
         nombre:document.getElementById("provNombre").value.trim(),
@@ -1407,7 +1408,8 @@ function guardarProveedor(){
     }
 
 
-       fetch(URL_SCRIPT,{
+
+    fetch(URL_SCRIPT,{
 
         method:"POST",
 
@@ -1424,26 +1426,45 @@ function guardarProveedor(){
 
     })
 
+
     .then(function(){
 
         alert("Proveedor guardado correctamente.");
 
+
         cargarProveedores();
+
 
         document.getElementById("proveedor").value =
         proveedor.nombre;
 
-        volverNuevaCompra();
+
+        // Limpia campos del formulario proveedor
+
+        document.getElementById("provNombre").value="";
+        document.getElementById("provTelefono").value="";
+        document.getElementById("provWhatsapp").value="";
+        document.getElementById("provDireccion").value="";
+        document.getElementById("provCiudad").value="";
+        document.getElementById("provGaleria").value="";
+        document.getElementById("provLocal").value="";
+        document.getElementById("provInstagram").value="";
+        document.getElementById("provObs").value="";
+
 
     })
+
 
     .catch(function(error){
 
         console.log(error);
 
-        alert("El proveedor fue enviado. Revisar hoja PROVEEDORES.");
+        alert("Error al guardar proveedor: " + error);
 
     });
+
+
+}
 
 
 /* =====================================================
