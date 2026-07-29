@@ -1197,45 +1197,58 @@ function enviarCompraCompleta(){
 
     const compra={
 
-        fecha:localStorage.getItem("fechaCompra"),
+        fecha:
+        localStorage.getItem("fechaCompra"),
 
-        proveedor:localStorage.getItem("proveedor"),
+        proveedor:
+        localStorage.getItem("proveedor"),
 
-        observaciones:localStorage.getItem("observaciones")
+        observaciones:
+        localStorage.getItem("observaciones") || ""
 
     };
 
-    fetch(
 
-        URL_SCRIPT,
+    console.log("ENVIANDO:");
+    console.log(compra);
+    console.log(prendasGuardadas);
 
-        {
 
-            method:"POST",
 
-            headers:{
+    fetch(URL_SCRIPT,{
 
-                "Content-Type":"application/json"
+        method:"POST",
 
-            },
+        headers:{
+            "Content-Type":
+            "text/plain;charset=utf-8"
+        },
 
-            body:JSON.stringify({
 
-                accion:"guardarCompra",
+        body:JSON.stringify({
 
-                compra:compra,
+            accion:"guardarCompra",
 
-                prendas:prendasGuardadas
+            compra:compra,
 
-            })
+            prendas:prendasGuardadas
 
-        }
+        })
 
-    )
+    })
 
-    .then(r=>r.json())
+
+    .then(function(respuesta){
+
+        return respuesta.json();
+
+    })
+
 
     .then(function(resp){
+
+        console.log(resp);
+
 
         if(resp.ok){
 
@@ -1243,21 +1256,29 @@ function enviarCompraCompleta(){
 
         }else{
 
-            alert(resp.mensaje);
+            alert(
+            "Error Google Sheets: "+
+            resp.mensaje
+            );
 
         }
 
+
     })
 
-    .catch(function(){
 
-        alert("Error de conexión.");
+    .catch(function(error){
+
+        console.log(error);
+
+        alert(
+        "Error de conexión con Google Apps Script"
+        );
 
     });
 
+
 }
-
-
 
 /* =====================================================
    FINALIZAR
