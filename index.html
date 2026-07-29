@@ -1398,18 +1398,35 @@ function mostrar(p){
 
 function guardarProveedor(){
 
-  
+
     const proveedor={
 
-        nombre:document.getElementById("provNombre").value.trim(),
-        telefono:document.getElementById("provTelefono").value.trim(),
-        whatsapp:document.getElementById("provWhatsapp").value.trim(),
-        direccion:document.getElementById("provDireccion").value.trim(),
-        ciudad:document.getElementById("provCiudad").value.trim(),
-        galeria:document.getElementById("provGaleria").value.trim(),
-        local:document.getElementById("provLocal").value.trim(),
-        instagram:document.getElementById("provInstagram").value.trim(),
-        observaciones:document.getElementById("provObs").value.trim()
+        nombre:
+        document.getElementById("provNombre").value.trim(),
+
+        telefono:
+        document.getElementById("provTelefono").value.trim(),
+
+        whatsapp:
+        document.getElementById("provWhatsapp").value.trim(),
+
+        direccion:
+        document.getElementById("provDireccion").value.trim(),
+
+        ciudad:
+        document.getElementById("provCiudad").value.trim(),
+
+        galeria:
+        document.getElementById("provGaleria").value.trim(),
+
+        local:
+        document.getElementById("provLocal").value.trim(),
+
+        instagram:
+        document.getElementById("provInstagram").value.trim(),
+
+        observaciones:
+        document.getElementById("provObs").value.trim()
 
     };
 
@@ -1417,6 +1434,7 @@ function guardarProveedor(){
     if(proveedor.nombre==""){
 
         alert("Ingrese el nombre del proveedor.");
+
         return;
 
     }
@@ -1434,6 +1452,7 @@ function guardarProveedor(){
         body:JSON.stringify({
 
             accion:"guardarProveedor",
+
             proveedor:proveedor
 
         })
@@ -1441,29 +1460,66 @@ function guardarProveedor(){
     })
 
 
-    .then(function(){
+    .then(function(respuesta){
 
-        alert("Proveedor guardado correctamente.");
+        return respuesta.json();
 
-
-        cargarProveedores();
-
-
-        document.getElementById("proveedor").value =
-        proveedor.nombre;
+    })
 
 
-        // Limpia campos del formulario proveedor
+    .then(function(resp){
 
-        document.getElementById("provNombre").value="";
-        document.getElementById("provTelefono").value="";
-        document.getElementById("provWhatsapp").value="";
-        document.getElementById("provDireccion").value="";
-        document.getElementById("provCiudad").value="";
-        document.getElementById("provGaleria").value="";
-        document.getElementById("provLocal").value="";
-        document.getElementById("provInstagram").value="";
-        document.getElementById("provObs").value="";
+
+        console.log("Respuesta servidor:",resp);
+
+
+
+        if(resp.ok){
+
+
+            alert("Proveedor guardado correctamente.");
+
+
+
+            // Actualiza la lista de proveedores
+
+            cargarProveedores();
+
+
+
+            // Espera que cargue el combo
+
+            setTimeout(function(){
+
+
+                document.getElementById("proveedor").value =
+                proveedor.nombre;
+
+
+
+                limpiarFormularioProveedor();
+
+
+
+                volverNuevaCompra();
+
+
+
+            },500);
+
+
+
+        }else{
+
+
+            alert(
+                "Error al guardar proveedor: "
+                + resp.mensaje
+            );
+
+
+        }
+
 
 
     })
@@ -1471,11 +1527,45 @@ function guardarProveedor(){
 
     .catch(function(error){
 
+
         console.log(error);
 
-        alert("Error al guardar proveedor: " + error);
+
+        alert(
+            "Error de conexión al guardar proveedor: "
+            + error
+        );
+
 
     });
+
+
+}
+
+
+
+
+
+function limpiarFormularioProveedor(){
+
+
+    document.getElementById("provNombre").value="";
+
+    document.getElementById("provTelefono").value="";
+
+    document.getElementById("provWhatsapp").value="";
+
+    document.getElementById("provDireccion").value="";
+
+    document.getElementById("provCiudad").value="";
+
+    document.getElementById("provGaleria").value="";
+
+    document.getElementById("provLocal").value="";
+
+    document.getElementById("provInstagram").value="";
+
+    document.getElementById("provObs").value="";
 
 
 }
