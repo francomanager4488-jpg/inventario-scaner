@@ -1380,6 +1380,76 @@ function mostrar(p){
 
 }
 
+function guardarProveedor(){
+
+    const proveedor={
+
+        nombre:document.getElementById("provNombre").value.trim(),
+        telefono:document.getElementById("provTelefono").value.trim(),
+        whatsapp:document.getElementById("provWhatsapp").value.trim(),
+        direccion:document.getElementById("provDireccion").value.trim(),
+        ciudad:document.getElementById("provCiudad").value.trim(),
+        galeria:document.getElementById("provGaleria").value.trim(),
+        local:document.getElementById("provLocal").value.trim(),
+        instagram:document.getElementById("provInstagram").value.trim(),
+        observaciones:document.getElementById("provObs").value.trim()
+
+    };
+
+    if(proveedor.nombre==""){
+
+        alert("Ingrese el nombre del proveedor.");
+        return;
+
+    }
+
+    fetch(URL_SCRIPT,{
+
+        method:"POST",
+
+        headers:{
+            "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+
+            accion:"guardarProveedor",
+            proveedor:proveedor
+
+        })
+
+    })
+
+    .then(r=>r.json())
+
+    .then(function(resp){
+
+        if(resp.ok){
+
+            alert("Proveedor guardado correctamente.");
+
+            cargarProveedores();
+
+            document.getElementById("proveedor").value=proveedor.nombre;
+
+            volverNuevaCompra();
+
+        }else{
+
+            alert(resp.mensaje);
+
+        }
+
+    })
+
+    .catch(function(){
+
+        alert("Error de conexión.");
+
+    });
+
+}
+
 
 
 /* =====================================================
