@@ -1407,7 +1407,7 @@ function guardarProveedor(){
     }
 
 
-    fetch(URL_SCRIPT,{
+       fetch(URL_SCRIPT,{
 
         method:"POST",
 
@@ -1424,58 +1424,26 @@ function guardarProveedor(){
 
     })
 
+    .then(function(){
 
-    .then(function(r){
+        alert("Proveedor guardado correctamente.");
 
-        return r.text();
+        cargarProveedores();
 
-    })
+        document.getElementById("proveedor").value =
+        proveedor.nombre;
 
-
-    .then(function(texto){
-
-        console.log("Respuesta servidor:",texto);
-
-
-        const resp = JSON.parse(texto);
-
-
-        if(resp.ok){
-
-
-            alert("Proveedor guardado correctamente.");
-
-
-            cargarProveedores();
-
-
-            document.getElementById("proveedor").value =
-            proveedor.nombre;
-
-
-            volverNuevaCompra();
-
-
-        }else{
-
-
-            alert(resp.mensaje);
-
-
-        }
-
+        volverNuevaCompra();
 
     })
-
 
     .catch(function(error){
 
-        alert("Error real: " + error);
+        console.log(error);
+
+        alert("El proveedor fue enviado. Revisar hoja PROVEEDORES.");
 
     });
-
-
-}
 
 
 /* =====================================================
