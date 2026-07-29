@@ -622,11 +622,26 @@ function abrirNuevoProveedor(){
     
 function volverNuevaCompra(){
 
-    document.getElementById("pantallaProveedor").style.display="none";
+    console.log("Entrando a volverNuevaCompra");
 
-    document.getElementById("pantallaNuevaCompra").style.display="block";
+    ocultarPantallas();
+
+    let pantalla = document.getElementById("pantallaNuevaCompra");
+
+    if(pantalla){
+
+        pantalla.style.display="block";
+
+        console.log("Pantalla nueva compra mostrada");
+
+    }else{
+
+        console.log("NO existe pantallaNuevaCompra");
+
+    }
 
 }
+
 
 
 function volverTipoCarga(){
