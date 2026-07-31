@@ -1116,7 +1116,7 @@ function mostrarFormularioPrenda(){
 
     }
 
-    const talle=colaPrendas[indicePrenda] || "";
+    const talle=colaPrendas[indicePrenda];
 
     document.getElementById("tituloCarga").innerHTML=
 
@@ -1124,7 +1124,21 @@ function mostrarFormularioPrenda(){
 
     let html="";
 
+   if(talle){
+
     html+="<b>Talle:</b> "+talle;
+
+}else{
+
+    html+="<label>Talle</label>";
+
+    html+="<select id='tallePrenda'>";
+
+    html+="<option value=''>Seleccione...</option>";
+
+    html+="</select>";
+
+}
 
     html+="<br><br>";
 
