@@ -775,7 +775,7 @@ function cargarTallesIndividual(){
     fetch(
         URL_SCRIPT+
         "?accion=talles&genero="+
-        encodeURIComponent(grupoSeleccionado)
+        encodeURIComponent(document.getElementById("grupoCompra").value)
     )
 
     .then(r=>r.json())
@@ -806,7 +806,6 @@ function cargarTallesIndividual(){
     });
 
 }
-
 function cargarProveedores(){
 
     fetch(URL_SCRIPT+"?accion=proveedores")
