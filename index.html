@@ -770,7 +770,42 @@ function cargarSubcategorias(categoria){
 
 }
 
+function cargarTallesIndividual(){
 
+    fetch(
+        URL_SCRIPT+
+        "?accion=talles&genero="+
+        encodeURIComponent(grupoSeleccionado)
+    )
+
+    .then(r=>r.json())
+
+    .then(function(lista){
+
+        const combo =
+        document.getElementById("tallePrenda");
+
+        if(!combo){
+            return;
+        }
+
+        combo.innerHTML="";
+
+        combo.innerHTML+=
+        "<option value=''>Seleccione...</option>";
+
+        lista.forEach(function(item){
+
+            combo.innerHTML+=
+            "<option value='"+item.talle+"'>"+
+            item.talle+
+            "</option>";
+
+        });
+
+    });
+
+}
 
 function cargarProveedores(){
 
