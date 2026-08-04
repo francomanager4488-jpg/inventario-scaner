@@ -948,7 +948,81 @@ function mostrarDisenoPersonalizado(){
     "none";
 
 }
-    
+function cargarColores(){
+
+    fetch(URL_SCRIPT+"?accion=colores")
+
+    .then(r=>r.json())
+
+    .then(function(lista){
+
+        const combo =
+        document.getElementById("colorPrenda");
+
+        if(!combo){
+            return;
+        }
+
+        combo.innerHTML="";
+
+        combo.innerHTML +=
+        "<option value=''>Seleccione...</option>";
+
+        lista.forEach(function(item){
+
+            combo.innerHTML +=
+            "<option value='"+item.nombre+"'>"+
+            item.nombre+
+            "</option>";
+
+        });
+
+
+        combo.innerHTML +=
+        "<option value='PERSONALIZADO'>Personalizado</option>";
+
+    });
+
+}
+
+
+
+function cargarDisenos(){
+
+    fetch(URL_SCRIPT+"?accion=diseños")
+
+    .then(r=>r.json())
+
+    .then(function(lista){
+
+        const combo =
+        document.getElementById("disenoPrenda");
+
+        if(!combo){
+            return;
+        }
+
+        combo.innerHTML="";
+
+        combo.innerHTML +=
+        "<option value=''>Seleccione...</option>";
+
+        lista.forEach(function(item){
+
+            combo.innerHTML +=
+            "<option value='"+item.nombre+"'>"+
+            item.nombre+
+            "</option>";
+
+        });
+
+
+        combo.innerHTML +=
+        "<option value='PERSONALIZADO'>Personalizado</option>";
+
+    });
+
+}    
 function cargarProveedores(){
 
     fetch(URL_SCRIPT+"?accion=proveedores")
@@ -1300,15 +1374,16 @@ function mostrarFormularioPrenda(){
     const talle=colaPrendas[indicePrenda];
 
 
-    document.getElementById("tituloCarga").innerHTML=
-
+    document.getElementById("tituloCarga").innerHTML =
     "Prenda "+(indicePrenda+1)+" de "+colaPrendas.length;
 
 
     let html="";
 
 
+    // =========================
     // TALLE
+    // =========================
 
     if(talle){
 
@@ -1328,7 +1403,13 @@ function mostrarFormularioPrenda(){
 
 
 
+    html+="<br><br>";
+
+
+
+    // =========================
     // COLOR
+    // =========================
 
     html+="<label>Color</label>";
 
@@ -1338,6 +1419,8 @@ function mostrarFormularioPrenda(){
 
     html+="</select>";
 
+
+    html+="<br>";
 
     html+="<input ";
 
@@ -1349,8 +1432,13 @@ function mostrarFormularioPrenda(){
 
 
 
+    html+="<br><br>";
 
+
+
+    // =========================
     // DISEÑO
+    // =========================
 
     html+="<label>Diseño</label>";
 
@@ -1360,6 +1448,9 @@ function mostrarFormularioPrenda(){
 
     html+="</select>";
 
+
+
+    html+="<br>";
 
     html+="<input ";
 
@@ -1371,8 +1462,13 @@ function mostrarFormularioPrenda(){
 
 
 
+    html+="<br><br>";
 
+
+
+    // =========================
     // BOTON
+    // =========================
 
     html+="<button class='verde' onclick='guardarPrendaActual()'>";
 
@@ -1386,7 +1482,9 @@ function mostrarFormularioPrenda(){
 
 
 
-    // Carga de talle si es carga individual
+    // =========================
+    // CARGAS
+    // =========================
 
     if(!talle){
 
@@ -1394,8 +1492,6 @@ function mostrarFormularioPrenda(){
 
     }
 
-
-    // Carga de listas maestras
 
     cargarColores();
 
