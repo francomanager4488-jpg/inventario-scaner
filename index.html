@@ -770,20 +770,31 @@ function cargarSubcategorias(categoria){
 
 }
 
-function cargarTallesIndividual(){
+function obtenerTallesFrontend(genero){
 
-    fetch(
+    return fetch(
+
         URL_SCRIPT+
         "?accion=talles&genero="+
-        encodeURIComponent(document.getElementById("grupoCompra").value)
+        encodeURIComponent(genero)
+
     )
 
-    .then(r=>r.json())
+    .then(function(r){
+
+        return r.json();
+
+    });
+
+}
+
+function cargarTallesIndividual(){
+
+    obtenerTallesFrontend(grupoSeleccionado)
 
     .then(function(lista){
 
-        const combo =
-        document.getElementById("tallePrenda");
+        const combo=document.getElementById("tallePrenda");
 
         if(!combo){
             return;
@@ -791,8 +802,7 @@ function cargarTallesIndividual(){
 
         combo.innerHTML="";
 
-        combo.innerHTML+=
-        "<option value=''>Seleccione...</option>";
+        combo.innerHTML+="<option value=''>Seleccione...</option>";
 
         lista.forEach(function(item){
 
@@ -806,6 +816,7 @@ function cargarTallesIndividual(){
     });
 
 }
+    
 function cargarProveedores(){
 
     fetch(URL_SCRIPT+"?accion=proveedores")
@@ -958,35 +969,21 @@ function mostrarCantidades(){
 
     document.getElementById("pantallaCantidades").style.display="block";
 
-    let talles=[];
+   document.getElementById("listaCantidades").innerHTML="Cargando talles...";
 
-    if(
+obtenerTallesFrontend(grupoSeleccionado)
 
-    grupoSeleccionado=="BE" ||
-
-    grupoSeleccionado=="BA" ||
-
-    grupoSeleccionado=="UB"
-
-){
-
-    talles=["TU","0","1","2","3","4","5"];
-
-}else{
-
-    talles=["4","6","8","10","12","14","16"];
-
-}
+.then(function(lista){
 
     let html="";
 
     html+="<table class='tablaTalles'>";
 
-    talles.forEach(function(t){
+    lista.forEach(function(item){
 
         html+="<tr>";
 
-        html+="<td><b>Talle "+t+"</b></td>";
+        html+="<td><b>Talle "+item.talle+"</b></td>";
 
         html+="<td class='celdaCantidad'>";
 
@@ -994,7 +991,7 @@ function mostrarCantidades(){
 
         html+=" class='cantidadTalle'";
 
-        html+=" data-talle='"+t+"'";
+        html+=" data-talle='"+item.talle+"'";
 
         html+=" type='number'";
 
@@ -1012,9 +1009,9 @@ function mostrarCantidades(){
 
     document.getElementById("listaCantidades").innerHTML=html;
 
+});
+
 }
-
-
 
 function continuarCantidades(){
 
@@ -1211,6 +1208,22 @@ function mostrarFormularioPrenda(){
 
 function guardarPrendaActual(){
 
+    let talle=colaPrendas[indicePrenda];
+
+    if(talle===null){
+
+        talle=document.getElementById("tallePrenda").value;
+
+        if(talle==""){
+
+            alert("Seleccione un talle.");
+
+            return;
+
+        }
+
+    }
+
     prendasGuardadas.push({
 
         genero:grupoSeleccionado,
@@ -1219,7 +1232,7 @@ function guardarPrendaActual(){
 
         subcategoria:subcategoriaSeleccionada,
 
-        talle:colaPrendas[indicePrenda],
+        talle:talle,
 
         color:document.getElementById("colorPrenda").value.trim(),
 
@@ -1233,15 +1246,12 @@ function guardarPrendaActual(){
 
     });
 
-   
     indicePrenda++;
 
     mostrarFormularioPrenda();
 
 }
-
-
-
+    
 /* =====================================================
    ENVIAR COMPRA
 ===================================================== */
