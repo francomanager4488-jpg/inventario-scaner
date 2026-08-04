@@ -816,6 +816,138 @@ function cargarTallesIndividual(){
     });
 
 }
+
+// =====================================================
+// COLORES Y DISEÑOS
+// =====================================================
+
+
+function cargarColores(){
+
+    fetch(URL_SCRIPT+"?accion=colores")
+
+    .then(r=>r.json())
+
+    .then(function(lista){
+
+        const combo =
+        document.getElementById("colorPrenda");
+
+
+        if(!combo){
+            return;
+        }
+
+
+        lista.forEach(function(item){
+
+            combo.innerHTML +=
+
+            "<option value='"+item.nombre+"'>"+
+            item.nombre+
+            "</option>";
+
+        });
+
+
+
+        combo.innerHTML +=
+
+        "<option value='PERSONALIZADO'>Personalizado</option>";
+
+    });
+
+}
+
+
+
+
+
+function cargarDisenos(){
+
+    fetch(URL_SCRIPT+"?accion=diseños")
+
+    .then(r=>r.json())
+
+    .then(function(lista){
+
+        const combo =
+        document.getElementById("disenoPrenda");
+
+
+        if(!combo){
+            return;
+        }
+
+
+
+        lista.forEach(function(item){
+
+            combo.innerHTML +=
+
+            "<option value='"+item.nombre+"'>"+
+            item.nombre+
+            "</option>";
+
+        });
+
+
+
+        combo.innerHTML +=
+
+        "<option value='PERSONALIZADO'>Personalizado</option>";
+
+    });
+
+}
+
+
+
+
+
+function mostrarColorPersonalizado(){
+
+    const valor =
+    document.getElementById("colorPrenda").value;
+
+
+    document.getElementById("colorPersonalizado").style.display =
+
+    valor=="PERSONALIZADO"
+
+    ?
+
+    "block"
+
+    :
+
+    "none";
+
+}
+
+
+
+
+
+function mostrarDisenoPersonalizado(){
+
+    const valor =
+    document.getElementById("disenoPrenda").value;
+
+
+    document.getElementById("disenoPersonalizado").style.display =
+
+    valor=="PERSONALIZADO"
+
+    ?
+
+    "block"
+
+    :
+
+    "none";
+
+}
     
 function cargarProveedores(){
 
@@ -844,7 +976,23 @@ function cargarProveedores(){
 
 }
 
+function cargarColores(){
 
+    return fetch(URL_SCRIPT+"?accion=colores")
+
+    .then(r=>r.json());
+
+}
+
+
+
+function cargarDisenos(){
+
+    return fetch(URL_SCRIPT+"?accion=diseños")
+
+    .then(r=>r.json());
+
+}
 
 /* =====================================================
    EVENTOS DE LOS COMBOS
@@ -1139,6 +1287,7 @@ function mostrarFormularioPrenda(){
 
     document.getElementById("pantallaCarga").style.display="block";
 
+
     if(indicePrenda>=colaPrendas.length){
 
         enviarCompraCompleta();
@@ -1147,43 +1296,83 @@ function mostrarFormularioPrenda(){
 
     }
 
+
     const talle=colaPrendas[indicePrenda];
+
 
     document.getElementById("tituloCarga").innerHTML=
 
     "Prenda "+(indicePrenda+1)+" de "+colaPrendas.length;
 
+
     let html="";
 
-   if(talle){
 
-    html+="<b>Talle:</b> "+talle;
+    // TALLE
 
-}else{
+    if(talle){
 
-    html+="<label>Talle</label>";
+        html+="<b>Talle:</b> "+talle;
 
-    html+="<select id='tallePrenda'>";
+    }else{
+
+        html+="<label>Talle</label>";
+
+        html+="<select id='tallePrenda'>";
+
+        html+="<option value=''>Seleccione...</option>";
+
+        html+="</select>";
+
+    }
+
+
+
+    // COLOR
+
+    html+="<label>Color</label>";
+
+    html+="<select id='colorPrenda' onchange='mostrarColorPersonalizado()'>";
 
     html+="<option value=''>Seleccione...</option>";
 
     html+="</select>";
 
-}
 
-    html+="<br><br>";
+    html+="<input ";
 
-    html+="<label>Color</label>";
+    html+="id='colorPersonalizado' ";
 
-    html+="<input id='colorPrenda' placeholder='Opcional'>";
+    html+="placeholder='Color personalizado' ";
 
-    html+="<br><br>";
+    html+="style='display:none'>";
+
+
+
+
+    // DISEÑO
 
     html+="<label>Diseño</label>";
 
-    html+="<input id='disenoPrenda' placeholder='Opcional'>";
+    html+="<select id='disenoPrenda' onchange='mostrarDisenoPersonalizado()'>";
 
-    html+="<br><br>";
+    html+="<option value=''>Seleccione...</option>";
+
+    html+="</select>";
+
+
+    html+="<input ";
+
+    html+="id='disenoPersonalizado' ";
+
+    html+="placeholder='Diseño personalizado' ";
+
+    html+="style='display:none'>";
+
+
+
+
+    // BOTON
 
     html+="<button class='verde' onclick='guardarPrendaActual()'>";
 
@@ -1191,17 +1380,28 @@ function mostrarFormularioPrenda(){
 
     html+="</button>";
 
+
+
     document.getElementById("datosCarga").innerHTML=html;
+
+
+
+    // Carga de talle si es carga individual
 
     if(!talle){
 
-    cargarTallesIndividual();
+        cargarTallesIndividual();
+
+    }
+
+
+    // Carga de listas maestras
+
+    cargarColores();
+
+    cargarDisenos();
 
 }
-
-}
-
-
 /* =====================================================
    GUARDAR PRENDA
 ===================================================== */
