@@ -1072,20 +1072,21 @@ document.addEventListener("change",function(e){
 
 function crearCompra(){
 
-    const proveedor=
+    const proveedor =
     document.getElementById("proveedor").value;
 
-    const genero=
+    const genero =
     document.getElementById("grupoCompra").value;
 
-    const categoria=
+    const categoria =
     document.getElementById("categoriaPrenda").value;
 
-    const subcategoria=
+    const subcategoria =
     document.getElementById("subcategoriaPrenda").value;
 
-    const precio=
+    const precio =
     document.getElementById("precioCompra").value;
+
 
     if(proveedor==""){
 
@@ -1095,13 +1096,6 @@ function crearCompra(){
 
     }
 
-    if(genero==""){
-
-        alert("Seleccione el género.");
-
-        return;
-
-    }
 
     if(categoria==""){
 
@@ -1111,6 +1105,20 @@ function crearCompra(){
 
     }
 
+
+    if(
+        categoria!="ACCESORIOS" &&
+        categoria!="VARIOS" &&
+        genero==""
+    ){
+
+        alert("Seleccione el género.");
+
+        return;
+
+    }
+
+
     if(subcategoria==""){
 
         alert("Seleccione la subcategoría.");
@@ -1118,6 +1126,7 @@ function crearCompra(){
         return;
 
     }
+
 
     if(precio==""){
 
@@ -1127,22 +1136,51 @@ function crearCompra(){
 
     }
 
-    grupoSeleccionado=genero;
+
+    if(
+        categoria=="ACCESORIOS" ||
+        categoria=="VARIOS"
+    ){
+
+        grupoSeleccionado="";
+
+    }else{
+
+        grupoSeleccionado=genero;
+
+    }
+
+
     categoriaSeleccionada=categoria;
+
     subcategoriaSeleccionada=subcategoria;
 
-    localStorage.setItem("fechaCompra",
-        document.getElementById("fechaCompra").value);
 
-    localStorage.setItem("proveedor",proveedor);
+    localStorage.setItem(
+        "fechaCompra",
+        document.getElementById("fechaCompra").value
+    );
 
-    localStorage.setItem("marcaCompra",
-        document.getElementById("marcaCompra").value.trim());
+    localStorage.setItem(
+        "proveedor",
+        proveedor
+    );
 
-    localStorage.setItem("precioCompra",precio);
+    localStorage.setItem(
+        "marcaCompra",
+        document.getElementById("marcaCompra").value.trim()
+    );
 
-    localStorage.setItem("observaciones",
-        document.getElementById("obsCompra").value.trim());
+    localStorage.setItem(
+        "precioCompra",
+        precio
+    );
+
+    localStorage.setItem(
+        "observaciones",
+        document.getElementById("obsCompra").value.trim()
+    );
+
 
     ocultarPantallas();
 
