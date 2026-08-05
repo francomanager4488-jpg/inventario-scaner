@@ -1503,6 +1503,23 @@ function mostrarFormularioPrenda(){
     document.getElementById("pantallaCarga").style.display="block";
 
 
+    // =========================
+    // ACCESORIOS Y VARIOS
+    // =========================
+
+    if(
+        categoriaSeleccionada=="AA" ||
+        categoriaSeleccionada=="VA"
+    ){
+
+        mostrarFormularioVarios();
+
+        return;
+
+    }
+
+
+
     if(indicePrenda>=colaPrendas.length){
 
         enviarCompraCompleta();
@@ -1512,49 +1529,50 @@ function mostrarFormularioPrenda(){
     }
 
 
+
     const talle=colaPrendas[indicePrenda];
+
 
 
     document.getElementById("tituloCarga").innerHTML =
     "Prenda "+(indicePrenda+1)+" de "+colaPrendas.length;
 
 
+
     let html="";
+
 
 
     // =========================
     // TALLE
     // =========================
 
-    if(
-        categoriaSeleccionada!="AA" &&
-        categoriaSeleccionada!="VA"
-    ){
 
-        if(talle){
+    if(talle){
 
-            html+="<b>Talle:</b> "+talle;
+        html+="<b>Talle:</b> "+talle;
 
-        }else{
+    }else{
 
-            html+="<label>Talle</label>";
+        html+="<label>Talle</label>";
 
-            html+="<select id='tallePrenda'>";
+        html+="<select id='tallePrenda'>";
 
-            html+="<option value=''>Seleccione...</option>";
+        html+="<option value=''>Seleccione...</option>";
 
-            html+="</select>";
-
-        }
-
-        html+="<br><br>";
+        html+="</select>";
 
     }
+
+
+    html+="<br><br>";
+
 
 
     // =========================
     // COLOR
     // =========================
+
 
     html+="<label>Color</label>";
 
@@ -1563,6 +1581,7 @@ function mostrarFormularioPrenda(){
     html+="<option value=''>Seleccione...</option>";
 
     html+="</select>";
+
 
     html+="<br>";
 
@@ -1574,12 +1593,15 @@ function mostrarFormularioPrenda(){
 
     html+="style='display:none'>";
 
+
     html+="<br><br>";
+
 
 
     // =========================
     // DISEÑO
     // =========================
+
 
     html+="<label>Diseño</label>";
 
@@ -1588,6 +1610,7 @@ function mostrarFormularioPrenda(){
     html+="<option value=''>Seleccione...</option>";
 
     html+="</select>";
+
 
     html+="<br>";
 
@@ -1599,12 +1622,15 @@ function mostrarFormularioPrenda(){
 
     html+="style='display:none'>";
 
+
     html+="<br><br>";
+
 
 
     // =========================
     // BOTÓN
     // =========================
+
 
     html+="<button class='verde' onclick='guardarPrendaActual()'>";
 
@@ -1613,29 +1639,125 @@ function mostrarFormularioPrenda(){
     html+="</button>";
 
 
+
     document.getElementById("datosCarga").innerHTML=html;
 
 
+
     // =========================
-    // CARGAS
+    // CARGAR TALLE
     // =========================
 
-    if(
-        categoriaSeleccionada!="AA" &&
-        categoriaSeleccionada!="VA" &&
-        !talle
-    ){
+
+    if(!talle){
 
         cargarTallesIndividual();
 
     }
 
 
+
+    // =========================
+    // CARGAR COLOR Y DISEÑO
+    // =========================
+
+
     cargarColores();
 
     cargarDisenos();
 
+
 }
+
+function mostrarFormularioVarios(){
+
+    ocultarPantallas();
+
+    document.getElementById("pantallaCarga").style.display="block";
+
+
+    document.getElementById("tituloCarga").innerHTML =
+    "Carga de producto";
+
+
+    let html="";
+
+
+    html+="<label>Descripción</label>";
+
+    html+="<input ";
+
+    html+="id='descripcionVarios' ";
+
+    html+="placeholder='Ej: Hebilla, colita, gorrito, accesorio...'";
+
+    html+=">";
+
+
+    html+="<br><br>";
+
+
+    html+="<button class='verde' onclick='guardarVarios()'>";
+
+    html+="Guardar producto";
+
+    html+="</button>";
+
+
+    document.getElementById("datosCarga").innerHTML=html;
+
+}
+
+
+
+function guardarVarios(){
+
+    const descripcion =
+    document.getElementById("descripcionVarios")
+    .value.trim();
+
+
+    if(descripcion==""){
+
+        alert("Ingrese una descripción.");
+
+        return;
+
+    }
+
+
+    prendasGuardadas.push({
+
+        genero:"",
+
+        categoria:categoriaSeleccionada,
+
+        subcategoria:subcategoriaSeleccionada,
+
+        talle:"",
+
+        color:"",
+
+        diseno:"",
+
+        descripcion:descripcion,
+
+        precioCompra:Number(
+            localStorage.getItem("precioCompra")
+        ),
+
+        precioVenta:0,
+
+        observaciones:
+        localStorage.getItem("observaciones") || ""
+
+    });
+
+
+    enviarCompraCompleta();
+
+}
+    
 /* =====================================================
    GUARDAR PRENDA
 ===================================================== */
