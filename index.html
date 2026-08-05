@@ -1512,13 +1512,25 @@ function mostrarFormularioPrenda(){
         categoriaSeleccionada=="VA"
     ){
 
-        mostrarFormularioVarios();
+        if(prendasGuardadas.length==0){
+
+            mostrarFormularioVarios();
+
+        }else{
+
+            enviarCompraCompleta();
+
+        }
 
         return;
 
     }
 
 
+
+    // =========================
+    // FIN DE CARGA DE PRENDAS
+    // =========================
 
     if(indicePrenda>=colaPrendas.length){
 
@@ -1530,7 +1542,7 @@ function mostrarFormularioPrenda(){
 
 
 
-    const talle=colaPrendas[indicePrenda];
+    const talle = colaPrendas[indicePrenda];
 
 
 
@@ -1546,7 +1558,6 @@ function mostrarFormularioPrenda(){
     // =========================
     // TALLE
     // =========================
-
 
     if(talle){
 
@@ -1572,7 +1583,6 @@ function mostrarFormularioPrenda(){
     // =========================
     // COLOR
     // =========================
-
 
     html+="<label>Color</label>";
 
@@ -1602,7 +1612,6 @@ function mostrarFormularioPrenda(){
     // DISEÑO
     // =========================
 
-
     html+="<label>Diseño</label>";
 
     html+="<select id='disenoPrenda' onchange='mostrarDisenoPersonalizado()'>";
@@ -1631,7 +1640,6 @@ function mostrarFormularioPrenda(){
     // BOTÓN
     // =========================
 
-
     html+="<button class='verde' onclick='guardarPrendaActual()'>";
 
     html+="Guardar y continuar";
@@ -1645,9 +1653,8 @@ function mostrarFormularioPrenda(){
 
 
     // =========================
-    // CARGAR TALLE
+    // CARGAR TALLE INDIVIDUAL
     // =========================
-
 
     if(!talle){
 
@@ -1661,12 +1668,11 @@ function mostrarFormularioPrenda(){
     // CARGAR COLOR Y DISEÑO
     // =========================
 
-
     cargarColores();
 
     cargarDisenos();
 
-
+}
 }
 
 function mostrarFormularioVarios(){
@@ -1680,41 +1686,58 @@ function mostrarFormularioVarios(){
     "Carga de producto";
 
 
+    let descripcionGuardada =
+    localStorage.getItem("descripcionProducto") || "";
+
+
     let html="";
 
 
-    html+="<label>Descripción</label>";
+    html += "<label>Descripción</label>";
 
-    html+="<input ";
+    html += "<input ";
 
-    html+="id='descripcionVarios' ";
+    html += "id='descripcionVarios' ";
 
-    html+="placeholder='Ej: Hebilla, colita, gorrito, accesorio...'";
+    html += "value='"+descripcionGuardada+"' ";
 
-    html+=">";
-
-
-    html+="<br><br>";
+    html += "placeholder='Ej: Hebilla, colita, gorrito, accesorio...'>";
 
 
-    html+="<button class='verde' onclick='guardarVarios()'>";
+    html += "<label>Cantidad</label>";
 
-    html+="Guardar producto";
+    html += "<input ";
 
-    html+="</button>";
+    html += "id='cantidadVarios' ";
+
+    html += "type='number' ";
+
+    html += "value='1' ";
+
+    html += "min='1'>";
+
+
+    html += "<button class='verde' onclick='guardarVarios()'>";
+
+    html += "Guardar producto";
+
+    html += "</button>";
 
 
     document.getElementById("datosCarga").innerHTML=html;
 
 }
-
-
-
 function guardarVarios(){
 
     const descripcion =
     document.getElementById("descripcionVarios")
     .value.trim();
+
+
+    const cantidad =
+    Number(
+        document.getElementById("cantidadVarios").value
+    );
 
 
     if(descripcion==""){
@@ -1726,38 +1749,55 @@ function guardarVarios(){
     }
 
 
-    prendasGuardadas.push({
+    if(cantidad<=0){
 
-        genero:"",
+        alert("Ingrese una cantidad válida.");
 
-        categoria:categoriaSeleccionada,
+        return;
 
-        subcategoria:subcategoriaSeleccionada,
+    }
 
-        talle:"",
 
-        color:"",
+    prendasGuardadas=[];
 
-        diseno:"",
 
-        descripcion:descripcion,
+    for(let i=0;i<cantidad;i++){
 
-        precioCompra:Number(
-            localStorage.getItem("precioCompra")
-        ),
 
-        precioVenta:0,
+        prendasGuardadas.push({
 
-        observaciones:
-        localStorage.getItem("observaciones") || ""
+            genero:"",
 
-    });
+            categoria:categoriaSeleccionada,
+
+            subcategoria:subcategoriaSeleccionada,
+
+            talle:"",
+
+            color:"",
+
+            diseno:"",
+
+            descripcion:descripcion,
+
+            precioCompra:Number(
+                localStorage.getItem("precioCompra")
+            ),
+
+            precioVenta:0,
+
+            observaciones:
+            localStorage.getItem("observaciones") || ""
+
+        });
+
+
+    }
 
 
     enviarCompraCompleta();
 
 }
-    
 /* =====================================================
    GUARDAR PRENDA
 ===================================================== */
