@@ -1405,26 +1405,30 @@ function mostrarFormularioPrenda(){
     // TALLE
     // =========================
 
-    if(talle){
+    if(
+        categoriaSeleccionada!="ACCESORIOS" &&
+        categoriaSeleccionada!="VARIOS"
+    ){
 
-        html+="<b>Talle:</b> "+talle;
+        if(talle){
 
-    }else{
+            html+="<b>Talle:</b> "+talle;
 
-        html+="<label>Talle</label>";
+        }else{
 
-        html+="<select id='tallePrenda'>";
+            html+="<label>Talle</label>";
 
-        html+="<option value=''>Seleccione...</option>";
+            html+="<select id='tallePrenda'>";
 
-        html+="</select>";
+            html+="<option value=''>Seleccione...</option>";
+
+            html+="</select>";
+
+        }
+
+        html+="<br><br>";
 
     }
-
-
-
-    html+="<br><br>";
-
 
 
     // =========================
@@ -1439,7 +1443,6 @@ function mostrarFormularioPrenda(){
 
     html+="</select>";
 
-
     html+="<br>";
 
     html+="<input ";
@@ -1450,10 +1453,7 @@ function mostrarFormularioPrenda(){
 
     html+="style='display:none'>";
 
-
-
     html+="<br><br>";
-
 
 
     // =========================
@@ -1468,8 +1468,6 @@ function mostrarFormularioPrenda(){
 
     html+="</select>";
 
-
-
     html+="<br>";
 
     html+="<input ";
@@ -1480,14 +1478,11 @@ function mostrarFormularioPrenda(){
 
     html+="style='display:none'>";
 
-
-
     html+="<br><br>";
 
 
-
     // =========================
-    // BOTON
+    // BOTÓN
     // =========================
 
     html+="<button class='verde' onclick='guardarPrendaActual()'>";
@@ -1497,16 +1492,18 @@ function mostrarFormularioPrenda(){
     html+="</button>";
 
 
-
     document.getElementById("datosCarga").innerHTML=html;
-
 
 
     // =========================
     // CARGAS
     // =========================
 
-    if(!talle){
+    if(
+        categoriaSeleccionada!="ACCESORIOS" &&
+        categoriaSeleccionada!="VARIOS" &&
+        !talle
+    ){
 
         cargarTallesIndividual();
 
@@ -1524,21 +1521,49 @@ function mostrarFormularioPrenda(){
 
 function guardarPrendaActual(){
 
-    let talle=colaPrendas[indicePrenda];
+    let talle="";
 
-    if(talle===null){
+    if(
+        categoriaSeleccionada!="ACCESORIOS" &&
+        categoriaSeleccionada!="VARIOS"
+    ){
 
-        talle=document.getElementById("tallePrenda").value;
+        talle=colaPrendas[indicePrenda];
 
-        if(talle==""){
+        if(talle===null){
 
-            alert("Seleccione un talle.");
+            talle=document.getElementById("tallePrenda").value;
 
-            return;
+            if(talle==""){
+
+                alert("Seleccione un talle.");
+
+                return;
+
+            }
 
         }
 
     }
+
+
+    let color=document.getElementById("colorPrenda").value;
+
+    if(color=="PERSONALIZADO"){
+
+        color=document.getElementById("colorPersonalizado").value.trim();
+
+    }
+
+
+    let diseno=document.getElementById("disenoPrenda").value;
+
+    if(diseno=="PERSONALIZADO"){
+
+        diseno=document.getElementById("disenoPersonalizado").value.trim();
+
+    }
+
 
     prendasGuardadas.push({
 
@@ -1550,9 +1575,9 @@ function guardarPrendaActual(){
 
         talle:talle,
 
-        color:document.getElementById("colorPrenda").value.trim(),
+        color:color,
 
-        diseno:document.getElementById("disenoPrenda").value.trim(),
+        diseno:diseno,
 
         precioCompra:Number(localStorage.getItem("precioCompra")),
 
@@ -1561,6 +1586,7 @@ function guardarPrendaActual(){
         observaciones:localStorage.getItem("observaciones") || ""
 
     });
+
 
     indicePrenda++;
 
