@@ -1107,8 +1107,8 @@ function crearCompra(){
 
 
     if(
-        categoria!="ACCESORIOS" &&
-        categoria!="VARIOS" &&
+        categoria!="AA" &&
+        categoria!="VA" &&
         genero==""
     ){
 
@@ -1138,8 +1138,8 @@ function crearCompra(){
 
 
     if(
-        categoria=="ACCESORIOS" ||
-        categoria=="VARIOS"
+        categoria=="AA" ||
+        categoria=="VA"
     ){
 
         grupoSeleccionado="";
@@ -1406,8 +1406,8 @@ function mostrarFormularioPrenda(){
     // =========================
 
     if(
-        categoriaSeleccionada!="ACCESORIOS" &&
-        categoriaSeleccionada!="VARIOS"
+        categoriaSeleccionada!="AA" &&
+        categoriaSeleccionada!="VA"
     ){
 
         if(talle){
@@ -1500,8 +1500,8 @@ function mostrarFormularioPrenda(){
     // =========================
 
     if(
-        categoriaSeleccionada!="ACCESORIOS" &&
-        categoriaSeleccionada!="VARIOS" &&
+        categoriaSeleccionada!="AA" &&
+        categoriaSeleccionada!="VA" &&
         !talle
     ){
 
@@ -1523,16 +1523,19 @@ function guardarPrendaActual(){
 
     let talle="";
 
+
     if(
-        categoriaSeleccionada!="ACCESORIOS" &&
-        categoriaSeleccionada!="VARIOS"
+        categoriaSeleccionada!="AA" &&
+        categoriaSeleccionada!="VA"
     ){
 
         talle=colaPrendas[indicePrenda];
 
+
         if(talle===null){
 
             talle=document.getElementById("tallePrenda").value;
+
 
             if(talle==""){
 
@@ -1547,7 +1550,9 @@ function guardarPrendaActual(){
     }
 
 
+
     let color=document.getElementById("colorPrenda").value;
+
 
     if(color=="PERSONALIZADO"){
 
@@ -1556,7 +1561,9 @@ function guardarPrendaActual(){
     }
 
 
+
     let diseno=document.getElementById("disenoPrenda").value;
+
 
     if(diseno=="PERSONALIZADO"){
 
@@ -1565,35 +1572,65 @@ function guardarPrendaActual(){
     }
 
 
+
     prendasGuardadas.push({
 
-        genero:grupoSeleccionado,
 
-        categoria:categoriaSeleccionada,
+        genero:
+        (
+            categoriaSeleccionada=="AA" ||
+            categoriaSeleccionada=="VA"
+        )
+        ?
+        ""
+        :
+        grupoSeleccionado,
 
-        subcategoria:subcategoriaSeleccionada,
 
-        talle:talle,
+        categoria:
+        categoriaSeleccionada,
 
-        color:color,
 
-        diseno:diseno,
+        subcategoria:
+        subcategoriaSeleccionada,
 
-        precioCompra:Number(localStorage.getItem("precioCompra")),
 
-        precioVenta:0,
+        talle:
+        talle,
 
-        observaciones:localStorage.getItem("observaciones") || ""
+
+        color:
+        color,
+
+
+        diseno:
+        diseno,
+
+
+        precioCompra:
+        Number(
+            localStorage.getItem("precioCompra")
+        ),
+
+
+        precioVenta:
+        0,
+
+
+        observaciones:
+        localStorage.getItem("observaciones") || ""
+
 
     });
 
 
+
     indicePrenda++;
+
 
     mostrarFormularioPrenda();
 
 }
-    
 /* =====================================================
    ENVIAR COMPRA
 ===================================================== */
