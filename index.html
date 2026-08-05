@@ -302,6 +302,16 @@ placeholder="Marca (opcional)">
 
 </select>
 
+<div id="contenedorDescripcion" style="display:none;">
+
+<label>Descripción</label>
+
+<input
+id="descripcionProducto"
+placeholder="Descripción del producto">
+
+</div>
+    
 <label>Precio de compra</label>
 
 <input
@@ -679,8 +689,12 @@ function controlarGeneroPorCategoria(){
     document.getElementById("categoriaPrenda").value;
 
 
-    const contenedor =
+    const contenedorGenero =
     document.getElementById("contenedorGenero");
+
+
+    const contenedorDescripcion =
+    document.getElementById("contenedorDescripcion");
 
 
     if(
@@ -692,12 +706,18 @@ function controlarGeneroPorCategoria(){
 
         document.getElementById("grupoCompra").value="";
 
-        contenedor.style.display="none";
+        contenedorGenero.style.display="none";
+
+        contenedorDescripcion.style.display="block";
 
 
     }else{
 
-        contenedor.style.display="block";
+        contenedorGenero.style.display="block";
+
+        contenedorDescripcion.style.display="none";
+
+        document.getElementById("descripcionProducto").value="";
 
     }
 
@@ -1123,6 +1143,13 @@ function crearCompra(){
     const precio =
     document.getElementById("precioCompra").value;
 
+    const descripcion =
+    document.getElementById("descripcionProducto")
+    ?
+    document.getElementById("descripcionProducto").value.trim()
+    :
+    "";
+
 
     if(proveedor==""){
 
@@ -1131,8 +1158,6 @@ function crearCompra(){
         return;
 
     }
-
-
     if(categoria==""){
 
         alert("Seleccione la categoría.");
@@ -1216,7 +1241,10 @@ function crearCompra(){
         "observaciones",
         document.getElementById("obsCompra").value.trim()
     );
-
+localStorage.setItem(
+    "descripcionProducto",
+    descripcion
+);
 
     ocultarPantallas();
 
