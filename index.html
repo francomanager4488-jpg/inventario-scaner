@@ -1131,17 +1131,22 @@ function crearCompra(){
     const proveedor =
     document.getElementById("proveedor").value;
 
+
     const genero =
     document.getElementById("grupoCompra").value;
+
 
     const categoria =
     document.getElementById("categoriaPrenda").value;
 
+
     const subcategoria =
     document.getElementById("subcategoriaPrenda").value;
 
+
     const precio =
     document.getElementById("precioCompra").value;
+
 
     const descripcion =
     document.getElementById("descripcionProducto")
@@ -1151,6 +1156,7 @@ function crearCompra(){
     "";
 
 
+
     if(proveedor==""){
 
         alert("Seleccione el proveedor.");
@@ -1158,6 +1164,9 @@ function crearCompra(){
         return;
 
     }
+
+
+
     if(categoria==""){
 
         alert("Seleccione la categoría.");
@@ -1166,6 +1175,9 @@ function crearCompra(){
 
     }
 
+
+
+    // Las categorías AA y VA no necesitan género
 
     if(
         categoria!="AA" &&
@@ -1180,6 +1192,7 @@ function crearCompra(){
     }
 
 
+
     if(subcategoria==""){
 
         alert("Seleccione la subcategoría.");
@@ -1187,6 +1200,7 @@ function crearCompra(){
         return;
 
     }
+
 
 
     if(precio==""){
@@ -1197,6 +1211,11 @@ function crearCompra(){
 
     }
 
+
+
+    // ===============================
+    // DEFINIR GENERO
+    // ===============================
 
     if(
         categoria=="AA" ||
@@ -1212,43 +1231,81 @@ function crearCompra(){
     }
 
 
+
     categoriaSeleccionada=categoria;
 
     subcategoriaSeleccionada=subcategoria;
 
+
+
+    // ===============================
+    // GUARDAR DATOS TEMPORALES
+    // ===============================
 
     localStorage.setItem(
         "fechaCompra",
         document.getElementById("fechaCompra").value
     );
 
+
     localStorage.setItem(
         "proveedor",
         proveedor
     );
+
 
     localStorage.setItem(
         "marcaCompra",
         document.getElementById("marcaCompra").value.trim()
     );
 
+
     localStorage.setItem(
         "precioCompra",
         precio
     );
 
+
     localStorage.setItem(
         "observaciones",
         document.getElementById("obsCompra").value.trim()
     );
-localStorage.setItem(
-    "descripcionProducto",
-    descripcion
-);
 
-    ocultarPantallas();
 
-    document.getElementById("pantallaTipoCarga").style.display="block";
+    localStorage.setItem(
+        "descripcionProducto",
+        descripcion
+    );
+
+
+
+    // ===============================
+    // ACCESORIOS Y VARIOS
+    // VAN DIRECTO A DESCRIPCION
+    // ===============================
+
+    if(
+        categoria=="AA" ||
+        categoria=="VA"
+    ){
+
+        prendasGuardadas=[];
+
+        indicePrenda=0;
+
+        mostrarFormularioVarios();
+
+
+    }else{
+
+
+        ocultarPantallas();
+
+        document.getElementById("pantallaTipoCarga").style.display="block";
+
+
+    }
+
 
 }
 
