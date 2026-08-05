@@ -669,6 +669,36 @@ function volverResumen(){
    CARGA DE DESPLEGABLES
 ===================================================== */
 
+function controlarGeneroPorCategoria(){
+
+    const categoria =
+    document.getElementById("categoriaPrenda").value;
+
+
+    const contenedor =
+    document.getElementById("grupoCompra").parentElement;
+
+
+    if(
+        categoria=="AA" ||
+        categoria=="VA"
+    ){
+
+        grupoSeleccionado="";
+
+        document.getElementById("grupoCompra").value="";
+
+        contenedor.style.display="none";
+
+
+    }else{
+
+        contenedor.style.display="block";
+
+    }
+
+}
+    
 function cargarGeneros(){
 
     fetch(URL_SCRIPT+"?accion=generos")
@@ -1059,6 +1089,8 @@ document.addEventListener("change",function(e){
     if(e.target.id=="categoriaPrenda"){
 
         cargarSubcategorias(e.target.value);
+
+        controlarGeneroPorCategoria();
 
     }
 
