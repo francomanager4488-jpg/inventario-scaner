@@ -876,88 +876,6 @@ function cargarTallesIndividual(){
 // =====================================================
 
 
-function cargarColores(){
-
-    fetch(URL_SCRIPT+"?accion=colores")
-
-    .then(r=>r.json())
-
-    .then(function(lista){
-
-        const combo =
-        document.getElementById("colorPrenda");
-
-
-        if(!combo){
-            return;
-        }
-
-
-        lista.forEach(function(item){
-
-            combo.innerHTML +=
-
-            "<option value='"+item.nombre+"'>"+
-            item.nombre+
-            "</option>";
-
-        });
-
-
-
-        combo.innerHTML +=
-
-        "<option value='PERSONALIZADO'>Personalizado</option>";
-
-    });
-
-}
-
-
-
-
-
-function cargarDisenos(){
-
-    fetch(URL_SCRIPT+"?accion=diseños")
-
-    .then(r=>r.json())
-
-    .then(function(lista){
-
-        const combo =
-        document.getElementById("disenoPrenda");
-
-
-        if(!combo){
-            return;
-        }
-
-
-
-        lista.forEach(function(item){
-
-            combo.innerHTML +=
-
-            "<option value='"+item.nombre+"'>"+
-            item.nombre+
-            "</option>";
-
-        });
-
-
-
-        combo.innerHTML +=
-
-        "<option value='PERSONALIZADO'>Personalizado</option>";
-
-    });
-
-}
-
-
-
-
 
 function mostrarColorPersonalizado(){
 
@@ -1681,119 +1599,85 @@ function mostrarFormularioVarios(){
 
     document.getElementById("pantallaCarga").style.display="block";
 
-
     document.getElementById("tituloCarga").innerHTML =
     "Carga de producto";
-
 
     let descripcionGuardada =
     localStorage.getItem("descripcionProducto") || "";
 
-
     let html="";
-
 
     html += "<label>Descripción</label>";
 
     html += "<input ";
-
-   html += "id='descripcionVarios' ";
-
-html += "value=/"+descripcionGuardada+"/ ";
-
-html += "placeholder='Ej: Hebilla, colita, gorrito, accesorio...'>";
-
+    html += "id='descripcionVarios' ";
+    html += "value='"+descripcionGuardada+"' ";
+    html += "placeholder='Ej: Hebilla, colita, gorrito, accesorio...'>";
 
     html += "<label>Cantidad</label>";
 
     html += "<input ";
-
     html += "id='cantidadVarios' ";
-
     html += "type='number' ";
-
     html += "value='1' ";
-
     html += "min='1'>";
 
-
     html += "<button class='verde' onclick='guardarVarios()'>";
-
     html += "Guardar producto";
-
     html += "</button>";
 
-
-    document.getElementById("datosCarga").innerHTML=html;
+    document.getElementById("datosCarga").innerHTML = html;
 
 }
+
 function guardarVarios(){
 
     const descripcion =
     document.getElementById("descripcionVarios")
     .value.trim();
 
-
     const cantidad =
     Number(
         document.getElementById("cantidadVarios").value
     );
 
-
     if(descripcion==""){
 
         alert("Ingrese una descripción.");
-
         return;
 
     }
-
 
     if(cantidad<=0){
 
         alert("Ingrese una cantidad válida.");
-
         return;
 
     }
 
-
     prendasGuardadas=[];
 
-
     for(let i=0;i<cantidad;i++){
-
 
         prendasGuardadas.push({
 
             genero:"",
-
             categoria:categoriaSeleccionada,
-
             subcategoria:subcategoriaSeleccionada,
-
             talle:"",
-
             color:"",
-
             diseno:"",
-
             descripcion:descripcion,
-
             precioCompra:Number(
                 localStorage.getItem("precioCompra")
             ),
-
             precioVenta:0,
-
             observaciones:
             localStorage.getItem("observaciones") || ""
 
         });
 
-
     }
-
 
     enviarCompraCompleta();
 
