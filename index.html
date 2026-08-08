@@ -1,2468 +1,773 @@
 <!DOCTYPE html>
-
 <html>
 
 <head>
 
 <meta charset="UTF-8">
 
-<base target="_top">
-
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1">
 
 <script src="https://unpkg.com/html5-qrcode"></script>
 
 <style>
 
-*{
-  box-sizing:border-box;
+body{
+
+font-family:Arial;
+
+background:#f3f3f3;
+
+margin:0;
+
+padding:20px;
+
 }
 
-body{
-  font-family:Arial,sans-serif;
-  background:#f3f3f3;
-  margin:0;
-  padding:15px;
-  color:#222;
-}
 
 .card{
-  max-width:550px;
-  margin:auto;
-  background:white;
-  padding:20px;
-  border-radius:14px;
-  box-shadow:0 2px 12px rgba(0,0,0,.18);
+
+max-width:500px;
+
+margin:auto;
+
+background:white;
+
+border-radius:12px;
+
+padding:20px;
+
+box-shadow:
+0 2px 12px
+rgba(0,0,0,.2);
+
 }
+
 
 h2{
-  text-align:center;
-  margin-top:0;
+
+text-align:center;
+
+margin-top:0;
+
 }
 
-h3{
-  margin-bottom:8px;
-}
-
-label{
-  display:block;
-  margin-top:12px;
-  font-weight:bold;
-}
 
 input,
-select,
-textarea{
-  width:100%;
-  padding:12px;
-  margin-top:5px;
-  font-size:16px;
-  border-radius:7px;
-  border:1px solid #ccc;
-  background:white;
+select{
+
+width:100%;
+
+padding:15px;
+
+font-size:20px;
+
+box-sizing:border-box;
+
+margin-top:10px;
+
+border:
+1px solid #ccc;
+
+border-radius:6px;
+
 }
 
-textarea{
-  min-height:80px;
-  resize:vertical;
-}
 
 button{
-  width:100%;
-  padding:14px;
-  margin-top:12px;
-  font-size:18px;
-  border:0;
-  border-radius:8px;
-  cursor:pointer;
-  background:#43a047;
-  color:white;
+
+width:100%;
+
+padding:15px;
+
+margin-top:12px;
+
+font-size:20px;
+
+border:none;
+
+border-radius:8px;
+
+cursor:pointer;
+
 }
 
-button.secundario{
-  background:#1976d2;
+
+#buscar{
+
+background:#1976d2;
+
+color:white;
+
 }
 
-button.rojo{
-  background:#d32f2f;
+
+#camara{
+
+background:#43a047;
+
+color:white;
+
 }
 
-button.gris{
-  background:#757575;
+
+#cambiarEstado{
+
+background:#ff9800;
+
+color:white;
+
 }
 
-button.config{
-  background:#6a1b9a;
-}
-
-.pantalla{
-  display:none;
-}
-
-.menu-boton{
-  margin-top:12px;
-}
-
-.info{
-  background:#e3f2fd;
-  padding:12px;
-  border-radius:8px;
-  margin-top:12px;
-  font-size:15px;
-}
-
-.config-box{
-  background:#f5f5f5;
-  padding:15px;
-  border-radius:10px;
-  margin-top:15px;
-}
-
-.tipo-carga{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-  margin-top:15px;
-}
-
-.tipo-carga button{
-  margin-top:0;
-}
-
-.item{
-  background:#eeeeee;
-  padding:12px;
-  margin-top:10px;
-  border-radius:9px;
-}
-
-.item-header{
-  font-weight:bold;
-  margin-bottom:6px;
-}
-
-.cantidad-grid{
-  display:grid;
-  grid-template-columns:1fr 90px;
-  gap:8px;
-  align-items:center;
-  margin-top:8px;
-}
-
-.cantidad-grid input{
-  margin-top:0;
-  text-align:center;
-}
-
-.talle-item{
-  background:#fafafa;
-  border:1px solid #ddd;
-  border-radius:8px;
-  padding:10px;
-  margin-top:8px;
-}
-
-.precio-info{
-  background:#e8f5e9;
-  padding:10px;
-  border-radius:8px;
-  margin-top:10px;
-  font-weight:bold;
-}
-
-#reader{
-  margin-top:15px;
-}
 
 #resultado{
-  margin-top:20px;
-  font-size:17px;
-  line-height:1.7;
+
+margin-top:20px;
+
+font-size:18px;
+
+line-height:1.7;
+
 }
+
+
+#reader{
+
+margin-top:20px;
+
+}
+
 
 .estado{
-  text-align:center;
-  margin-top:10px;
-  font-size:14px;
-  color:#555;
+
+padding:10px;
+
+margin-top:15px;
+
+border-radius:8px;
+
+background:#eeeeee;
+
 }
 
-.oculto{
-  display:none;
+
+.estadoActual{
+
+font-size:20px;
+
+font-weight:bold;
+
 }
+
+
+.mensaje{
+
+margin-top:15px;
+
+padding:12px;
+
+border-radius:8px;
+
+background:#e8f5e9;
+
+color:#2e7d32;
+
+}
+
+
+.error{
+
+background:#ffebee;
+
+color:#c62828;
+
+}
+
 
 </style>
 
 </head>
 
+
 <body>
 
-<!-- =========================================================
-     MENU PRINCIPAL
-========================================================= -->
-
-<div id="menuPrincipal" class="pantalla">
 
 <div class="card">
 
-<h2>📦 ROPITA DE CUENTO</h2>
 
-<button onclick="nuevaCompra()">
-🛒 Nueva compra
-</button>
+<h2>
+📦 INVENTARIO
+</h2>
 
-<button class="secundario" onclick="buscarInventario()">
-🔎 Buscar producto
-</button>
-
-<button class="config" onclick="abrirConfiguracion()">
-⚙️ Configuración
-</button>
-
-</div>
-
-</div>
-
-<!-- =========================================================
-     CONFIGURACION
-========================================================= -->
-
-<div id="pantallaConfiguracion" class="pantalla">
-
-<div class="card">
-
-<h2>⚙️ Configuración</h2>
-
-<label>
-Coeficiente de venta
-</label>
 
 <input
-type="number"
-id="coeficiente"
-step="0.1"
-min="0.1"
-value="2.5"
+id="codigo"
+placeholder="Código de barras"
+autocomplete="off">
 
->
-
-<div class="info">
-
-El precio de venta se calculará automáticamente:
-
-<br><br>
-
-<b>
-Precio de compra × coeficiente = precio de venta
-</b>
-
-<br><br>
-
-Ejemplo: $10.000 × 2,5 = $25.000
-
-</div>
-
-<button onclick="guardarConfiguracion()">
-💾 Guardar configuración
-</button>
-
-<button class="rojo" onclick="volverMenu()">
-Volver
-</button>
-
-</div>
-
-</div>
-
-<!-- =========================================================
-     NUEVA COMPRA
-========================================================= -->
-
-<div id="pantallaNuevaCompra" class="pantalla">
-
-<div class="card">
-
-<h2>🛒 Nueva compra</h2>
-
-<label>
-Proveedor
-</label>
-
-<select id="proveedor">
-<option value="">Seleccione proveedor</option>
-</select>
 
 <button
-class="secundario"
-onclick="nuevoProveedor()">
-
-➕ Nuevo proveedor
-
-</button>
-
-<label>
-Fecha
-</label>
-
-<input
-type="date"
-id="fechaCompra"
-
->
-
-<label>
-Observaciones
-</label>
-
-<textarea id="obsCompra"></textarea>
-
-<div class="info">
-
-<b>¿Qué querés cargar?</b>
-
-</div>
-
-<div class="tipo-carga">
-
-<button onclick="cargaIndividual()">
-👕 Individual
-</button>
-
-<button class="secundario" onclick="cargaCurva()">
-📦 Curva
-</button>
-
-</div>
-
-<button class="rojo" onclick="volverMenu()">
-Volver
-</button>
-
-</div>
-
-</div>
-
-<!-- =========================================================
-     NUEVO PROVEEDOR
-========================================================= -->
-
-<div id="pantallaProveedor" class="pantalla">
-
-<div class="card">
-
-<h2>🏪 Nuevo proveedor</h2>
-
-<label>Nombre</label> <input id="provNombre">
-
-<label>Teléfono</label> <input id="provTelefono">
-
-<label>WhatsApp</label> <input id="provWhatsapp">
-
-<label>Dirección</label> <input id="provDireccion">
-
-<label>Ciudad</label> <input id="provCiudad">
-
-<label>Galería</label> <input id="provGaleria">
-
-<label>Local</label> <input id="provLocal">
-
-<label>Instagram</label> <input id="provInstagram">
-
-<label>Observaciones</label>
-
-<textarea id="provObs"></textarea>
-
-<button onclick="guardarProveedor()">
-💾 Guardar proveedor
-</button>
-
-<button class="rojo" onclick="volverNuevaCompra()">
-Cancelar
-</button>
-
-</div>
-
-</div>
-
-<!-- =========================================================
-     CARGA INDIVIDUAL
-========================================================= -->
-
-<div id="pantallaIndividual" class="pantalla">
-
-<div class="card">
-
-<h2>👕 Cargar prenda</h2>
-
-<label>Género</label>
-
-<select id="individualGenero"
-onchange="cargarDatosIndividual()"> </select>
-
-<label>Categoría</label>
-
-<select id="individualCategoria"
-onchange="cargarSubcategoriasIndividual()"> </select>
-
-<label>Subcategoría</label>
-
-<select id="individualSubcategoria">
-</select>
-
-<label>Talle</label>
-
-<select id="individualTalle">
-</select>
-
-<label>Color</label>
-
-<select id="individualColor">
-</select>
-
-<label>Diseño</label>
-
-<select id="individualDiseno">
-</select>
-
-<label>Precio compra</label>
-
-<input
-type="number"
-id="individualPrecioCompra"
-step="0.01"
-oninput="calcularPrecioIndividual()"
-
->
-
-<label>Precio venta</label>
-
-<input
-type="number"
-id="individualPrecioVenta"
-step="0.01"
-
->
-
-<div class="precio-info">
-Coeficiente actual:
-<span id="coefIndividual">2.5</span>
-</div>
-
-<label>Observaciones</label>
-
-<textarea id="individualObservaciones"></textarea>
-
-<button onclick="agregarIndividual()">
-➕ Agregar prenda
-</button>
-
-<button class="secundario" onclick="guardarCompra()">
-💾 Guardar compra
-</button>
-
-<button class="rojo" onclick="volverNuevaCompra()">
-Volver
-</button>
-
-</div>
-
-</div>
-
-<!-- =========================================================
-     CARGA CURVA
-========================================================= -->
-
-<div id="pantallaCurva" class="pantalla">
-
-<div class="card">
-
-<h2>📦 Cargar curva</h2>
-
-<label>Género</label>
-
-<select
-id="curvaGenero"
-onchange="cargarDatosCurva()"> </select>
-
-<label>Categoría</label>
-
-<select
-id="curvaCategoria"
-onchange="cargarSubcategoriasCurva()"> </select>
-
-<label>Subcategoría</label>
-
-<select id="curvaSubcategoria">
-</select>
-
-<div class="info">
-
-Los talles se cargan automáticamente según el género seleccionado.
-
-<br><br>
-
-Por defecto la cantidad es <b>1</b>. Podés poner <b>0</b> si no recibiste ese talle.
-
-</div>
-
-<div id="tallesCurva"></div>
-
-<button onclick="agregarCurva()">
-➕ Agregar curva
-</button>
-
-<button class="secundario" onclick="guardarCompra()">
-💾 Guardar compra
-</button>
-
-<button class="rojo" onclick="volverNuevaCompra()">
-Volver
-</button>
-
-</div>
-
-</div>
-
-<!-- =========================================================
-     RESUMEN
-========================================================= -->
-
-<div id="pantallaResumen" class="pantalla">
-
-<div class="card">
-
-<h2>📋 Resumen de compra</h2>
-
-<div id="resumenCompra"></div>
-
-<button onclick="guardarCompraFinal()">
-✅ Confirmar guardado
-</button>
-
-<button class="rojo" onclick="volverNuevaCompra()">
-Cancelar
-</button>
-
-</div>
-
-</div>
-
-<!-- =========================================================
-     BUSQUEDA
-========================================================= -->
-
-<div id="pantallaBusqueda" class="pantalla">
-
-<div class="card">
-
-<h2>🔎 Buscar producto</h2>
-
-<input
-id="codigoBusqueda"
-placeholder="Código de barras o código interno"
-
->
-
-<button
-class="secundario"
-onclick="iniciarCamaraBusqueda()">
+id="camara"
+onclick="iniciarCamara()">
 
 📷 Escanear
 
 </button>
 
-<button onclick="buscarProducto()">
+
+<button
+id="buscar"
+onclick="buscar()">
+
 🔎 Buscar
+
 </button>
+
 
 <div id="reader"></div>
 
+
 <div id="resultado"></div>
 
-<button class="rojo" onclick="volverMenu()">
-Volver
-</button>
 
 </div>
 
-</div>
 
 <script>
 
-
-/* =========================================================
-   URL APPS SCRIPT
-========================================================= */
 
 const URL_SCRIPT =
 "https://script.google.com/macros/s/AKfycbwsBLmhm8xSx3vsfYEurnFM9m7D4S8WVLrGRBKRmnsx6uHLRAhEHMvzTUXlCW_kFnpC/exec";
 
 
-/* =========================================================
-   VARIABLES
-========================================================= */
-
-let prendas=[];
-
-let modoCarga="";
-
-let tallesActuales=[];
+let productoActual=null;
 
 let html5QrCode=null;
 
 
-/* =========================================================
-   INICIO
-========================================================= */
+/************************************************************
+ * BUSCAR
+ ************************************************************/
 
-window.onload=function(){
+function buscar(){
 
-  cargarCoeficiente();
+const codigo =
+document
+.getElementById("codigo")
+.value
+.trim();
 
-  ocultarPantallas();
 
-  document.getElementById("menuPrincipal").style.display="block";
+if(!codigo){
 
-  cargarProveedores();
+alert(
+"Ingrese un código."
+);
+
+return;
+
+}
+
+
+document
+.getElementById("resultado")
+.innerHTML=
+"Buscando...";
+
+
+fetch(
+URL_SCRIPT+
+"?accion=buscar&codigo="+
+encodeURIComponent(codigo)
+)
+
+.then(
+r=>r.json()
+)
+
+.then(
+mostrar
+)
+
+.catch(
+error=>{
+
+document
+.getElementById("resultado")
+.innerHTML=
+
+'<div class="error">'+
+'Error al buscar el producto.'+
+'</div>';
+
+console.error(error);
+
+});
+
+}
+
+
+/************************************************************
+ * MOSTRAR PRODUCTO
+ ************************************************************/
+
+function mostrar(p){
+
+productoActual=p;
+
+
+if(!p){
+
+document
+.getElementById("resultado")
+.innerHTML=
+
+"<h3>Producto no encontrado</h3>";
+
+return;
+
+}
+
+
+document
+.getElementById("resultado")
+.innerHTML=
+
+"<h2>"+
+(p.descripcion || "")+
+"</h2>"+
+
+"<b>Código:</b> "+
+(p.codigo || "")+
+"<br>"+
+
+"<b>Género:</b> "+
+(p.genero || "")+
+"<br>"+
+
+"<b>Categoría:</b> "+
+(p.categoria || "")+
+"<br>"+
+
+"<b>Subcategoría:</b> "+
+(p.subcategoria || "")+
+"<br>"+
+
+"<b>Talle:</b> "+
+(p.talle || "")+
+"<br>"+
+
+"<b>Color:</b> "+
+(p.color || "")+
+"<br>"+
+
+"<b>Diseño:</b> "+
+(p.diseño || "")+
+"<br>"+
+
+"<b>Precio compra:</b> $"+
+(p.precioCompra || 0)+
+"<br>"+
+
+"<b>Precio venta:</b> $"+
+(p.precioVenta || 0)+
+"<br>"+
+
+"<div class='estado'>"+
+
+"<div class='estadoActual'>"+
+"Estado actual: "+
+(p.estado || "")+
+"</div>"+
+
+"<select id='nuevoEstado'>"+
+
+"<option value='Disponible' "+
+(p.estado=="Disponible"?"selected":"")+
+">Disponible</option>"+
+
+"<option value='Defectuoso' "+
+(p.estado=="Defectuoso"?"selected":"")+
+">Defectuoso</option>"+
+
+"<option value='Vendido' "+
+(p.estado=="Vendido"?"selected":"")+
+">Vendido</option>"+
+
+"</select>"+
+
+"<button id='cambiarEstado' "+
+"onclick='cambiarEstado()'>"+
+
+"💾 Cambiar estado"+
+
+"</button>"+
+
+"</div>";
+
+}
+
+
+/************************************************************
+ * CAMBIAR ESTADO
+ ************************************************************/
+
+function cambiarEstado(){
+
+if(!productoActual){
+
+alert(
+"No hay ningún producto cargado."
+);
+
+return;
+
+}
+
+
+const nuevoEstado =
+document
+.getElementById("nuevoEstado")
+.value;
+
+
+if(
+nuevoEstado==
+productoActual.estado
+){
+
+alert(
+"El producto ya tiene ese estado."
+);
+
+return;
+
+}
+
+
+if(
+nuevoEstado=="Vendido"
+){
+
+const confirmar =
+confirm(
+"¿Confirmar que esta prenda fue vendida?\n\n"+
+"El producto será pasado a la hoja VENTAS."
+);
+
+
+if(!confirmar){
+
+return;
+
+}
+
+}
+
+
+if(
+nuevoEstado=="Defectuoso"
+){
+
+const confirmar =
+confirm(
+"¿Marcar esta prenda como DEFECTUOSA?"
+);
+
+
+if(!confirmar){
+
+return;
+
+}
+
+}
+
+
+const datos={
+
+accion:
+"cambiarEstado",
+
+codigo:
+productoActual.codigo,
+
+estado:
+nuevoEstado
 
 };
 
 
-/* =========================================================
-   CONFIGURACION
-========================================================= */
-
-function obtenerCoeficiente(){
-
-  const guardado =
-    localStorage.getItem("coeficienteVenta");
-
-  if(guardado){
-
-    const valor=parseFloat(guardado);
-
-    if(!isNaN(valor) && valor>0){
-
-      return valor;
-
-    }
-
-  }
-
-  return 2.5;
-
-}
+document
+.getElementById("cambiarEstado")
+.disabled=true;
 
 
-function cargarCoeficiente(){
+fetch(
+URL_SCRIPT,
+{
 
-  const coef=obtenerCoeficiente();
+method:"POST",
 
-  document.getElementById("coeficiente").value=coef;
+headers:{
+"Content-Type":
+"text/plain;charset=utf-8"
+},
 
-  const ci=
-    document.getElementById("coefIndividual");
+body:
+JSON.stringify(datos)
 
-  if(ci){
-    ci.textContent=coef;
-  }
+})
 
-}
+.then(
+r=>r.json()
+)
+
+.then(
+resp=>{
+
+document
+.getElementById("cambiarEstado")
+.disabled=false;
 
 
-function abrirConfiguracion(){
+if(!resp.ok){
 
-  ocultarPantallas();
+alert(
+resp.mensaje
+);
 
-  document.getElementById(
-    "pantallaConfiguracion"
-  ).style.display="block";
-
-  document.getElementById(
-    "coeficiente"
-  ).value=obtenerCoeficiente();
+return;
 
 }
 
 
-function guardarConfiguracion(){
+if(
+nuevoEstado=="Vendido"
+){
 
-  const valor=
-    parseFloat(
-      document.getElementById("coeficiente").value
-    );
+document
+.getElementById("resultado")
+.innerHTML=
 
-  if(isNaN(valor) || valor<=0){
+"<div class='mensaje'>"+
+"✅ "+resp.mensaje+
+"</div>";
 
-    alert("Ingrese un coeficiente válido.");
+productoActual=null;
 
-    return;
+document
+.getElementById("codigo")
+.value="";
 
-  }
-
-  localStorage.setItem(
-    "coeficienteVenta",
-    valor
-  );
-
-  cargarCoeficiente();
-
-  alert(
-    "Configuración guardada.\n\nCoeficiente: "+
-    valor
-  );
-
-  volverMenu();
+return;
 
 }
 
 
-/* =========================================================
-   PANTALLAS
-========================================================= */
-
-function ocultarPantallas(){
-
-  [
-    "menuPrincipal",
-    "pantallaConfiguracion",
-    "pantallaNuevaCompra",
-    "pantallaProveedor",
-    "pantallaIndividual",
-    "pantallaCurva",
-    "pantallaResumen",
-    "pantallaBusqueda"
-  ].forEach(function(id){
-
-    const el=document.getElementById(id);
-
-    if(el){
-      el.style.display="none";
-    }
-
-  });
-
-}
+productoActual.estado=
+nuevoEstado;
 
 
-function volverMenu(){
-
-  detenerCamara();
-
-  ocultarPantallas();
-
-  document.getElementById(
-    "menuPrincipal"
-  ).style.display="block";
-
-  cargarProveedores();
-
-}
+mostrar(productoActual);
 
 
-function nuevaCompra(){
+const mensaje =
+document.createElement("div");
 
-  prendas=[];
 
-  ocultarPantallas();
+mensaje.className=
+"mensaje";
 
-  document.getElementById(
-    "pantallaNuevaCompra"
-  ).style.display="block";
 
-  const fecha=
-    document.getElementById("fechaCompra");
+mensaje.innerHTML=
+"✅ "+
+resp.mensaje;
 
-  if(!fecha.value){
 
-    const hoy=new Date();
+document
+.getElementById("resultado")
+.appendChild(
+mensaje
+);
 
-    const yyyy=hoy.getFullYear();
+})
 
-    const mm=
-      String(hoy.getMonth()+1)
-      .padStart(2,"0");
+.catch(
+error=>{
 
-    const dd=
-      String(hoy.getDate())
-      .padStart(2,"0");
+document
+.getElementById("cambiarEstado")
+.disabled=false;
 
-    fecha.value=
-      yyyy+"-"+mm+"-"+dd;
+alert(
+"Error: "+
+error
+);
 
-  }
-
-  cargarProveedores();
+});
 
 }
 
 
-function volverNuevaCompra(){
+/************************************************************
+ * CAMARA
+ ************************************************************/
 
-  detenerCamara();
+function iniciarCamara(){
 
-  ocultarPantallas();
-
-  document.getElementById(
-    "pantallaNuevaCompra"
-  ).style.display="block";
-
-  cargarProveedores();
-
-}
+document
+.getElementById("reader")
+.innerHTML="";
 
 
-/* =========================================================
-   PROVEEDORES
-========================================================= */
+if(html5QrCode){
 
-function nuevoProveedor(){
+try{
 
-  ocultarPantallas();
+html5QrCode.stop();
 
-  document.getElementById(
-    "pantallaProveedor"
-  ).style.display="block";
+}catch(e){}
 
 }
 
 
-function guardarProveedor(){
-
-  const proveedor={
-
-    nombre:
-      document.getElementById("provNombre").value.trim(),
-
-    telefono:
-      document.getElementById("provTelefono").value.trim(),
-
-    whatsapp:
-      document.getElementById("provWhatsapp").value.trim(),
-
-    direccion:
-      document.getElementById("provDireccion").value.trim(),
-
-    ciudad:
-      document.getElementById("provCiudad").value.trim(),
-
-    galeria:
-      document.getElementById("provGaleria").value.trim(),
-
-    local:
-      document.getElementById("provLocal").value.trim(),
-
-    instagram:
-      document.getElementById("provInstagram").value.trim(),
-
-    observaciones:
-      document.getElementById("provObs").value.trim()
-
-  };
+html5QrCode =
+new Html5Qrcode(
+"reader"
+);
 
 
-  if(proveedor.nombre===""){
+navigator
+.mediaDevices
+.getUserMedia({
 
-    alert("Ingrese el nombre del proveedor.");
+video:{
+facingMode:"environment"
+}
 
-    return;
+})
 
-  }
+.then(
+stream=>{
+
+stream
+.getTracks()
+.forEach(
+track=>track.stop()
+);
 
 
-  fetch(URL_SCRIPT,{
+html5QrCode
+.start(
 
-    method:"POST",
+{
+facingMode:{
+ideal:"environment"
+}
+},
 
-    headers:{
-      "Content-Type":
-      "text/plain;charset=utf-8"
-    },
+{
 
-    body:JSON.stringify({
+fps:10,
 
-      accion:"guardarProveedor",
+qrbox:{
+width:280,
+height:120
+},
 
-      proveedor:proveedor
+formatsToSupport:[
 
-    })
+Html5QrcodeSupportedFormats.CODE_128,
 
-  })
+Html5QrcodeSupportedFormats.EAN_13,
 
-  .then(function(r){
+Html5QrcodeSupportedFormats.EAN_8,
 
-    return r.json();
+Html5QrcodeSupportedFormats.CODE_39,
 
-  })
+Html5QrcodeSupportedFormats.UPC_A,
 
-  .then(function(resp){
+Html5QrcodeSupportedFormats.UPC_E
 
-    if(resp.ok){
+]
 
-      alert(resp.mensaje);
+},
 
-      limpiarProveedor();
+codigo=>{
 
-      volverNuevaCompra();
+document
+.getElementById("codigo")
+.value=codigo;
 
-    }else{
 
-      alert(
-        resp.mensaje ||
-        "No se pudo guardar el proveedor."
-      );
+html5QrCode
+.stop()
+.then(
+()=>{
 
-    }
+buscar();
 
-  })
+}
+)
+.catch(
+()=>{
 
-  .catch(function(error){
+buscar();
 
-    alert(
-      "Error al guardar proveedor: "+
-      error
-    );
+}
+);
 
-  });
+},
+
+error=>{}
+
+)
+
+.catch(
+error=>{
+
+alert(
+"No se pudo iniciar el escáner: "+
+error
+);
+
+});
+
+})
+
+.catch(
+error=>{
+
+alert(
+"Permiso de cámara rechazado: "+
+error.name
+);
+
+});
 
 }
 
 
-function limpiarProveedor(){
+/************************************************************
+ * ENTER EN EL CAMPO
+ ************************************************************/
 
-  [
-    "provNombre",
-    "provTelefono",
-    "provWhatsapp",
-    "provDireccion",
-    "provCiudad",
-    "provGaleria",
-    "provLocal",
-    "provInstagram",
-    "provObs"
-  ].forEach(function(id){
+document
+.getElementById("codigo")
+.addEventListener(
+"keydown",
+function(event){
 
-    const campo=document.getElementById(id);
+if(
+event.key==="Enter"
+){
 
-    if(campo){
-      campo.value="";
-    }
-
-  });
+buscar();
 
 }
 
-
-function cargarProveedores(){
-
-  fetch(
-    URL_SCRIPT+
-    "?accion=proveedores"
-  )
-
-  .then(r=>r.json())
-
-  .then(function(lista){
-
-    const combo=
-      document.getElementById("proveedor");
-
-    if(!combo)return;
-
-    combo.innerHTML=
-      "<option value=''>Seleccione proveedor</option>";
-
-    lista.forEach(function(p){
-
-      const option=
-        document.createElement("option");
-
-      option.value=p.nombre;
-
-      option.textContent=p.nombre;
-
-      combo.appendChild(option);
-
-    });
-
-  })
-
-  .catch(function(error){
-
-    console.error(
-      "Error proveedores:",
-      error
-    );
-
-  });
-
-}
-
-
-/* =========================================================
-   CARGA INDIVIDUAL
-========================================================= */
-
-function cargaIndividual(){
-
-  modoCarga="individual";
-
-  ocultarPantallas();
-
-  document.getElementById(
-    "pantallaIndividual"
-  ).style.display="block";
-
-  cargarGenerosIndividual();
-
-  cargarColoresIndividual();
-
-  cargarDisenosIndividual();
-
-  document.getElementById(
-    "coefIndividual"
-  ).textContent=
-    obtenerCoeficiente();
-
-}
-
-
-function cargarGenerosIndividual(){
-
-  fetch(
-    URL_SCRIPT+
-    "?accion=generos"
-  )
-
-  .then(r=>r.json())
-
-  .then(function(lista){
-
-    const combo=
-      document.getElementById(
-        "individualGenero"
-      );
-
-    combo.innerHTML="";
-
-    lista.forEach(function(g){
-
-      const option=
-        document.createElement("option");
-
-      option.value=g.codigo;
-
-      option.textContent=g.nombre;
-
-      combo.appendChild(option);
-
-    });
-
-    cargarDatosIndividual();
-
-  });
-
-}
-
-
-function cargarDatosIndividual(){
-
-  cargarCategoriasIndividual();
-
-  cargarTallesIndividual();
-
-}
-
-
-function cargarCategoriasIndividual(){
-
-  fetch(
-    URL_SCRIPT+
-    "?accion=categorias"
-  )
-
-  .then(r=>r.json())
-
-  .then(function(lista){
-
-    const combo=
-      document.getElementById(
-        "individualCategoria"
-      );
-
-    combo.innerHTML="";
-
-    lista.forEach(function(c){
-
-      const option=
-        document.createElement("option");
-
-      option.value=c.codigo;
-
-      option.textContent=c.nombre;
-
-      combo.appendChild(option);
-
-    });
-
-    cargarSubcategoriasIndividual();
-
-  });
-
-}
-
-
-function cargarSubcategoriasIndividual(){
-
-  const categoria=
-    document.getElementById(
-      "individualCategoria"
-    ).value;
-
-  fetch(
-    URL_SCRIPT+
-    "?accion=subcategorias&categoria="+
-    encodeURIComponent(categoria)
-  )
-
-  .then(r=>r.json())
-
-  .then(function(lista){
-
-    const combo=
-      document.getElementById(
-        "individualSubcategoria"
-      );
-
-    combo.innerHTML="";
-
-    lista.forEach(function(s){
-
-      const option=
-        document.createElement("option");
-
-      option.value=s.codigo;
-
-      option.textContent=s.nombre;
-
-      combo.appendChild(option);
-
-    });
-
-  });
-
-}
-
-
-function cargarTallesIndividual(){
-
-  const genero=
-    document.getElementById(
-      "individualGenero"
-    ).value;
-
-  fetch(
-    URL_SCRIPT+
-    "?accion=talles&genero="+
-    encodeURIComponent(genero)
-  )
-
-  .then(r=>r.json())
-
-  .then(function(lista){
-
-    const combo=
-      document.getElementById(
-        "individualTalle"
-      );
-
-    combo.innerHTML="";
-
-    lista.forEach(function(t){
-
-      const option=
-        document.createElement("option");
-
-      option.value=t.talle;
-
-      option.textContent=t.talle;
-
-      combo.appendChild(option);
-
-    });
-
-  });
-
-}
-
-
-function cargarColoresIndividual(){
-
-  fetch(
-    URL_SCRIPT+
-    "?accion=colores"
-  )
-
-  .then(r=>r.json())
-
-  .then(function(lista){
-
-    const combo=
-      document.getElementById(
-        "individualColor"
-      );
-
-    combo.innerHTML="";
-
-    lista.forEach(function(c){
-
-      const option=
-        document.createElement("option");
-
-      option.value=c.nombre;
-
-      option.textContent=c.nombre;
-
-      combo.appendChild(option);
-
-    });
-
-  });
-
-}
-
-
-function cargarDisenosIndividual(){
-
-  fetch(
-    URL_SCRIPT+
-    "?accion=diseños"
-  )
-
-  .then(r=>r.json())
-
-  .then(function(lista){
-
-    const combo=
-      document.getElementById(
-        "individualDiseno"
-      );
-
-    combo.innerHTML="";
-
-    lista.forEach(function(d){
-
-      const option=
-        document.createElement("option");
-
-      option.value=d.nombre;
-
-      option.textContent=d.nombre;
-
-      combo.appendChild(option);
-
-    });
-
-  });
-
-}
-
-
-/* =========================================================
-   PRECIO INDIVIDUAL
-========================================================= */
-
-function calcularPrecioIndividual(){
-
-  const compra=
-    parseFloat(
-      document.getElementById(
-        "individualPrecioCompra"
-      ).value
-    );
-
-  if(isNaN(compra)){
-
-    document.getElementById(
-      "individualPrecioVenta"
-    ).value="";
-
-    return;
-
-  }
-
-  const coef=
-    obtenerCoeficiente();
-
-  const venta=
-    compra*coef;
-
-  document.getElementById(
-    "individualPrecioVenta"
-  ).value=
-    Math.round(venta*100)/100;
-
-}
-
-
-function agregarIndividual(){
-
-  const p={
-
-    genero:
-      document.getElementById(
-        "individualGenero"
-      ).value,
-
-    categoria:
-      document.getElementById(
-        "individualCategoria"
-      ).value,
-
-    subcategoria:
-      document.getElementById(
-        "individualSubcategoria"
-      ).value,
-
-    talle:
-      document.getElementById(
-        "individualTalle"
-      ).value,
-
-    color:
-      document.getElementById(
-        "individualColor"
-      ).value,
-
-    diseno:
-      document.getElementById(
-        "individualDiseno"
-      ).value,
-
-    precioCompra:
-      document.getElementById(
-        "individualPrecioCompra"
-      ).value,
-
-    precioVenta:
-      document.getElementById(
-        "individualPrecioVenta"
-      ).value,
-
-    observaciones:
-      document.getElementById(
-        "individualObservaciones"
-      ).value
-
-  };
-
-
-  if(!p.genero ||
-     !p.categoria ||
-     !p.subcategoria ||
-     !p.talle){
-
-    alert(
-      "Complete género, categoría, subcategoría y talle."
-    );
-
-    return;
-
-  }
-
-
-  if(!p.precioCompra){
-
-    alert(
-      "Ingrese el precio de compra."
-    );
-
-    return;
-
-  }
-
-
-  prendas.push(p);
-
-  alert(
-    "Prenda agregada correctamente."
-  );
-
-  limpiarFormularioIndividual();
-
-}
-
-
-function limpiarFormularioIndividual(){
-
-  document.getElementById(
-    "individualPrecioCompra"
-  ).value="";
-
-  document.getElementById(
-    "individualPrecioVenta"
-  ).value="";
-
-  document.getElementById(
-    "individualObservaciones"
-  ).value="";
-
-}
-
-
-/* =========================================================
-   CARGA CURVA
-========================================================= */
-
-function cargaCurva(){
-
-  modoCarga="curva";
-
-  ocultarPantallas();
-
-  document.getElementById(
-    "pantallaCurva"
-  ).style.display="block";
-
-  cargarGenerosCurva();
-
-}
-
-
-function cargarGenerosCurva(){
-
-  fetch(
-    URL_SCRIPT+
-    "?accion=generos"
-  )
-
-  .then(r=>r.json())
-
-  .then(function(lista){
-
-    const combo=
-      document.getElementById(
-        "curvaGenero"
-      );
-
-    combo.innerHTML="";
-
-    lista.forEach(function(g){
-
-      const option=
-        document.createElement("option");
-
-      option.value=g.codigo;
-
-      option.textContent=g.nombre;
-
-      combo.appendChild(option);
-
-    });
-
-    cargarDatosCurva();
-
-  });
-
-}
-
-
-function cargarDatosCurva(){
-
-  cargarCategoriasCurva();
-
-  cargarTallesCurva();
-
-}
-
-
-function cargarCategoriasCurva(){
-
-  fetch(
-    URL_SCRIPT+
-    "?accion=categorias"
-  )
-
-  .then(r=>r.json())
-
-  .then(function(lista){
-
-    const combo=
-      document.getElementById(
-        "curvaCategoria"
-      );
-
-    combo.innerHTML="";
-
-    lista.forEach(function(c){
-
-      const option=
-        document.createElement("option");
-
-      option.value=c.codigo;
-
-      option.textContent=c.nombre;
-
-      combo.appendChild(option);
-
-    });
-
-    cargarSubcategoriasCurva();
-
-  });
-
-}
-
-
-function cargarSubcategoriasCurva(){
-
-  const categoria=
-    document.getElementById(
-      "curvaCategoria"
-    ).value;
-
-  fetch(
-    URL_SCRIPT+
-    "?accion=subcategorias&categoria="+
-    encodeURIComponent(categoria)
-  )
-
-  .then(r=>r.json())
-
-  .then(function(lista){
-
-    const combo=
-      document.getElementById(
-        "curvaSubcategoria"
-      );
-
-    combo.innerHTML="";
-
-    lista.forEach(function(s){
-
-      const option=
-        document.createElement("option");
-
-      option.value=s.codigo;
-
-      option.textContent=s.nombre;
-
-      combo.appendChild(option);
-
-    });
-
-  });
-
-}
-
-
-function cargarTallesCurva(){
-
-  const genero=
-    document.getElementById(
-      "curvaGenero"
-    ).value;
-
-  fetch(
-    URL_SCRIPT+
-    "?accion=talles&genero="+
-    encodeURIComponent(genero)
-  )
-
-  .then(r=>r.json())
-
-  .then(function(lista){
-
-    tallesActuales=lista;
-
-    mostrarTallesCurva();
-
-  });
-
-}
-
-
-function mostrarTallesCurva(){
-
-  const div=
-    document.getElementById(
-      "tallesCurva"
-    );
-
-  div.innerHTML="";
-
-  if(tallesActuales.length===0){
-
-    div.innerHTML=
-      "<p>No hay talles configurados para este género.</p>";
-
-    return;
-
-  }
-
-  tallesActuales.forEach(function(t,i){
-
-    div.innerHTML+=
-
-      `<div class="talle-item">
-
-        <b>${t.talle}</b>
-
-        <div class="cantidad-grid">
-
-          <span>Cantidad</span>
-
-          <input
-            type="number"
-            min="0"
-            value="1"
-            id="cantidadTalle_${i}"
-          >
-
-        </div>
-
-      </div>`;
-
-  });
-
-}
-
-
-/* =========================================================
-   AGREGAR CURVA
-========================================================= */
-
-function agregarCurva(){
-
-  const genero=
-    document.getElementById(
-      "curvaGenero"
-    ).value;
-
-  const categoria=
-    document.getElementById(
-      "curvaCategoria"
-    ).value;
-
-  const subcategoria=
-    document.getElementById(
-      "curvaSubcategoria"
-    ).value;
-
-
-  if(!genero ||
-     !categoria ||
-     !subcategoria){
-
-    alert(
-      "Complete género, categoría y subcategoría."
-    );
-
-    return;
-
-  }
-
-
-  const precioCompra=
-    prompt(
-      "Ingrese el precio de compra de la curva:"
-    );
-
-
-  if(precioCompra===null ||
-     precioCompra===""){
-
-    return;
-
-  }
-
-
-  const compra=
-    parseFloat(precioCompra);
-
-  if(isNaN(compra) || compra<0){
-
-    alert(
-      "Ingrese un precio de compra válido."
-    );
-
-    return;
-
-  }
-
-
-  const coef=
-    obtenerCoeficiente();
-
-  const venta=
-    Math.round(
-      compra*coef*100
-    )/100;
-
-
-  let cantidadTotal=0;
-
-
-  tallesActuales.forEach(function(t,i){
-
-    const campo=
-      document.getElementById(
-        "cantidadTalle_"+i
-      );
-
-    const cantidad=
-      parseInt(campo.value)||0;
-
-    if(cantidad<=0)return;
-
-
-    cantidadTotal+=cantidad;
-
-
-    for(let n=0;n<cantidad;n++){
-
-      prendas.push({
-
-        genero:genero,
-
-        categoria:categoria,
-
-        subcategoria:subcategoria,
-
-        talle:t.talle,
-
-        color:"",
-
-        diseno:"",
-
-        precioCompra:compra,
-
-        precioVenta:venta,
-
-        observaciones:"",
-
-        pendienteColor:true,
-
-        pendienteDiseno:true
-
-      });
-
-    }
-
-  });
-
-
-  if(cantidadTotal===0){
-
-    alert(
-      "Ingrese al menos una cantidad mayor que 0."
-    );
-
-    return;
-
-  }
-
-
-  prepararDatosIndividualesCurva();
-
-
-  alert(
-    "Curva agregada: "+
-    cantidadTotal+
-    " prendas."
-  );
-
-}
-
-
-function prepararDatosIndividualesCurva(){
-
-  const colores=[];
-  const disenos=[];
-
-
-  Promise.all([
-
-    fetch(
-      URL_SCRIPT+
-      "?accion=colores"
-    ).then(r=>r.json()),
-
-    fetch(
-      URL_SCRIPT+
-      "?accion=diseños"
-    ).then(r=>r.json())
-
-  ])
-
-  .then(function(resultados){
-
-    const listaColores=resultados[0];
-
-    const listaDisenos=resultados[1];
-
-
-    const opcionesColor=
-      listaColores.map(function(c){
-
-        return `<option value="${c.nombre}">
-          ${c.nombre}
-        </option>`;
-
-      }).join("");
-
-
-    const opcionesDiseno=
-      listaDisenos.map(function(d){
-
-        return `<option value="${d.nombre}">
-          ${d.nombre}
-        </option>`;
-
-      }).join("");
-
-
-    const pendientes=
-      prendas.filter(function(p){
-
-        return p.pendienteColor;
-
-      });
-
-
-    if(pendientes.length===0){
-
-      return;
-
-    }
-
-
-    ocultarPantallas();
-
-    document.getElementById(
-      "pantallaIndividual"
-    ).style.display="block";
-
-
-    const card=
-      document.querySelector(
-        "#pantallaIndividual .card"
-      );
-
-
-    let html=
-
-      `<h2>🎨 Completar prendas de la curva</h2>
-
-       <div class="info">
-       Cada prenda puede tener un color y diseño diferente.
-       </div>`;
-
-
-    pendientes.forEach(function(p,index){
-
-      html+=
-
-      `<div class="item">
-
-        <div class="item-header">
-          ${p.genero} -
-          ${p.categoria} -
-          ${p.subcategoria}
-        </div>
-
-        <div>
-          Talle: <b>${p.talle}</b>
-        </div>
-
-        <label>Color</label>
-
-        <select
-          id="curvaColor_${index}">
-          ${opcionesColor}
-        </select>
-
-        <label>Diseño</label>
-
-        <select
-          id="curvaDiseno_${index}">
-          ${opcionesDiseno}
-        </select>
-
-      </div>`;
-
-    });
-
-
-    html+=
-
-      `<button onclick="guardarDatosCurvaIndividuales()">
-        Continuar
-       </button>
-
-       <button class="rojo"
-       onclick="volverNuevaCompra()">
-        Cancelar
-       </button>`;
-
-
-    card.innerHTML=html;
-
-
-    pendientes.forEach(function(p,index){
-
-      const color=
-        document.getElementById(
-          "curvaColor_"+index
-        );
-
-      const diseno=
-        document.getElementById(
-          "curvaDiseno_"+index
-        );
-
-      if(color)color.value="";
-
-      if(diseno)diseno.value="";
-
-    });
-
-  });
-
-}
-
-
-function guardarDatosCurvaIndividuales(){
-
-  const pendientes=
-    prendas.filter(function(p){
-
-      return p.pendienteColor;
-
-    });
-
-
-  pendientes.forEach(function(p,index){
-
-    const color=
-      document.getElementById(
-        "curvaColor_"+index
-      );
-
-    const diseno=
-      document.getElementById(
-        "curvaDiseno_"+index
-      );
-
-
-    p.color=
-      color ? color.value : "";
-
-    p.diseno=
-      diseno ? diseno.value : "";
-
-    delete p.pendienteColor;
-
-    delete p.pendienteDiseno;
-
-  });
-
-
-  alert(
-    "Prendas de la curva completadas."
-  );
-
-
-  mostrarResumen();
-
-}
-
-
-/* =========================================================
-   GUARDAR COMPRA
-========================================================= */
-
-function guardarCompra(){
-
-  if(prendas.length===0){
-
-    alert(
-      "No hay prendas cargadas."
-    );
-
-    return;
-
-  }
-
-
-  const pendientes=
-    prendas.some(function(p){
-
-      return p.pendienteColor;
-
-    });
-
-
-  if(pendientes){
-
-    prepararDatosIndividualesCurva();
-
-    return;
-
-  }
-
-
-  mostrarResumen();
-
-}
-
-
-function mostrarResumen(){
-
-  ocultarPantallas();
-
-  document.getElementById(
-    "pantallaResumen"
-  ).style.display="block";
-
-
-  const div=
-    document.getElementById(
-      "resumenCompra"
-    );
-
-
-  let html="";
-
-
-  html+=
-    `<div class="info">
-      <b>Total de prendas:</b>
-      ${prendas.length}
-     </div>`;
-
-
-  prendas.forEach(function(p,i){
-
-    html+=
-
-      `<div class="item">
-
-        <b>${i+1}.</b>
-        ${p.genero} -
-        ${p.categoria} -
-        ${p.subcategoria}
-
-        <br>
-
-        Talle: ${p.talle}
-
-        <br>
-
-        Color: ${p.color || "-"}
-
-        <br>
-
-        Diseño: ${p.diseno || "-"}
-
-        <br>
-
-        Compra: $${p.precioCompra}
-
-        <br>
-
-        Venta: $${p.precioVenta}
-
-      </div>`;
-
-  });
-
-
-  div.innerHTML=html;
-
-}
-
-
-function guardarCompraFinal(){
-
-  if(prendas.length===0){
-
-    alert(
-      "No hay prendas cargadas."
-    );
-
-    return;
-
-  }
-
-
-  const compra={
-
-    fecha:
-      document.getElementById(
-        "fechaCompra"
-      ).value,
-
-    proveedor:
-      document.getElementById(
-        "proveedor"
-      ).value,
-
-    observaciones:
-      document.getElementById(
-        "obsCompra"
-      ).value
-
-  };
-
-
-  fetch(URL_SCRIPT,{
-
-    method:"POST",
-
-    headers:{
-      "Content-Type":
-      "text/plain;charset=utf-8"
-    },
-
-    body:JSON.stringify({
-
-      accion:"guardarCompra",
-
-      compra:compra,
-
-      prendas:prendas
-
-    })
-
-  })
-
-  .then(r=>r.json())
-
-  .then(function(resp){
-
-    if(resp.ok){
-
-      alert(
-        resp.mensaje+
-        "\n\nPrendas guardadas: "+
-        resp.cantidad
-      );
-
-      prendas=[];
-
-      nuevaCompra();
-
-    }else{
-
-      alert(
-        resp.mensaje ||
-        "Error al guardar."
-      );
-
-    }
-
-  })
-
-  .catch(function(error){
-
-    alert(
-      "Error al guardar compra: "+
-      error
-    );
-
-  });
-
-}
-
-
-/* =========================================================
-   BUSQUEDA
-========================================================= */
-
-function buscarInventario(){
-
-  ocultarPantallas();
-
-  document.getElementById(
-    "pantallaBusqueda"
-  ).style.display="block";
-
-}
-
-
-function buscarProducto(){
-
-  const codigo=
-    document.getElementById(
-      "codigoBusqueda"
-    ).value.trim();
-
-
-  if(!codigo){
-
-    alert(
-      "Ingrese o escanee un código."
-    );
-
-    return;
-
-  }
-
-
-  fetch(
-    URL_SCRIPT+
-    "?accion=buscar&codigo="+
-    encodeURIComponent(codigo)
-  )
-
-  .then(r=>r.json())
-
-  .then(function(p){
-
-    mostrarProducto(p);
-
-  })
-
-  .catch(function(error){
-
-    document.getElementById(
-      "resultado"
-    ).innerHTML=
-      "<h3>Error al buscar</h3>"+
-      "<p>"+error+"</p>";
-
-  });
-
-}
-
-
-function mostrarProducto(p){
-
-  const div=
-    document.getElementById(
-      "resultado"
-    );
-
-
-  if(!p){
-
-    div.innerHTML=
-      "<h3>Producto no encontrado</h3>";
-
-    return;
-
-  }
-
-
-  div.innerHTML=
-
-    `<div class="item">
-
-      <h3>${p.descripcion || "Producto"}</h3>
-
-      <b>Código:</b>
-      ${p.codigo || ""}
-
-      <br>
-
-      <b>Género:</b>
-      ${p.genero || ""}
-
-      <br>
-
-      <b>Categoría:</b>
-      ${p.categoria || ""}
-
-      <br>
-
-      <b>Subcategoría:</b>
-      ${p.subcategoria || ""}
-
-      <br>
-
-      <b>Talle:</b>
-      ${p.talle || ""}
-
-      <br>
-
-      <b>Color:</b>
-      ${p.color || ""}
-
-      <br>
-
-      <b>Diseño:</b>
-      ${p.diseño || ""}
-
-      <br>
-
-      <b>Precio compra:</b>
-      $${p.precioCompra || 0}
-
-      <br>
-
-      <b>Precio venta:</b>
-      $${p.precioVenta || 0}
-
-      <br>
-
-      <b>Estado:</b>
-      ${p.estado || ""}
-
-    </div>`;
-
-}
-
-
-/* =========================================================
-   CAMARA
-========================================================= */
-
-function iniciarCamaraBusqueda(){
-
-  const reader=
-    document.getElementById("reader");
-
-  reader.innerHTML="";
-
-
-  if(typeof Html5Qrcode==="undefined"){
-
-    alert(
-      "No se pudo cargar el lector de códigos."
-    );
-
-    return;
-
-  }
-
-
-  html5QrCode=
-    new Html5Qrcode("reader");
-
-
-  navigator.mediaDevices.getUserMedia({
-
-    video:{
-      facingMode:"environment"
-    }
-
-  })
-
-  .then(function(stream){
-
-    stream.getTracks()
-      .forEach(function(track){
-
-        track.stop();
-
-      });
-
-
-    return html5QrCode.start(
-
-      {
-        facingMode:{
-          ideal:"environment"
-        }
-      },
-
-      {
-        fps:10,
-
-        qrbox:{
-          width:280,
-          height:120
-        },
-
-        formatsToSupport:[
-
-          Html5QrcodeSupportedFormats.CODE_128,
-
-          Html5QrcodeSupportedFormats.EAN_13,
-
-          Html5QrcodeSupportedFormats.EAN_8,
-
-          Html5QrcodeSupportedFormats.CODE_39,
-
-          Html5QrcodeSupportedFormats.UPC_A,
-
-          Html5QrcodeSupportedFormats.UPC_E
-
-        ]
-
-      },
-
-      function(codigo){
-
-        document.getElementById(
-          "codigoBusqueda"
-        ).value=codigo;
-
-        detenerCamara();
-
-        buscarProducto();
-
-      },
-
-      function(error){}
-
-    );
-
-  })
-
-  .catch(function(error){
-
-    alert(
-      "No se pudo acceder a la cámara: "+
-      error.name
-    );
-
-  });
-
-}
-
-
-function detenerCamara(){
-
-  if(html5QrCode){
-
-    try{
-
-      html5QrCode.stop()
-      .then(function(){
-
-        html5QrCode.clear();
-
-        html5QrCode=null;
-
-      })
-      .catch(function(){
-
-        html5QrCode=null;
-
-      });
-
-    }catch(e){
-
-      html5QrCode=null;
-
-    }
-
-  }
-
-}
-
-
-/* =========================================================
-   COMPATIBILIDAD
-========================================================= */
-
-function buscar(){
-
-  buscarProducto();
-
-}
+});
 
 </script>
 
