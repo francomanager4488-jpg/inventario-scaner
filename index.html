@@ -28,7 +28,7 @@ body{
 }
 
 .card{
-  max-width:550px;
+  max-width:600px;
   margin:0 auto 20px auto;
   background:white;
   padding:20px;
@@ -36,7 +36,6 @@ body{
   box-shadow:0 2px 12px rgba(0,0,0,.18);
 }
 
-h1,
 h2,
 h3{
   text-align:center;
@@ -93,10 +92,6 @@ button.gris{
   background:#757575;
 }
 
-button.naranja{
-  background:#ef6c00;
-}
-
 button:disabled{
   background:#aaa;
   cursor:not-allowed;
@@ -104,10 +99,6 @@ button:disabled{
 
 .pantalla{
   display:none;
-}
-
-.menu-boton{
-  margin-top:15px;
 }
 
 .tipo-carga{
@@ -149,29 +140,8 @@ button:disabled{
   color:#c62828;
 }
 
-.talles-grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:10px;
-  margin-top:10px;
-}
-
-.talle-item{
-  background:#f5f5f5;
-  border:1px solid #ddd;
-  border-radius:8px;
-  padding:10px;
-}
-
-.talle-nombre{
-  font-weight:bold;
-  margin-bottom:5px;
-}
-
-.talle-cantidad{
-  width:100%;
-  text-align:center;
-  font-size:18px;
+.oculto{
+  display:none;
 }
 
 .resumen-item{
@@ -186,11 +156,32 @@ button:disabled{
   margin-bottom:5px;
 }
 
-.resultado{
-  margin-top:20px;
-  padding:15px;
+.curva-talle{
+  margin-top:15px;
+  padding:12px;
   background:#f5f5f5;
+  border:1px solid #ddd;
   border-radius:10px;
+}
+
+.curva-talle-titulo{
+  font-size:18px;
+  font-weight:bold;
+  margin-bottom:10px;
+}
+
+.curva-prenda{
+  background:white;
+  border:1px solid #ddd;
+  border-radius:8px;
+  padding:12px;
+  margin-top:10px;
+}
+
+.curva-prenda-titulo{
+  font-weight:bold;
+  color:#1976d2;
+  margin-bottom:8px;
 }
 
 .codigo{
@@ -200,8 +191,15 @@ button:disabled{
   color:#1976d2;
 }
 
-.oculto{
-  display:none;
+#reader{
+  margin-top:15px;
+}
+
+.resultado{
+  margin-top:20px;
+  padding:15px;
+  background:#f5f5f5;
+  border-radius:10px;
 }
 
 </style>
@@ -249,7 +247,11 @@ button:disabled{
 <label>Proveedor</label>
 
 <select id="proveedor">
-<option value="">Cargando...</option>
+
+<option value="">
+Cargando proveedores...
+</option>
+
 </select>
 
 <button
@@ -276,7 +278,9 @@ id="obsCompra"></textarea>
 <h3>¿Cómo querés cargar?</h3>
 
 <button onclick="seleccionarTipoCarga('individual')">
+
 👕 Prenda individual
+
 </button>
 
 <button
@@ -354,7 +358,7 @@ class="estado"></div>
 
 <!-- ========================================================= -->
 
-<!-- CARGA DE PRENDA -->
+<!-- CARGA -->
 
 <!-- ========================================================= -->
 
@@ -369,17 +373,25 @@ class="estado"></div>
 <div class="info">
 
 Los géneros, categorías, subcategorías,
-colores y talles se cargan desde Google Sheets.
+talles, colores y diseños se cargan desde Google Sheets.
 
 </div>
+
+<!-- ========================================================= -->
+
+<!-- DATOS GENERALES -->
+
+<!-- ========================================================= -->
 
 <label>Género</label>
 
 <select
 id="genero"
-onchange="cargarTalles(); cargarCategorias();">
+onchange="cambioGenero()">
 
-<option value="">Cargando...</option>
+<option value="">
+Cargando...
+</option>
 
 </select>
 
@@ -389,7 +401,9 @@ onchange="cargarTalles(); cargarCategorias();">
 id="categoria"
 onchange="cargarSubcategorias()">
 
-<option value="">Cargando...</option>
+<option value="">
+Cargando...
+</option>
 
 </select>
 
@@ -397,13 +411,15 @@ onchange="cargarSubcategorias()">
 
 <select id="subcategoria">
 
-<option value="">Cargando...</option>
+<option value="">
+Cargando...
+</option>
 
 </select>
 
 <!-- ========================================================= -->
 
-<!-- TALLE INDIVIDUAL -->
+<!-- INDIVIDUAL -->
 
 <!-- ========================================================= -->
 
@@ -419,11 +435,31 @@ Seleccione género primero
 
 </select>
 
+<label>Color</label>
+
+<select id="colorIndividual">
+
+<option value="">
+Cargando colores...
+</option>
+
+</select>
+
+<label>Diseño</label>
+
+<select id="disenoIndividual">
+
+<option value="">
+Cargando diseños...
+</option>
+
+</select>
+
 </div>
 
 <!-- ========================================================= -->
 
-<!-- TALLES CURVA -->
+<!-- CURVA -->
 
 <!-- ========================================================= -->
 
@@ -433,32 +469,23 @@ Seleccione género primero
 Talles y cantidades
 </label>
 
-<div
-id="tallesGrid"
-class="talles-grid">
-
-</div>
-
 <div class="info">
 
-Por defecto cada talle comienza en 1.
-Podés colocar 0 en los talles que no compraste.
+Cada talle comienza con cantidad 1.
+Podés cambiar la cantidad o colocar 0.
+Cada unidad tendrá su propio color y diseño.
 
 </div>
 
+<div id="tallesGrid"></div>
+
 </div>
 
-<label>Color</label>
+<!-- ========================================================= -->
 
-<select id="color">
+<!-- PRECIOS Y OBSERVACIONES -->
 
-<option value="">Cargando...</option>
-
-</select>
-
-<label>Diseño</label>
-
-<input id="diseno">
+<!-- ========================================================= -->
 
 <label>Precio compra</label>
 
@@ -478,10 +505,10 @@ step="0.01">
 
 <label>Observaciones</label>
 
-<textarea id="obsProducto"></textarea>
+<textarea
+id="obsProducto"></textarea>
 
-<button
-onclick="agregarCarga()">
+<button onclick="agregarCarga()">
 
 ➕ Agregar a la compra
 
@@ -505,8 +532,11 @@ Volver
 
 </button>
 
-<div id="estadoCarga"
-class="estado"></div>
+<div
+id="estadoCarga"
+class="estado">
+
+</div>
 
 </div>
 
@@ -581,6 +611,10 @@ let tipoCarga = "individual";
 
 let html5QrCode = null;
 
+let listaColores = [];
+
+let listaDisenos = [];
+
 
 /* ========================================================= */
 /* INICIO */
@@ -610,7 +644,7 @@ function iniciar(){
 
 function ocultarPantallas(){
 
-  const pantallas = [
+  [
 
     "menuPrincipal",
     "pantallaNuevaCompra",
@@ -618,9 +652,7 @@ function ocultarPantallas(){
     "pantallaCarga",
     "pantallaBusqueda"
 
-  ];
-
-  pantallas.forEach(function(id){
+  ].forEach(function(id){
 
     const elemento =
       document.getElementById(id);
@@ -711,6 +743,10 @@ function seleccionarTipoCarga(tipo){
 
   tipoCarga = tipo;
 
+  prendas = [];
+
+  mostrarPrendas();
+
   ocultarPantallas();
 
   document.getElementById(
@@ -755,6 +791,8 @@ function seleccionarTipoCarga(tipo){
 
   cargarColores();
 
+  cargarDisenos();
+
 }
 
 
@@ -778,19 +816,24 @@ function cargarProveedores(){
   .then(function(lista){
 
     const combo =
-      document.getElementById("proveedor");
+      document.getElementById(
+        "proveedor"
+      );
 
     combo.innerHTML =
       '<option value="">Seleccione proveedor</option>';
+
 
     lista.forEach(function(p){
 
       const option =
         document.createElement("option");
 
-      option.value = p.nombre;
+      option.value =
+        p.nombre;
 
-      option.textContent = p.nombre;
+      option.textContent =
+        p.nombre;
 
       combo.appendChild(option);
 
@@ -806,6 +849,10 @@ function cargarProveedores(){
 
 }
 
+
+/* ========================================================= */
+/* GUARDAR PROVEEDOR */
+/* ========================================================= */
 
 function guardarProveedor(){
 
@@ -998,7 +1045,9 @@ function cargarGeneros(){
   .then(function(lista){
 
     const combo =
-      document.getElementById("genero");
+      document.getElementById(
+        "genero"
+      );
 
     combo.innerHTML =
       '<option value="">Seleccione género</option>';
@@ -1009,7 +1058,8 @@ function cargarGeneros(){
       const option =
         document.createElement("option");
 
-      option.value = g.codigo;
+      option.value =
+        g.codigo;
 
       option.textContent =
         g.nombre;
@@ -1024,9 +1074,7 @@ function cargarGeneros(){
       combo.value =
         lista[0].codigo;
 
-      cargarCategorias();
-
-      cargarTalles();
+      cambioGenero();
 
     }
 
@@ -1037,6 +1085,15 @@ function cargarGeneros(){
     console.error(error);
 
   });
+
+}
+
+
+function cambioGenero(){
+
+  cargarTalles();
+
+  cargarCategorias();
 
 }
 
@@ -1103,7 +1160,9 @@ function cargarTalles(){
 function cargarTallesIndividual(lista){
 
   const combo =
-    document.getElementById("talle");
+    document.getElementById(
+      "talle"
+    );
 
   combo.innerHTML =
     '<option value="">Seleccione talle</option>';
@@ -1114,7 +1173,8 @@ function cargarTallesIndividual(lista){
     const option =
       document.createElement("option");
 
-    option.value = t.talle;
+    option.value =
+      t.talle;
 
     option.textContent =
       t.talle;
@@ -1125,6 +1185,10 @@ function cargarTallesIndividual(lista){
 
 }
 
+
+/* ========================================================= */
+/* CURVA: GENERAR TALLE + CANTIDAD */
+/* ========================================================= */
 
 function cargarTallesCurva(lista){
 
@@ -1138,21 +1202,28 @@ function cargarTallesCurva(lista){
 
   lista.forEach(function(t){
 
-    const item =
+    const contenedor =
       document.createElement("div");
 
-    item.className =
-      "talle-item";
+    contenedor.className =
+      "curva-talle";
 
 
-    const nombre =
+    const titulo =
       document.createElement("div");
 
-    nombre.className =
-      "talle-nombre";
+    titulo.className =
+      "curva-talle-titulo";
 
-    nombre.textContent =
+    titulo.textContent =
       t.talle;
+
+
+    const cantidadLabel =
+      document.createElement("label");
+
+    cantidadLabel.textContent =
+      "Cantidad";
 
 
     const cantidad =
@@ -1167,17 +1238,402 @@ function cargarTallesCurva(lista){
     cantidad.value = "1";
 
     cantidad.className =
-      "talle-cantidad";
+      "cantidad-talle";
 
     cantidad.dataset.talle =
       t.talle;
 
 
-    item.appendChild(nombre);
+    const prendasDiv =
+      document.createElement("div");
 
-    item.appendChild(cantidad);
+    prendasDiv.className =
+      "prendas-curva";
 
-    grid.appendChild(item);
+
+    cantidad.addEventListener(
+      "input",
+      function(){
+
+        actualizarPrendasCurva(
+          contenedor,
+          t.talle,
+          cantidad,
+          prendasDiv
+        );
+
+      }
+    );
+
+
+    contenedor.appendChild(titulo);
+
+    contenedor.appendChild(
+      cantidadLabel
+    );
+
+    contenedor.appendChild(
+      cantidad
+    );
+
+    contenedor.appendChild(
+      prendasDiv
+    );
+
+    grid.appendChild(
+      contenedor
+    );
+
+
+    actualizarPrendasCurva(
+      contenedor,
+      t.talle,
+      cantidad,
+      prendasDiv
+    );
+
+  });
+
+}
+
+
+/* ========================================================= */
+/* CURVA: CREAR CADA PRENDA */
+/* ========================================================= */
+
+function actualizarPrendasCurva(
+  contenedor,
+  talle,
+  cantidadInput,
+  prendasDiv
+){
+
+  let cantidad =
+    parseInt(
+      cantidadInput.value,
+      10
+    );
+
+
+  if(isNaN(cantidad) || cantidad < 0){
+
+    cantidad = 0;
+
+  }
+
+
+  if(cantidad > 50){
+
+    cantidad = 50;
+
+    cantidadInput.value = 50;
+
+  }
+
+
+  prendasDiv.innerHTML = "";
+
+
+  for(
+    let i=0;
+    i<cantidad;
+    i++
+  ){
+
+    const prenda =
+      document.createElement("div");
+
+    prenda.className =
+      "curva-prenda";
+
+
+    const titulo =
+      document.createElement("div");
+
+    titulo.className =
+      "curva-prenda-titulo";
+
+    titulo.textContent =
+      "Prenda " +
+      (i+1) +
+      " — Talle " +
+      talle;
+
+
+    const colorLabel =
+      document.createElement("label");
+
+    colorLabel.textContent =
+      "Color";
+
+
+    const color =
+      crearSelectColores();
+
+
+    color.className =
+      "color-curva";
+
+
+    const disenoLabel =
+      document.createElement("label");
+
+    disenoLabel.textContent =
+      "Diseño";
+
+
+    const diseno =
+      crearSelectDisenos();
+
+
+    diseno.className =
+      "diseno-curva";
+
+
+    prenda.appendChild(titulo);
+
+    prenda.appendChild(
+      colorLabel
+    );
+
+    prenda.appendChild(
+      color
+    );
+
+    prenda.appendChild(
+      disenoLabel
+    );
+
+    prenda.appendChild(
+      diseno
+    );
+
+
+    prendasDiv.appendChild(
+      prenda
+    );
+
+  }
+
+}
+
+
+/* ========================================================= */
+/* SELECT COLORES */
+/* ========================================================= */
+
+function crearSelectColores(){
+
+  const select =
+    document.createElement("select");
+
+
+  const primera =
+    document.createElement("option");
+
+  primera.value = "";
+
+  primera.textContent =
+    "Seleccione color";
+
+  select.appendChild(
+    primera
+  );
+
+
+  listaColores.forEach(function(c){
+
+    const option =
+      document.createElement("option");
+
+    option.value =
+      c.nombre;
+
+    option.textContent =
+      c.nombre;
+
+    select.appendChild(
+      option
+    );
+
+  });
+
+
+  return select;
+
+}
+
+
+/* ========================================================= */
+/* SELECT DISEÑOS */
+/* ========================================================= */
+
+function crearSelectDisenos(){
+
+  const select =
+    document.createElement("select");
+
+
+  const primera =
+    document.createElement("option");
+
+  primera.value = "";
+
+  primera.textContent =
+    "Seleccione diseño";
+
+  select.appendChild(
+    primera
+  );
+
+
+  listaDisenos.forEach(function(d){
+
+    const option =
+      document.createElement("option");
+
+    option.value =
+      d.nombre;
+
+    option.textContent =
+      d.nombre;
+
+    select.appendChild(
+      option
+    );
+
+  });
+
+
+  return select;
+
+}
+
+
+/* ========================================================= */
+/* COLORES */
+/* ========================================================= */
+
+function cargarColores(){
+
+  fetch(
+
+    URL_SCRIPT +
+    "?accion=colores"
+
+  )
+
+  .then(function(r){
+
+    return r.json();
+
+  })
+
+  .then(function(lista){
+
+    listaColores = lista || [];
+
+
+    const combo =
+      document.getElementById(
+        "colorIndividual"
+      );
+
+
+    combo.innerHTML =
+      '<option value="">Seleccione color</option>';
+
+
+    listaColores.forEach(function(c){
+
+      const option =
+        document.createElement("option");
+
+      option.value =
+        c.nombre;
+
+      option.textContent =
+        c.nombre;
+
+      combo.appendChild(
+        option
+      );
+
+    });
+
+  })
+
+  .catch(function(error){
+
+    console.error(
+      "Error cargando colores:",
+      error
+    );
+
+  });
+
+}
+
+
+/* ========================================================= */
+/* DISEÑOS */
+/* ========================================================= */
+
+function cargarDisenos(){
+
+  fetch(
+
+    URL_SCRIPT +
+    "?accion=dise%C3%B1os"
+
+  )
+
+  .then(function(r){
+
+    return r.json();
+
+  })
+
+  .then(function(lista){
+
+    listaDisenos = lista || [];
+
+
+    const combo =
+      document.getElementById(
+        "disenoIndividual"
+      );
+
+
+    combo.innerHTML =
+      '<option value="">Seleccione diseño</option>';
+
+
+    listaDisenos.forEach(function(d){
+
+      const option =
+        document.createElement("option");
+
+      option.value =
+        d.nombre;
+
+      option.textContent =
+        d.nombre;
+
+      combo.appendChild(
+        option
+      );
+
+    });
+
+  })
+
+  .catch(function(error){
+
+    console.error(
+      "Error cargando diseños:",
+      error
+    );
 
   });
 
@@ -1225,7 +1681,9 @@ function cargarCategorias(){
       option.textContent =
         c.nombre;
 
-      combo.appendChild(option);
+      combo.appendChild(
+        option
+      );
 
     });
 
@@ -1305,64 +1763,10 @@ function cargarSubcategorias(){
       option.textContent =
         s.nombre;
 
-      combo.appendChild(option);
-
-    });
-
-  })
-
-  .catch(function(error){
-
-    console.error(error);
-
-  });
-
-}
-
-
-/* ========================================================= */
-/* COLORES */
-/* ========================================================= */
-
-function cargarColores(){
-
-  fetch(
-
-    URL_SCRIPT +
-    "?accion=colores"
-
-  )
-
-  .then(function(r){
-
-    return r.json();
-
-  })
-
-  .then(function(lista){
-
-    const combo =
-      document.getElementById(
-        "color"
+      combo.appendChild(
+        option
       );
 
-    combo.innerHTML =
-      '<option value="">Seleccione color</option>';
-
-
-    lista.forEach(function(c){
-
-      const option =
-        document.createElement("option");
-
-      option.value =
-        c.nombre;
-
-      option.textContent =
-        c.nombre;
-
-      combo.appendChild(option);
-
     });
 
   })
@@ -1377,7 +1781,7 @@ function cargarColores(){
 
 
 /* ========================================================= */
-/* AGREGAR PRENDA INDIVIDUAL / CURVA */
+/* AGREGAR CARGA */
 /* ========================================================= */
 
 function agregarCarga(){
@@ -1396,16 +1800,6 @@ function agregarCarga(){
     document.getElementById(
       "subcategoria"
     ).value;
-
-  const color =
-    document.getElementById(
-      "color"
-    ).value;
-
-  const diseno =
-    document.getElementById(
-      "diseno"
-    ).value.trim();
 
   const precioCompra =
     document.getElementById(
@@ -1454,113 +1848,255 @@ function agregarCarga(){
 
   if(tipoCarga === "individual"){
 
-    const talle =
-      document.getElementById(
-        "talle"
-      ).value;
-
-
-    if(!talle){
-
-      alert("Seleccione un talle.");
-
-      return;
-
-    }
-
-
-    prendas.push({
-
-      genero:genero,
-
-      categoria:categoria,
-
-      subcategoria:subcategoria,
-
-      talle:talle,
-
-      color:color,
-
-      diseno:diseno,
-
-      precioCompra:precioCompra,
-
-      precioVenta:precioVenta,
-
-      observaciones:observaciones
-
-    });
+    agregarIndividual(
+      genero,
+      categoria,
+      subcategoria,
+      precioCompra,
+      precioVenta,
+      observaciones
+    );
 
   }else{
 
-    const inputs =
-      document.querySelectorAll(
-        ".talle-cantidad"
+    agregarCurva(
+      genero,
+      categoria,
+      subcategoria,
+      precioCompra,
+      precioVenta,
+      observaciones
+    );
+
+  }
+
+}
+
+
+/* ========================================================= */
+/* AGREGAR INDIVIDUAL */
+/* ========================================================= */
+
+function agregarIndividual(
+  genero,
+  categoria,
+  subcategoria,
+  precioCompra,
+  precioVenta,
+  observaciones
+){
+
+  const talle =
+    document.getElementById(
+      "talle"
+    ).value;
+
+  const color =
+    document.getElementById(
+      "colorIndividual"
+    ).value;
+
+  const diseno =
+    document.getElementById(
+      "disenoIndividual"
+    ).value;
+
+
+  if(!talle){
+
+    alert("Seleccione un talle.");
+
+    return;
+
+  }
+
+
+  if(!color){
+
+    alert("Seleccione un color.");
+
+    return;
+
+  }
+
+
+  if(!diseno){
+
+    alert("Seleccione un diseño.");
+
+    return;
+
+  }
+
+
+  prendas.push({
+
+    genero:genero,
+
+    categoria:categoria,
+
+    subcategoria:subcategoria,
+
+    talle:talle,
+
+    color:color,
+
+    diseno:diseno,
+
+    precioCompra:precioCompra,
+
+    precioVenta:precioVenta,
+
+    observaciones:observaciones
+
+  });
+
+
+  mostrarPrendas();
+
+  limpiarDatosPrenda();
+
+}
+
+
+/* ========================================================= */
+/* AGREGAR CURVA */
+/* ========================================================= */
+
+function agregarCurva(
+  genero,
+  categoria,
+  subcategoria,
+  precioCompra,
+  precioVenta,
+  observaciones
+){
+
+  const bloques =
+    document.querySelectorAll(
+      ".curva-talle"
+    );
+
+
+  let total = 0;
+
+
+  bloques.forEach(function(bloque){
+
+    const cantidadInput =
+      bloque.querySelector(
+        ".cantidad-talle"
       );
 
 
-    let cantidadTotal = 0;
+    const cantidad =
+      parseInt(
+        cantidadInput.value,
+        10
+      ) || 0;
 
 
-    inputs.forEach(function(input){
-
-      const cantidad =
-        parseInt(input.value,10) || 0;
+    const talle =
+      cantidadInput.dataset.talle;
 
 
-      const talle =
-        input.dataset.talle;
+    if(cantidad <= 0){
+
+      return;
+
+    }
 
 
-      if(cantidad > 0){
-
-        cantidadTotal += cantidad;
-
-
-        for(
-          let i=0;
-          i<cantidad;
-          i++
-        ){
-
-          prendas.push({
-
-            genero:genero,
-
-            categoria:categoria,
-
-            subcategoria:subcategoria,
-
-            talle:talle,
-
-            color:color,
-
-            diseno:diseno,
-
-            precioCompra:precioCompra,
-
-            precioVenta:precioVenta,
-
-            observaciones:observaciones
-
-          });
-
-        }
-
-      }
-
-    });
+    const filas =
+      bloque.querySelectorAll(
+        ".curva-prenda"
+      );
 
 
-    if(cantidadTotal === 0){
+    if(filas.length !== cantidad){
 
       alert(
-        "Ingrese al menos una cantidad."
+        "Hay un problema con la cantidad del talle " +
+        talle +
+        "."
       );
 
       return;
 
     }
+
+
+    filas.forEach(function(fila){
+
+      const color =
+        fila.querySelector(
+          ".color-curva"
+        ).value;
+
+
+      const diseno =
+        fila.querySelector(
+          ".diseno-curva"
+        ).value;
+
+
+      if(!color){
+
+        throw new Error(
+          "Falta seleccionar color en " +
+          talle
+        );
+
+      }
+
+
+      if(!diseno){
+
+        throw new Error(
+          "Falta seleccionar diseño en " +
+          talle
+        );
+
+      }
+
+
+      prendas.push({
+
+        genero:genero,
+
+        categoria:categoria,
+
+        subcategoria:subcategoria,
+
+        talle:talle,
+
+        color:color,
+
+        diseno:diseno,
+
+        precioCompra:precioCompra,
+
+        precioVenta:precioVenta,
+
+        observaciones:observaciones
+
+      });
+
+
+      total++;
+
+    });
+
+  });
+
+
+  if(total === 0){
+
+    alert(
+      "Ingrese al menos una cantidad."
+    );
+
+    return;
 
   }
 
@@ -1582,6 +2118,15 @@ function mostrarPrendas(){
     document.getElementById(
       "listaPrendas"
     );
+
+
+  if(prendas.length === 0){
+
+    div.innerHTML = "";
+
+    return;
+
+  }
 
 
   div.innerHTML =
@@ -1616,11 +2161,11 @@ function mostrarPrendas(){
       "<br>" +
 
       "Color: " +
-      (p.color || "-") +
+      p.color +
       "<br>" +
 
       "Diseño: " +
-      (p.diseno || "-") +
+      p.diseno +
       "<br>" +
 
       "Compra: $" +
@@ -1639,14 +2184,10 @@ function mostrarPrendas(){
 
 
 /* ========================================================= */
-/* LIMPIAR DATOS DE PRENDA */
+/* LIMPIAR PRENDA */
 /* ========================================================= */
 
 function limpiarDatosPrenda(){
-
-  document.getElementById(
-    "diseno"
-  ).value = "";
 
   document.getElementById(
     "precioCompra"
@@ -1667,15 +2208,46 @@ function limpiarDatosPrenda(){
       "talle"
     ).value = "";
 
+    document.getElementById(
+      "colorIndividual"
+    ).value = "";
+
+    document.getElementById(
+      "disenoIndividual"
+    ).value = "";
+
   }else{
 
     document
       .querySelectorAll(
-        ".talle-cantidad"
+        ".cantidad-talle"
       )
       .forEach(function(input){
 
         input.value = "1";
+
+        const bloque =
+          input.closest(
+            ".curva-talle"
+          );
+
+        const prendasDiv =
+          bloque.querySelector(
+            ".prendas-curva"
+          );
+
+
+        actualizarPrendasCurva(
+
+          bloque,
+
+          input.dataset.talle,
+
+          input,
+
+          prendasDiv
+
+        );
 
       });
 
@@ -1783,9 +2355,13 @@ function guardarCompra(){
     if(resp.ok){
 
       alert(
+
         resp.mensaje +
+
         "\n\nPrendas guardadas: " +
+
         resp.cantidad
+
       );
 
 
@@ -2017,8 +2593,10 @@ function cargarLibreriaCamara(){
     const script =
       document.createElement("script");
 
+
     script.src =
       "https://unpkg.com/html5-qrcode";
+
 
     script.onload =
       function(){
@@ -2026,6 +2604,7 @@ function cargarLibreriaCamara(){
         resolve();
 
       };
+
 
     script.onerror =
       function(){
@@ -2039,7 +2618,9 @@ function cargarLibreriaCamara(){
       };
 
 
-    document.head.appendChild(script);
+    document.head.appendChild(
+      script
+    );
 
   });
 
@@ -2064,8 +2645,10 @@ function iniciarCamara(){
 
   .then(function(){
 
-    if(!navigator.mediaDevices ||
-       !navigator.mediaDevices.getUserMedia){
+    if(
+      !navigator.mediaDevices ||
+      !navigator.mediaDevices.getUserMedia
+    ){
 
       throw new Error(
         "El navegador no permite acceder a la cámara."
@@ -2178,20 +2761,13 @@ function iniciarCamara(){
 
         detenerCamara();
 
-
         buscarProducto();
 
       },
 
       function(error){
 
-        /*
-
-        Errores normales de lectura.
-        No mostramos alertas para no
-        molestar mientras escanea.
-
-        */
+        /* Error normal de lectura */
 
       }
 
@@ -2218,9 +2794,7 @@ function iniciarCamara(){
 
 function detenerCamara(){
 
-  if(
-    html5QrCode
-  ){
+  if(html5QrCode){
 
     try{
 
