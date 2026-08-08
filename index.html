@@ -1,63 +1,602 @@
 <!DOCTYPE html>
-
 <html lang="es">
 
 <head>
 
-<meta charset="UTF-8">
+  <meta charset="UTF-8">
 
-<base target="_top">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1">
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ropita de Cuento - Inventario</title>
 
-<title>Ropita de Cuento - Inventario</title>
+  <script src="https://unpkg.com/html5-qrcode"></script>
 
-<!-- Lector de códigos -->
+  <style>
 
-<script src="https://unpkg.com/html5-qrcode"></script>
+    *{
+      box-sizing:border-box;
+    }
 
-<style> *{ box-sizing:border-box; } body{ font-family:Arial,sans-serif; background:#f3f3f3; margin:0; padding:20px; } .card{ max-width:500px; margin:auto; background:white; border-radius:12px; padding:20px; box-shadow:0 2px 12px rgba(0,0,0,.2); } h2{ text-align:center; margin-top:0; } input{ width:100%; padding:15px; font-size:22px; box-sizing:border-box; margin-top:10px; border:1px solid #ccc; border-radius:8px; } button{ width:100%; padding:15px; margin-top:12px; font-size:20px; border:none; border-radius:8px; cursor:pointer; } #buscar{ background:#1976d2; color:white; } #camara{ background:#43a047; color:white; } #cerrarCamara{ background:#d32f2f; color:white; display:none; } #resultado{ margin-top:20px; font-size:18px; line-height:1.7; } #reader{ margin-top:20px; } #estado{ margin-top:15px; text-align:center; color:#666; font-size:15px; } .producto{ background:#f7f7f7; border-radius:10px; padding:15px; border-left:5px solid #43a047; } .producto h3{ margin-top:0; color:#1976d2; } .fila{ padding:5px 0; border-bottom:1px solid #ddd; } .fila:last-child{ border-bottom:none; } .etiqueta{ font-weight:bold; } .precio{ font-size:24px; font-weight:bold; color:#2e7d32; } .error{ background:#ffebee; color:#c62828; padding:12px; border-radius:8px; } .ok{ background:#e8f5e9; color:#2e7d32; padding:12px; border-radius:8px; } </style>
+    body{
+      font-family:Arial,sans-serif;
+      background:#f3f3f3;
+      margin:0;
+      padding:20px;
+    }
+
+    .card{
+      width:100%;
+      max-width:500px;
+      margin:0 auto;
+      background:white;
+      border-radius:14px;
+      padding:22px;
+      box-shadow:0 2px 12px rgba(0,0,0,.18);
+    }
+
+    h1,
+    h2{
+      text-align:center;
+      margin-top:0;
+    }
+
+    .logo{
+      text-align:center;
+      font-size:25px;
+      font-weight:bold;
+      margin-bottom:25px;
+    }
+
+    button{
+      width:100%;
+      padding:15px;
+      margin-top:12px;
+      font-size:19px;
+      border:none;
+      border-radius:9px;
+      cursor:pointer;
+      color:white;
+    }
+
+    button:active{
+      transform:scale(.98);
+    }
+
+    .verde{
+      background:#43a047;
+    }
+
+    .azul{
+      background:#1976d2;
+    }
+
+    .naranja{
+      background:#ef6c00;
+    }
+
+    .gris{
+      background:#757575;
+    }
+
+    input{
+      width:100%;
+      padding:15px;
+      font-size:20px;
+      margin-top:10px;
+      border:1px solid #ccc;
+      border-radius:8px;
+    }
+
+    #reader{
+      width:100%;
+      margin-top:20px;
+    }
+
+    #resultado{
+      margin-top:20px;
+      line-height:1.7;
+      font-size:18px;
+    }
+
+    .producto{
+      background:#f5f5f5;
+      border-radius:10px;
+      padding:15px;
+      margin-top:15px;
+    }
+
+    .producto-titulo{
+      font-size:21px;
+      font-weight:bold;
+      margin-bottom:10px;
+    }
+
+    .dato{
+      margin-top:5px;
+    }
+
+    .oculto{
+      display:none;
+    }
+
+    .separador{
+      height:1px;
+      background:#ddd;
+      margin:20px 0;
+    }
+
+    .mensaje{
+      text-align:center;
+      margin-top:15px;
+      color:#555;
+    }
+
+  </style>
 
 </head>
 
+
 <body>
 
-<div class="card">
 
-<h2> 📦 INVENTARIO </h2>
+<!-- =====================================================
+     MENU PRINCIPAL
+     ===================================================== -->
 
-<input id="codigo" type="text" autocomplete="off" placeholder="Código de barras">
+<div id="menu" class="card">
 
-<button id="camara" onclick="iniciarCamara()">
+  <div class="logo">
+    📦 ROPITA DE CUENTO
+  </div>
 
-📷 Escanear
+  <h2>Inventario</h2>
 
-</button>
+  <button
+    class="verde"
+    onclick="abrirCarga()">
+    👕 Cargar prenda
+  </button>
 
-<button id="cerrarCamara" onclick="cerrarCamara()">
+  <button
+    class="azul"
+    onclick="mostrarBusqueda()">
+    🔎 Buscar producto
+  </button>
 
-✖ Cerrar cámara
-
-</button>
-
-<button id="buscar" onclick="buscar()">
-
-Buscar
-
-</button>
-
-<div id="reader"></div>
-
-<div id="estado"></div>
-
-<div id="resultado"></div>
+  <button
+    class="naranja"
+    onclick="mostrarEscaner()">
+    📷 Escanear producto
+  </button>
 
 </div>
 
 
+<!-- =====================================================
+     BUSQUEDA / ESCANER
+     ===================================================== -->
+
+<div id="pantallaBusqueda"
+     class="card oculto">
+
+  <h2>🔎 Buscar producto</h2>
+
+  <input
+    id="codigo"
+    type="text"
+    placeholder="Código de barras">
+
+  <button
+    class="azul"
+    onclick="buscar()">
+    Buscar
+  </button>
+
+  <button
+    class="naranja"
+    onclick="iniciarCamara()">
+    📷 Escanear
+  </button>
+
+  <button
+    class="gris"
+    onclick="volverMenu()">
+    ← Volver
+  </button>
+
+  <div id="reader"></div>
+
+  <div id="resultado"></div>
+
+</div>
 
 
-<script> /* ========================================================= URL DE LA WEB APP DE GOOGLE APPS SCRIPT ========================================================= */ const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbwsBLmhm8xSx3vsfYEurnFM9m7D4S8WVLrGRBKRmnsx6uHLRAhEHMvzTUXlCW_kFnpC/exec"; /* ========================================================= VARIABLE DEL ESCÁNER ========================================================= */ let html5QrCode = null; let camaraActiva = false; let buscando = false; /* ========================================================= BUSCAR PRODUCTO ========================================================= */ async function buscar(codigoEscaneado){ if(buscando){ return; } let codigo; /* Si la función recibió un código desde la cámara usamos ese. */ if(codigoEscaneado !== undefined){ codigo = String(codigoEscaneado).trim(); }else{ codigo = document .getElementById("codigo") .value .trim(); } /* Verificamos que haya código. */ if(codigo===""){ mostrarError( "Ingresá un código de barras." ); return; } buscando=true; document.getElementById( "resultado" ).innerHTML=""; document.getElementById( "estado" ).innerText= "🔎 Buscando producto..."; const boton = document.getElementById("buscar"); boton.disabled=true; try{ /* IMPORTANTE: GitHub Pages no puede utilizar google.script.run. Por eso hacemos GET directamente contra la Web App de Apps Script. */ const url = URL_SCRIPT + "?accion=buscar&codigo=" + encodeURIComponent(codigo); const respuesta = await fetch( url, { method:"GET", redirect:"follow", cache:"no-store" } ); if(!respuesta.ok){ throw new Error( "Error HTTP " + respuesta.status ); } const texto = await respuesta.text(); let producto; try{ producto = JSON.parse(texto); }catch(error){ console.error( "Respuesta del servidor:", texto ); throw new Error( "La respuesta del servidor no es JSON válido." ); } /* Si Apps Script devolvió un error. */ if( producto && producto.error ){ throw new Error( producto.error ); } /* Si no existe el producto. */ if(!producto){ mostrarError( "Producto no encontrado." ); document.getElementById( "estado" ).innerText=""; return; } /* Mostramos el producto. */ mostrarProducto(producto); document.getElementById( "estado" ).innerText= "✅ Producto encontrado"; }catch(error){ console.error(error); mostrarError( "No se pudo consultar el inventario: " + error.message ); document.getElementById( "estado" ).innerText=""; }finally{ buscando=false; boton.disabled=false; } } /* ========================================================= MOSTRAR PRODUCTO ========================================================= */ function mostrarProducto(p){ /* Estos son exactamente los campos que devuelve buscarProducto() en codigo.gs. */ const codigo = escapar(p.codigo); const genero = escapar(p.genero); const categoria = escapar(p.categoria); const subcategoria = escapar(p.subcategoria); const talle = escapar(p.talle); const color = escapar(p.color); const diseno = escapar(p.diseño); const estado = escapar(p.estado); const observaciones = escapar(p.observaciones); const precioCompra = formatearPrecio( p.precioCompra ); const precioVenta = formatearPrecio( p.precioVenta ); document.getElementById( "resultado" ).innerHTML= ` <div class="producto"> <h3> 👕 Producto encontrado </h3> <div class="fila"> <span class="etiqueta"> Código: </span> ${codigo} </div> <div class="fila"> <span class="etiqueta"> Género: </span> ${genero} </div> <div class="fila"> <span class="etiqueta"> Categoría: </span> ${categoria} </div> <div class="fila"> <span class="etiqueta"> Subcategoría: </span> ${subcategoria} </div> <div class="fila"> <span class="etiqueta"> Talle: </span> ${talle} </div> <div class="fila"> <span class="etiqueta"> Color: </span> ${color} </div> <div class="fila"> <span class="etiqueta"> Diseño: </span> ${diseno} </div> <div class="fila"> <span class="etiqueta"> Precio compra: </span> $${precioCompra} </div> <div class="fila"> <span class="etiqueta"> Precio venta: </span> <span class="precio"> $${precioVenta} </span> </div> <div class="fila"> <span class="etiqueta"> Estado: </span> ${estado} </div> ${ observaciones ? ` <div class="fila"> <span class="etiqueta"> Observaciones: </span> ${observaciones} </div> ` : "" } </div> `; } /* ========================================================= ESCAPAR HTML ========================================================= */ function escapar(valor){ if( valor === null || valor === undefined ){ return ""; } return String(valor) .replace(/&/g,"&amp;") .replace(/</g,"&lt;") .replace(/>/g,"&gt;") .replace(/"/g,"&quot;") .replace(/'/g,"&#039;"); } /* ========================================================= FORMATO DE PRECIO ========================================================= */ function formatearPrecio(valor){ const numero = Number(valor || 0); return numero.toLocaleString( "es-AR", { minimumFractionDigits:0, maximumFractionDigits:2 } ); } /* ========================================================= INICIAR CÁMARA ========================================================= */ async function iniciarCamara(){ if(camaraActiva){ return; } document.getElementById( "estado" ).innerText= "📷 Iniciando cámara..."; document.getElementById( "reader" ).innerHTML=""; try{ /* Comprobamos que html5-qrcode haya cargado. */ if( typeof Html5Qrcode === "undefined" ){ throw new Error( "No se pudo cargar html5-qrcode." ); } /* Creamos el lector. */ html5QrCode = new Html5Qrcode( "reader" ); camaraActiva=true; document.getElementById( "camara" ).style.display="none"; document.getElementById( "cerrarCamara" ).style.display="block"; /* Configuración. */ const configuracion={ fps:10, qrbox:{ width:280, height:120 }, formatsToSupport:[ Html5QrcodeSupportedFormats.CODE_128, Html5QrcodeSupportedFormats.EAN_13, Html5QrcodeSupportedFormats.EAN_8, Html5QrcodeSupportedFormats.CODE_39, Html5QrcodeSupportedFormats.UPC_A, Html5QrcodeSupportedFormats.UPC_E ] }; /* Arrancamos la cámara trasera. */ await html5QrCode.start( { facingMode:"environment" }, configuracion, function(codigo){ codigo = String(codigo).trim(); if(!codigo){ return; } /* Ponemos el código en el campo. */ document.getElementById( "codigo" ).value=codigo; /* Cerramos cámara. */ cerrarCamara(); /* Buscamos automáticamente. */ buscar(codigo); }, function(error){ /* Los errores de lectura se ignoran porque se producen continuamente mientras busca. */ } ); document.getElementById( "estado" ).innerText= "📷 Apuntá al código de barras."; }catch(error){ console.error(error); camaraActiva=false; html5QrCode=null; document.getElementById( "camara" ).style.display="block"; document.getElementById( "cerrarCamara" ).style.display="none"; document.getElementById( "reader" ).innerHTML=""; mostrarError( "No se pudo iniciar la cámara: " + error.message ); document.getElementById( "estado" ).innerText=""; } } /* ========================================================= CERRAR CÁMARA ========================================================= */ async function cerrarCamara(){ try{ if( html5QrCode && camaraActiva ){ await html5QrCode.stop(); } }catch(error){ console.warn( "No se pudo detener la cámara:", error ); } try{ if(html5QrCode){ html5QrCode.clear(); } }catch(error){ console.warn( "No se pudo limpiar el lector:", error ); } html5QrCode=null; camaraActiva=false; document.getElementById( "reader" ).innerHTML=""; document.getElementById( "camara" ).style.display="block"; document.getElementById( "cerrarCamara" ).style.display="none"; document.getElementById( "estado" ).innerText=""; } /* ========================================================= ENTER PARA BUSCAR ========================================================= */ document .getElementById("codigo") .addEventListener( "keydown", function(event){ if( event.key==="Enter" ){ event.preventDefault(); buscar(); } } ); /* ========================================================= LIMPIAR CÁMARA AL SALIR ========================================================= */ window.addEventListener( "beforeunload", function(){ if(camaraActiva){ cerrarCamara(); } } ); </script>
+<script>
+
+
+/* =====================================================
+   CONFIGURACION
+   ===================================================== */
+
+const URL_SCRIPT =
+"https://script.google.com/macros/s/AKfycbwsBLmhm8xSx3vsfYEurnFM9m7D4S8WVLrGRBKRmnsx6uHLRAhEHMvzTUXlCW_kFnpC/exec";
+
+
+let html5QrCode = null;
+
+
+/* =====================================================
+   MENU
+   ===================================================== */
+
+function abrirCarga(){
+
+  /*
+   * alta.html debe estar en el mismo repositorio
+   * de GitHub Pages que este index.html.
+   */
+
+  window.location.href = "alta.html";
+
+}
+
+
+function mostrarBusqueda(){
+
+  document.getElementById("menu")
+    .classList.add("oculto");
+
+  document.getElementById("pantallaBusqueda")
+    .classList.remove("oculto");
+
+  document.getElementById("resultado")
+    .innerHTML="";
+
+  document.getElementById("codigo")
+    .value="";
+
+}
+
+
+function mostrarEscaner(){
+
+  mostrarBusqueda();
+
+  setTimeout(function(){
+
+    iniciarCamara();
+
+  },300);
+
+}
+
+
+function volverMenu(){
+
+  detenerCamara();
+
+  document.getElementById("pantallaBusqueda")
+    .classList.add("oculto");
+
+  document.getElementById("menu")
+    .classList.remove("oculto");
+
+}
+
+
+/* =====================================================
+   BUSCAR PRODUCTO
+   ===================================================== */
+
+function buscar(){
+
+  const codigo =
+    document.getElementById("codigo")
+    .value
+    .trim();
+
+
+  if(codigo===""){
+
+    alert("Ingrese o escanee un código.");
+
+    return;
+
+  }
+
+
+  document.getElementById("resultado")
+    .innerHTML=
+      "<div class='mensaje'>Buscando producto...</div>";
+
+
+  fetch(
+    URL_SCRIPT +
+    "?accion=buscar&codigo=" +
+    encodeURIComponent(codigo)
+  )
+
+  .then(function(response){
+
+    if(!response.ok){
+
+      throw new Error(
+        "Error HTTP " + response.status
+      );
+
+    }
+
+    return response.json();
+
+  })
+
+  .then(function(producto){
+
+    mostrarProducto(producto);
+
+  })
+
+  .catch(function(error){
+
+    console.error(error);
+
+    document.getElementById("resultado")
+      .innerHTML=
+      "<div class='producto'>" +
+      "<b>Error al consultar el inventario.</b><br>" +
+      error.message +
+      "</div>";
+
+  });
+
+}
+
+
+/* =====================================================
+   MOSTRAR PRODUCTO
+   ===================================================== */
+
+function mostrarProducto(p){
+
+  if(!p){
+
+    document.getElementById("resultado")
+      .innerHTML=
+      "<div class='producto'>" +
+      "<div class='producto-titulo'>" +
+      "❌ Producto no encontrado" +
+      "</div>" +
+      "</div>";
+
+    return;
+
+  }
+
+
+  const precioCompra =
+    Number(p.precioCompra || 0)
+      .toLocaleString("es-AR",{
+        minimumFractionDigits:2
+      });
+
+
+  const precioVenta =
+    Number(p.precioVenta || 0)
+      .toLocaleString("es-AR",{
+        minimumFractionDigits:2
+      });
+
+
+  document.getElementById("resultado")
+    .innerHTML=
+
+    "<div class='producto'>" +
+
+      "<div class='producto-titulo'>" +
+        "📦 " +
+        (p.codigo || "") +
+      "</div>" +
+
+      "<div class='dato'>" +
+        "<b>Descripción:</b> " +
+        (p.descripcion || "") +
+      "</div>" +
+
+      "<div class='dato'>" +
+        "<b>Género:</b> " +
+        (p.genero || "") +
+      "</div>" +
+
+      "<div class='dato'>" +
+        "<b>Categoría:</b> " +
+        (p.categoria || "") +
+      "</div>" +
+
+      "<div class='dato'>" +
+        "<b>Subcategoría:</b> " +
+        (p.subcategoria || "") +
+      "</div>" +
+
+      "<div class='dato'>" +
+        "<b>Talle:</b> " +
+        (p.talle || "") +
+      "</div>" +
+
+      "<div class='dato'>" +
+        "<b>Color:</b> " +
+        (p.color || "") +
+      "</div>" +
+
+      "<div class='dato'>" +
+        "<b>Diseño:</b> " +
+        (p.diseno || "") +
+      "</div>" +
+
+      "<div class='dato'>" +
+        "<b>Precio compra:</b> $" +
+        precioCompra +
+      "</div>" +
+
+      "<div class='dato'>" +
+        "<b>Precio venta:</b> $" +
+        precioVenta +
+      "</div>" +
+
+      "<div class='dato'>" +
+        "<b>Estado:</b> " +
+        (p.estado || "") +
+      "</div>" +
+
+      "<div class='dato'>" +
+        "<b>Observaciones:</b> " +
+        (p.observaciones || "") +
+      "</div>" +
+
+    "</div>";
+
+}
+
+
+/* =====================================================
+   CAMARA
+   ===================================================== */
+
+function iniciarCamara(){
+
+  if(typeof Html5Qrcode === "undefined"){
+
+    alert(
+      "No se pudo cargar el lector de códigos."
+    );
+
+    return;
+
+  }
+
+
+  detenerCamara();
+
+
+  document.getElementById("reader")
+    .innerHTML="";
+
+
+  html5QrCode =
+    new Html5Qrcode("reader");
+
+
+  html5QrCode.start(
+
+    {
+      facingMode:"environment"
+    },
+
+    {
+      fps:10,
+
+      qrbox:{
+        width:280,
+        height:120
+      },
+
+      formatsToSupport:[
+
+        Html5QrcodeSupportedFormats.CODE_128,
+
+        Html5QrcodeSupportedFormats.EAN_13,
+
+        Html5QrcodeSupportedFormats.EAN_8,
+
+        Html5QrcodeSupportedFormats.CODE_39,
+
+        Html5QrcodeSupportedFormats.UPC_A,
+
+        Html5QrcodeSupportedFormats.UPC_E
+
+      ]
+
+    },
+
+    function(codigo){
+
+      document.getElementById("codigo")
+        .value=codigo;
+
+
+      detenerCamara();
+
+
+      buscar();
+
+    },
+
+    function(error){
+
+      /*
+       * Los errores de lectura normales
+       * no se muestran para no llenar la pantalla.
+       */
+
+    }
+
+  )
+
+  .catch(function(error){
+
+    console.error(error);
+
+    document.getElementById("reader")
+      .innerHTML=
+      "<div class='mensaje'>" +
+      "No se pudo iniciar la cámara.<br><br>" +
+      "Verificá que el navegador tenga permiso " +
+      "para utilizar la cámara." +
+      "</div>";
+
+  });
+
+}
+
+
+/* =====================================================
+   DETENER CAMARA
+   ===================================================== */
+
+function detenerCamara(){
+
+  if(
+    html5QrCode &&
+    html5QrCode.isScanning
+  ){
+
+    html5QrCode.stop()
+
+      .then(function(){
+
+        html5QrCode.clear();
+
+        html5QrCode=null;
+
+      })
+
+      .catch(function(error){
+
+        console.log(
+          "Error al detener cámara:",
+          error
+        );
+
+        html5QrCode=null;
+
+      });
+
+  }
+
+}
+
+
+</script>
 
 </body>
 
