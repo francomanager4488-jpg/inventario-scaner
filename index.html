@@ -1,776 +1,184 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="es">
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width, initial-scale=1">
-
-<script src="https://unpkg.com/html5-qrcode"></script>
-
-<style>
-
-body{
-
-font-family:Arial;
-
-background:#f3f3f3;
-
-margin:0;
-
-padding:20px;
-
-}
-
-
-.card{
-
-max-width:500px;
-
-margin:auto;
-
-background:white;
-
-border-radius:12px;
-
-padding:20px;
-
-box-shadow:
-0 2px 12px
-rgba(0,0,0,.2);
-
-}
-
-
-h2{
-
-text-align:center;
-
-margin-top:0;
-
-}
-
-
-input,
-select{
-
-width:100%;
-
-padding:15px;
-
-font-size:20px;
-
-box-sizing:border-box;
-
-margin-top:10px;
-
-border:
-1px solid #ccc;
-
-border-radius:6px;
-
-}
-
-
-button{
-
-width:100%;
-
-padding:15px;
-
-margin-top:12px;
-
-font-size:20px;
-
-border:none;
-
-border-radius:8px;
-
-cursor:pointer;
-
-}
-
-
-#buscar{
-
-background:#1976d2;
-
-color:white;
-
-}
-
-
-#camara{
-
-background:#43a047;
-
-color:white;
-
-}
-
-
-#cambiarEstado{
-
-background:#ff9800;
-
-color:white;
-
-}
-
-
-#resultado{
-
-margin-top:20px;
-
-font-size:18px;
-
-line-height:1.7;
-
-}
-
-
-#reader{
-
-margin-top:20px;
-
-}
-
-
-.estado{
-
-padding:10px;
-
-margin-top:15px;
-
-border-radius:8px;
-
-background:#eeeeee;
-
-}
-
-
-.estadoActual{
-
-font-size:20px;
-
-font-weight:bold;
-
-}
-
-
-.mensaje{
-
-margin-top:15px;
-
-padding:12px;
-
-border-radius:8px;
-
-background:#e8f5e9;
-
-color:#2e7d32;
-
-}
-
-
-.error{
-
-background:#ffebee;
-
-color:#c62828;
-
-}
-
-
-</style>
-
+<base target="_top">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ropita de Cuento - Inventario</title>
+<style> *{ box-sizing:border-box; } body{ font-family:Arial,sans-serif; background:#f3f3f3; margin:0; padding:15px; color:#333; } .card{ max-width:600px; margin:0 auto 20px auto; background:white; padding:20px; border-radius:12px; box-shadow:0 2px 12px rgba(0,0,0,.18); } h2, h3{ text-align:center; } h2{ margin-top:0; } label{ display:block; margin-top:13px; font-weight:bold; } input, select, textarea{ width:100%; padding:12px; margin-top:5px; font-size:16px; border:1px solid #ccc; border-radius:7px; background:white; } textarea{ min-height:80px; resize:vertical; } button{ width:100%; padding:14px; margin-top:12px; font-size:18px; border:0; border-radius:8px; cursor:pointer; color:white; background:#43a047; } button.azul{ background:#1976d2; } button.rojo{ background:#d32f2f; } button.gris{ background:#757575; } button:disabled{ background:#aaa; cursor:not-allowed; } .pantalla{ display:none; } .tipo-carga{ margin-top:15px; padding:15px; background:#f5f5f5; border-radius:10px; border:1px solid #ddd; } .tipo-carga button{ margin-top:10px; } .info{ margin-top:12px; padding:12px; background:#e3f2fd; border-radius:8px; font-size:14px; } .estado{ margin-top:10px; padding:10px; border-radius:7px; display:none; } .estado.ok{ display:block; background:#e8f5e9; color:#2e7d32; } .estado.error{ display:block; background:#ffebee; color:#c62828; } .oculto{ display:none; } .resumen-item{ background:#eeeeee; padding:12px; margin-top:10px; border-radius:8px; } .resumen-item strong{ display:block; margin-bottom:5px; } .curva-talle{ margin-top:15px; padding:12px; background:#f5f5f5; border:1px solid #ddd; border-radius:10px; } .curva-talle-titulo{ font-size:18px; font-weight:bold; margin-bottom:10px; } .curva-prenda{ background:white; border:1px solid #ddd; border-radius:8px; padding:12px; margin-top:10px; } .curva-prenda-titulo{ font-weight:bold; color:#1976d2; margin-bottom:8px; } .codigo{ font-family:monospace; font-size:18px; font-weight:bold; color:#1976d2; } #reader{ margin-top:15px; } .resultado{ margin-top:20px; padding:15px; background:#f5f5f5; border-radius:10px; } </style>
 </head>
-
-
 <body>
-
-
+<!-- ========================================================= -->
+<!-- MENU PRINCIPAL -->
+<!-- ========================================================= -->
+<div id="menuPrincipal" class="pantalla">
 <div class="card">
-
-
-<h2>
-📦 INVENTARIO
-</h2>
-
-
-<input
-id="codigo"
-placeholder="Código de barras"
-autocomplete="off">
-
-
-<button
-id="camara"
-onclick="iniciarCamara()">
-
-📷 Escanear
-
-</button>
-
-
-<button
-id="buscar"
-onclick="buscar()">
-
-🔎 Buscar
-
-</button>
-
-
-<div id="reader"></div>
-
-
-<div id="resultado"></div>
-
-
+<h2>📦 ROPITA DE CUENTO</h2>
+<button onclick="mostrarNuevaCompra()"> 🛒 Nueva compra </button>
+<button class="azul" onclick="mostrarBusqueda()"> 🔎 Buscar / Escanear producto </button>
 </div>
-
-
-<script>
-
-
-const URL_SCRIPT =
-"https://script.google.com/macros/s/AKfycbwsBLmhm8xSx3vsfYEurnFM9m7D4S8WVLrGRBKRmnsx6uHLRAhEHMvzTUXlCW_kFnpC/exec";
-
-
-let productoActual=null;
-
-let html5QrCode=null;
-
-
-/************************************************************
- * BUSCAR
- ************************************************************/
-
-function buscar(){
-
-const codigo =
-document
-.getElementById("codigo")
-.value
-.trim();
-
-
-if(!codigo){
-
-alert(
-"Ingrese un código."
-);
-
-return;
-
-}
-
-
-document
-.getElementById("resultado")
-.innerHTML=
-"Buscando...";
-
-
-fetch(
-URL_SCRIPT+
-"?accion=buscar&codigo="+
-encodeURIComponent(codigo)
-)
-
-.then(
-r=>r.json()
-)
-
-.then(
-mostrar
-)
-
-.catch(
-error=>{
-
-document
-.getElementById("resultado")
-.innerHTML=
-
-'<div class="error">'+
-'Error al buscar el producto.'+
-'</div>';
-
-console.error(error);
-
-});
-
-}
-
-
-/************************************************************
- * MOSTRAR PRODUCTO
- ************************************************************/
-
-function mostrar(p){
-
-productoActual=p;
-
-
-if(!p){
-
-document
-.getElementById("resultado")
-.innerHTML=
-
-"<h3>Producto no encontrado</h3>";
-
-return;
-
-}
-
-
-document
-.getElementById("resultado")
-.innerHTML=
-
-"<h2>"+
-(p.descripcion || "")+
-"</h2>"+
-
-"<b>Código:</b> "+
-(p.codigo || "")+
-"<br>"+
-
-"<b>Género:</b> "+
-(p.genero || "")+
-"<br>"+
-
-"<b>Categoría:</b> "+
-(p.categoria || "")+
-"<br>"+
-
-"<b>Subcategoría:</b> "+
-(p.subcategoria || "")+
-"<br>"+
-
-"<b>Talle:</b> "+
-(p.talle || "")+
-"<br>"+
-
-"<b>Color:</b> "+
-(p.color || "")+
-"<br>"+
-
-"<b>Diseño:</b> "+
-(p.diseño || "")+
-"<br>"+
-
-"<b>Precio compra:</b> $"+
-(p.precioCompra || 0)+
-"<br>"+
-
-"<b>Precio venta:</b> $"+
-(p.precioVenta || 0)+
-"<br>"+
-
-"<div class='estado'>"+
-
-"<div class='estadoActual'>"+
-"Estado actual: "+
-(p.estado || "")+
-"</div>"+
-
-"<select id='nuevoEstado'>"+
-
-"<option value='Disponible' "+
-(p.estado=="Disponible"?"selected":"")+
-">Disponible</option>"+
-
-"<option value='Defectuoso' "+
-(p.estado=="Defectuoso"?"selected":"")+
-">Defectuoso</option>"+
-
-"<option value='Vendido' "+
-(p.estado=="Vendido"?"selected":"")+
-">Vendido</option>"+
-
-"</select>"+
-
-"<button id='cambiarEstado' "+
-"onclick='cambiarEstado()'>"+
-
-"💾 Cambiar estado"+
-
-"</button>"+
-
-"</div>";
-
-}
-
-
-/************************************************************
- * CAMBIAR ESTADO
- ************************************************************/
-
-function cambiarEstado(){
-
-if(!productoActual){
-
-alert(
-"No hay ningún producto cargado."
-);
-
-return;
-
-}
-
-
-const nuevoEstado =
-document
-.getElementById("nuevoEstado")
-.value;
-
-
-if(
-nuevoEstado==
-productoActual.estado
-){
-
-alert(
-"El producto ya tiene ese estado."
-);
-
-return;
-
-}
-
-
-if(
-nuevoEstado=="Vendido"
-){
-
-const confirmar =
-confirm(
-"¿Confirmar que esta prenda fue vendida?\n\n"+
-"El producto será pasado a la hoja VENTAS."
-);
-
-
-if(!confirmar){
-
-return;
-
-}
-
-}
-
-
-if(
-nuevoEstado=="Defectuoso"
-){
-
-const confirmar =
-confirm(
-"¿Marcar esta prenda como DEFECTUOSA?"
-);
-
-
-if(!confirmar){
-
-return;
-
-}
-
-}
-
-
-const datos={
-
-accion:
-"cambiarEstado",
-
-codigo:
-productoActual.codigo,
-
-estado:
-nuevoEstado
-
-};
-
-
-document
-.getElementById("cambiarEstado")
-.disabled=true;
-
-
-fetch(
-URL_SCRIPT,
-{
-
-method:"POST",
-
-headers:{
-"Content-Type":
-"text/plain;charset=utf-8"
-},
-
-body:
-JSON.stringify(datos)
-
-})
-
-.then(
-r=>r.json()
-)
-
-.then(
-resp=>{
-
-document
-.getElementById("cambiarEstado")
-.disabled=false;
-
-
-if(!resp.ok){
-
-alert(
-resp.mensaje
-);
-
-return;
-
-}
-
-
-if(
-nuevoEstado=="Vendido"
-){
-
-document
-.getElementById("resultado")
-.innerHTML=
-
-"<div class='mensaje'>"+
-"✅ "+resp.mensaje+
-"</div>";
-
-productoActual=null;
-
-document
-.getElementById("codigo")
-.value="";
-
-return;
-
-}
-
-
-productoActual.estado=
-nuevoEstado;
-
-
-mostrar(productoActual);
-
-
-const mensaje =
-document.createElement("div");
-
-
-mensaje.className=
-"mensaje";
-
-
-mensaje.innerHTML=
-"✅ "+
-resp.mensaje;
-
-
-document
-.getElementById("resultado")
-.appendChild(
-mensaje
-);
-
-})
-
-.catch(
-error=>{
-
-document
-.getElementById("cambiarEstado")
-.disabled=false;
-
-alert(
-"Error: "+
-error
-);
-
-});
-
-}
-
-
-/************************************************************
- * CAMARA
- ************************************************************/
-
-function iniciarCamara(){
-
-document
-.getElementById("reader")
-.innerHTML="";
-
-
-if(html5QrCode){
-
-try{
-
-html5QrCode.stop();
-
-}catch(e){}
-
-}
-
-
-html5QrCode =
-new Html5Qrcode(
-"reader"
-);
-
-
-navigator
-.mediaDevices
-.getUserMedia({
-
-video:{
-facingMode:"environment"
-}
-
-})
-
-.then(
-stream=>{
-
-stream
-.getTracks()
-.forEach(
-track=>track.stop()
-);
-
-
-html5QrCode
-.start(
-
-{
-facingMode:{
-ideal:"environment"
-}
-},
-
-{
-
-fps:10,
-
-qrbox:{
-width:280,
-height:120
-},
-
-formatsToSupport:[
-
-Html5QrcodeSupportedFormats.CODE_128,
-
-Html5QrcodeSupportedFormats.EAN_13,
-
-Html5QrcodeSupportedFormats.EAN_8,
-
-Html5QrcodeSupportedFormats.CODE_39,
-
-Html5QrcodeSupportedFormats.UPC_A,
-
-Html5QrcodeSupportedFormats.UPC_E
-
-]
-
-},
-
-codigo=>{
-
-document
-.getElementById("codigo")
-.value=codigo;
-
-
-html5QrCode
-.stop()
-.then(
-()=>{
-
-buscar();
-
-}
-)
-.catch(
-()=>{
-
-buscar();
-
-}
-);
-
-},
-
-error=>{}
-
-)
-
-.catch(
-error=>{
-
-alert(
-"No se pudo iniciar el escáner: "+
-error
-);
-
-});
-
-})
-
-.catch(
-error=>{
-
-alert(
-"Permiso de cámara rechazado: "+
-error.name
-);
-
-});
-
-}
-
-
-/************************************************************
- * ENTER EN EL CAMPO
- ************************************************************/
-
-document
-.getElementById("codigo")
-.addEventListener(
-"keydown",
-function(event){
-
-if(
-event.key==="Enter"
-){
-
-buscar();
-
-}
-
-});
-
-</script>
-
+</div>
+<!-- ========================================================= -->
+<!-- NUEVA COMPRA -->
+<!-- ========================================================= -->
+<div id="pantallaNuevaCompra" class="pantalla">
+<div class="card">
+<h2>🛒 Nueva compra</h2>
+<label>Proveedor</label>
+<select id="proveedor">
+<option value=""> Cargando proveedores... </option>
+</select>
+<button class="azul" onclick="mostrarProveedor()">
+🏪 Nuevo proveedor
+</button>
+<label>Fecha</label>
+<input type="date" id="fechaCompra">
+<label>Observaciones</label>
+<textarea id="obsCompra"></textarea>
+<div class="tipo-carga">
+<h3>¿Cómo querés cargar?</h3>
+<button onclick="seleccionarTipoCarga('individual')">
+👕 Prenda individual
+</button>
+<button class="azul" onclick="seleccionarTipoCarga('curva')">
+📦 Cargar por curva
+</button>
+</div>
+<button class="gris" onclick="volverMenu()">
+Volver
+</button>
+</div>
+</div>
+<!-- ========================================================= -->
+<!-- PROVEEDOR -->
+<!-- ========================================================= -->
+<div id="pantallaProveedor" class="pantalla">
+<div class="card">
+<h2>🏪 Nuevo proveedor</h2>
+<label>Nombre</label>
+<input id="provNombre">
+<label>Teléfono</label>
+<input id="provTelefono">
+<label>WhatsApp</label>
+<input id="provWhatsapp">
+<label>Dirección</label>
+<input id="provDireccion">
+<label>Ciudad</label>
+<input id="provCiudad">
+<label>Galería</label>
+<input id="provGaleria">
+<label>Local</label>
+<input id="provLocal">
+<label>Instagram</label>
+<input id="provInstagram">
+<label>Observaciones</label>
+<textarea id="provObs"></textarea>
+<button onclick="guardarProveedor()"> Guardar proveedor </button>
+<button class="rojo" onclick="volverNuevaCompra()">
+Cancelar
+</button>
+<div id="estadoProveedor" class="estado"></div>
+</div>
+</div>
+<!-- ========================================================= -->
+<!-- CARGA -->
+<!-- ========================================================= -->
+<div id="pantallaCarga" class="pantalla">
+<div class="card">
+<h2 id="tituloCarga"> 👕 Prenda individual </h2>
+<div class="info">
+Los géneros, categorías, subcategorías,
+talles, colores y diseños se cargan desde Google Sheets.
+</div>
+<!-- ========================================================= -->
+<!-- DATOS GENERALES -->
+<!-- ========================================================= -->
+<label>Género</label>
+<select id="genero" onchange="cambioGenero()">
+<option value=""> Cargando... </option>
+</select>
+<label>Categoría</label>
+<select id="categoria" onchange="cargarSubcategorias()">
+<option value=""> Cargando... </option>
+</select>
+<label>Subcategoría</label>
+<select id="subcategoria">
+<option value=""> Cargando... </option>
+</select>
+<!-- ========================================================= -->
+<!-- INDIVIDUAL -->
+<!-- ========================================================= -->
+<div id="bloqueIndividual">
+<label>Talle</label>
+<select id="talle">
+<option value=""> Seleccione género primero </option>
+</select>
+<label>Color</label>
+<select id="colorIndividual">
+<option value=""> Cargando colores... </option>
+</select>
+<label>Diseño</label>
+<select id="disenoIndividual">
+<option value=""> Cargando diseños... </option>
+</select>
+</div>
+<!-- ========================================================= -->
+<!-- CURVA -->
+<!-- ========================================================= -->
+<div id="bloqueCurva" class="oculto">
+<label> Talles y cantidades </label>
+<div class="info">
+Cada talle comienza con cantidad 1.
+Podés cambiar la cantidad o colocar 0.
+Cada unidad tendrá su propio color y diseño.
+</div>
+<div id="tallesGrid"></div>
+</div>
+<!-- ========================================================= -->
+<!-- PRECIOS Y OBSERVACIONES -->
+<!-- ========================================================= -->
+<label>Precio compra</label>
+<input type="number" id="precioCompra" min="0" step="0.01">
+<label>Precio venta</label>
+<input type="number" id="precioVenta" min="0" step="0.01">
+<label>Observaciones</label>
+<textarea id="obsProducto"></textarea>
+<button onclick="agregarCarga()">
+➕ Agregar a la compra
+</button>
+<div id="listaPrendas"></div>
+<button class="azul" onclick="guardarCompra()">
+💾 Guardar compra
+</button>
+<button class="gris" onclick="volverNuevaCompra()">
+Volver
+</button>
+<div id="estadoCarga" class="estado">
+</div>
+</div>
+</div>
+<!-- ========================================================= -->
+<!-- BUSQUEDA -->
+<!-- ========================================================= -->
+<div id="pantallaBusqueda" class="pantalla">
+<div class="card">
+<h2>🔎 Inventario</h2>
+<input id="codigoBusqueda" placeholder="Código de barras o código interno" autocomplete="off">
+<button class="azul" onclick="buscarProducto()">
+🔎 Buscar
+</button>
+<button onclick="iniciarCamara()">
+📷 Escanear
+</button>
+<div id="reader"></div>
+<div id="resultadoBusqueda" class="resultado">
+</div>
+<button class="gris" onclick="volverMenu()">
+Volver
+</button>
+</div>
+</div>
+<script> /* ========================================================= */ /* CONFIGURACION */ /* ========================================================= */ const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbwsBLmhm8xSx3vsfYEurnFM9m7D4S8WVLrGRBKRmnsx6uHLRAhEHMvzTUXlCW_kFnpC/exec"; let prendas = []; let tipoCarga = "individual"; let html5QrCode = null; let listaColores = []; let listaDisenos = []; /* ========================================================= */ /* INICIO */ /* ========================================================= */ window.onload = function(){ iniciar(); }; function iniciar(){ ocultarPantallas(); document.getElementById( "menuPrincipal" ).style.display = "block"; } /* ========================================================= */ /* PANTALLAS */ /* ========================================================= */ function ocultarPantallas(){ [ "menuPrincipal", "pantallaNuevaCompra", "pantallaProveedor", "pantallaCarga", "pantallaBusqueda" ].forEach(function(id){ const elemento = document.getElementById(id); if(elemento){ elemento.style.display = "none"; } }); } function volverMenu(){ detenerCamara(); ocultarPantallas(); document.getElementById( "menuPrincipal" ).style.display = "block"; } function mostrarNuevaCompra(){ ocultarPantallas(); document.getElementById( "pantallaNuevaCompra" ).style.display = "block"; cargarProveedores(); } function volverNuevaCompra(){ detenerCamara(); ocultarPantallas(); document.getElementById( "pantallaNuevaCompra" ).style.display = "block"; cargarProveedores(); } function mostrarProveedor(){ ocultarPantallas(); document.getElementById( "pantallaProveedor" ).style.display = "block"; } function mostrarBusqueda(){ ocultarPantallas(); document.getElementById( "pantallaBusqueda" ).style.display = "block"; document.getElementById( "codigoBusqueda" ).focus(); } /* ========================================================= */ /* TIPO DE CARGA */ /* ========================================================= */ function seleccionarTipoCarga(tipo){ tipoCarga = tipo; prendas = []; mostrarPrendas(); ocultarPantallas(); document.getElementById( "pantallaCarga" ).style.display = "block"; if(tipo === "individual"){ document.getElementById( "tituloCarga" ).innerText = "👕 Prenda individual"; document.getElementById( "bloqueIndividual" ).style.display = "block"; document.getElementById( "bloqueCurva" ).classList.add("oculto"); }else{ document.getElementById( "tituloCarga" ).innerText = "📦 Carga por curva"; document.getElementById( "bloqueIndividual" ).style.display = "none"; document.getElementById( "bloqueCurva" ).classList.remove("oculto"); } cargarGeneros(); cargarColores(); cargarDisenos(); } /* ========================================================= */ /* PROVEEDORES */ /* ========================================================= */ function cargarProveedores(){ fetch( URL_SCRIPT + "?accion=proveedores" ) .then(function(r){ return r.json(); }) .then(function(lista){ const combo = document.getElementById( "proveedor" ); combo.innerHTML = '<option value="">Seleccione proveedor</option>'; lista.forEach(function(p){ const option = document.createElement("option"); option.value = p.nombre; option.textContent = p.nombre; combo.appendChild(option); }); }) .catch(function(error){ console.error(error); }); } /* ========================================================= */ /* GUARDAR PROVEEDOR */ /* ========================================================= */ function guardarProveedor(){ const proveedor = { nombre: document.getElementById( "provNombre" ).value.trim(), telefono: document.getElementById( "provTelefono" ).value.trim(), whatsapp: document.getElementById( "provWhatsapp" ).value.trim(), direccion: document.getElementById( "provDireccion" ).value.trim(), ciudad: document.getElementById( "provCiudad" ).value.trim(), galeria: document.getElementById( "provGaleria" ).value.trim(), local: document.getElementById( "provLocal" ).value.trim(), instagram: document.getElementById( "provInstagram" ).value.trim(), observaciones: document.getElementById( "provObs" ).value.trim() }; if(proveedor.nombre === ""){ mostrarEstado( "estadoProveedor", "Ingrese el nombre del proveedor.", false ); return; } fetch( URL_SCRIPT, { method:"POST", headers:{ "Content-Type": "text/plain;charset=utf-8" }, body:JSON.stringify({ accion:"guardarProveedor", proveedor:proveedor }) } ) .then(function(response){ return response.json(); }) .then(function(resp){ if(resp.ok){ mostrarEstado( "estadoProveedor", resp.mensaje || "Proveedor guardado correctamente.", true ); limpiarProveedor(); setTimeout(function(){ volverNuevaCompra(); },800); }else{ mostrarEstado( "estadoProveedor", resp.mensaje || "No se pudo guardar.", false ); } }) .catch(function(error){ mostrarEstado( "estadoProveedor", "Error: " + error, false ); }); } function limpiarProveedor(){ [ "provNombre", "provTelefono", "provWhatsapp", "provDireccion", "provCiudad", "provGaleria", "provLocal", "provInstagram", "provObs" ].forEach(function(id){ const campo = document.getElementById(id); if(campo){ campo.value = ""; } }); } /* ========================================================= */ /* GENEROS */ /* ========================================================= */ function cargarGeneros(){ fetch( URL_SCRIPT + "?accion=generos" ) .then(function(r){ return r.json(); }) .then(function(lista){ const combo = document.getElementById( "genero" ); combo.innerHTML = '<option value="">Seleccione género</option>'; lista.forEach(function(g){ const option = document.createElement("option"); option.value = g.codigo; option.textContent = g.nombre; combo.appendChild(option); }); if(lista.length > 0){ combo.value = lista[0].codigo; cambioGenero(); } }) .catch(function(error){ console.error(error); }); } function cambioGenero(){ cargarTalles(); cargarCategorias(); } /* ========================================================= */ /* TALLES */ /* ========================================================= */ function cargarTalles(){ const genero = document.getElementById( "genero" ).value; if(!genero){ document.getElementById( "talle" ).innerHTML = '<option value="">Seleccione género</option>'; document.getElementById( "tallesGrid" ).innerHTML = ""; return; } fetch( URL_SCRIPT + "?accion=talles&genero=" + encodeURIComponent(genero) ) .then(function(r){ return r.json(); }) .then(function(lista){ cargarTallesIndividual(lista); cargarTallesCurva(lista); }) .catch(function(error){ console.error(error); }); } function cargarTallesIndividual(lista){ const combo = document.getElementById( "talle" ); combo.innerHTML = '<option value="">Seleccione talle</option>'; lista.forEach(function(t){ const option = document.createElement("option"); option.value = t.talle; option.textContent = t.talle; combo.appendChild(option); }); } /* ========================================================= */ /* CURVA: GENERAR TALLE + CANTIDAD */ /* ========================================================= */ function cargarTallesCurva(lista){ const grid = document.getElementById( "tallesGrid" ); grid.innerHTML = ""; lista.forEach(function(t){ const contenedor = document.createElement("div"); contenedor.className = "curva-talle"; const titulo = document.createElement("div"); titulo.className = "curva-talle-titulo"; titulo.textContent = t.talle; const cantidadLabel = document.createElement("label"); cantidadLabel.textContent = "Cantidad"; const cantidad = document.createElement("input"); cantidad.type = "number"; cantidad.min = "0"; cantidad.step = "1"; cantidad.value = "1"; cantidad.className = "cantidad-talle"; cantidad.dataset.talle = t.talle; const prendasDiv = document.createElement("div"); prendasDiv.className = "prendas-curva"; cantidad.addEventListener( "input", function(){ actualizarPrendasCurva( contenedor, t.talle, cantidad, prendasDiv ); } ); contenedor.appendChild(titulo); contenedor.appendChild( cantidadLabel ); contenedor.appendChild( cantidad ); contenedor.appendChild( prendasDiv ); grid.appendChild( contenedor ); actualizarPrendasCurva( contenedor, t.talle, cantidad, prendasDiv ); }); } /* ========================================================= */ /* CURVA: CREAR CADA PRENDA */ /* ========================================================= */ function actualizarPrendasCurva( contenedor, talle, cantidadInput, prendasDiv ){ let cantidad = parseInt( cantidadInput.value, 10 ); if(isNaN(cantidad) || cantidad < 0){ cantidad = 0; } if(cantidad > 50){ cantidad = 50; cantidadInput.value = 50; } prendasDiv.innerHTML = ""; for( let i=0; i<cantidad; i++ ){ const prenda = document.createElement("div"); prenda.className = "curva-prenda"; const titulo = document.createElement("div"); titulo.className = "curva-prenda-titulo"; titulo.textContent = "Prenda " + (i+1) + " — Talle " + talle; const colorLabel = document.createElement("label"); colorLabel.textContent = "Color"; const color = crearSelectColores(); color.className = "color-curva"; const disenoLabel = document.createElement("label"); disenoLabel.textContent = "Diseño"; const diseno = crearSelectDisenos(); diseno.className = "diseno-curva"; prenda.appendChild(titulo); prenda.appendChild( colorLabel ); prenda.appendChild( color ); prenda.appendChild( disenoLabel ); prenda.appendChild( diseno ); prendasDiv.appendChild( prenda ); } } /* ========================================================= */ /* SELECT COLORES */ /* ========================================================= */ function crearSelectColores(){ const select = document.createElement("select"); const primera = document.createElement("option"); primera.value = ""; primera.textContent = "Seleccione color"; select.appendChild( primera ); listaColores.forEach(function(c){ const option = document.createElement("option"); option.value = c.nombre; option.textContent = c.nombre; select.appendChild( option ); }); return select; } /* ========================================================= */ /* SELECT DISEÑOS */ /* ========================================================= */ function crearSelectDisenos(){ const select = document.createElement("select"); const primera = document.createElement("option"); primera.value = ""; primera.textContent = "Seleccione diseño"; select.appendChild( primera ); listaDisenos.forEach(function(d){ const option = document.createElement("option"); option.value = d.nombre; option.textContent = d.nombre; select.appendChild( option ); }); return select; } /* ========================================================= */ /* COLORES */ /* ========================================================= */ function cargarColores(){ fetch( URL_SCRIPT + "?accion=colores" ) .then(function(r){ return r.json(); }) .then(function(lista){ listaColores = lista || []; const combo = document.getElementById( "colorIndividual" ); combo.innerHTML = '<option value="">Seleccione color</option>'; listaColores.forEach(function(c){ const option = document.createElement("option"); option.value = c.nombre; option.textContent = c.nombre; combo.appendChild( option ); }); }) .catch(function(error){ console.error( "Error cargando colores:", error ); }); } /* ========================================================= */ /* DISEÑOS */ /* ========================================================= */ function cargarDisenos(){ fetch( URL_SCRIPT + "?accion=dise%C3%B1os" ) .then(function(r){ return r.json(); }) .then(function(lista){ listaDisenos = lista || []; const combo = document.getElementById( "disenoIndividual" ); combo.innerHTML = '<option value="">Seleccione diseño</option>'; listaDisenos.forEach(function(d){ const option = document.createElement("option"); option.value = d.nombre; option.textContent = d.nombre; combo.appendChild( option ); }); }) .catch(function(error){ console.error( "Error cargando diseños:", error ); }); } /* ========================================================= */ /* CATEGORIAS */ /* ========================================================= */ function cargarCategorias(){ fetch( URL_SCRIPT + "?accion=categorias" ) .then(function(r){ return r.json(); }) .then(function(lista){ const combo = document.getElementById( "categoria" ); combo.innerHTML = '<option value="">Seleccione categoría</option>'; lista.forEach(function(c){ const option = document.createElement("option"); option.value = c.codigo; option.textContent = c.nombre; combo.appendChild( option ); }); if(lista.length > 0){ combo.value = lista[0].codigo; cargarSubcategorias(); } }) .catch(function(error){ console.error(error); }); } /* ========================================================= */ /* SUBCATEGORIAS */ /* ========================================================= */ function cargarSubcategorias(){ const categoria = document.getElementById( "categoria" ).value; if(!categoria){ return; } fetch( URL_SCRIPT + "?accion=subcategorias&categoria=" + encodeURIComponent(categoria) ) .then(function(r){ return r.json(); }) .then(function(lista){ const combo = document.getElementById( "subcategoria" ); combo.innerHTML = '<option value="">Seleccione subcategoría</option>'; lista.forEach(function(s){ const option = document.createElement("option"); option.value = s.codigo; option.textContent = s.nombre; combo.appendChild( option ); }); }) .catch(function(error){ console.error(error); }); } /* ========================================================= */ /* AGREGAR CARGA */ /* ========================================================= */ function agregarCarga(){ const genero = document.getElementById( "genero" ).value; const categoria = document.getElementById( "categoria" ).value; const subcategoria = document.getElementById( "subcategoria" ).value; const precioCompra = document.getElementById( "precioCompra" ).value; const precioVenta = document.getElementById( "precioVenta" ).value; const observaciones = document.getElementById( "obsProducto" ).value.trim(); if(!genero){ alert("Seleccione un género."); return; } if(!categoria){ alert("Seleccione una categoría."); return; } if(!subcategoria){ alert( "Seleccione una subcategoría." ); return; } if(tipoCarga === "individual"){ agregarIndividual( genero, categoria, subcategoria, precioCompra, precioVenta, observaciones ); }else{ agregarCurva( genero, categoria, subcategoria, precioCompra, precioVenta, observaciones ); } } /* ========================================================= */ /* AGREGAR INDIVIDUAL */ /* ========================================================= */ function agregarIndividual( genero, categoria, subcategoria, precioCompra, precioVenta, observaciones ){ const talle = document.getElementById( "talle" ).value; const color = document.getElementById( "colorIndividual" ).value; const diseno = document.getElementById( "disenoIndividual" ).value; if(!talle){ alert("Seleccione un talle."); return; } if(!color){ alert("Seleccione un color."); return; } if(!diseno){ alert("Seleccione un diseño."); return; } prendas.push({ genero:genero, categoria:categoria, subcategoria:subcategoria, talle:talle, color:color, diseno:diseno, precioCompra:precioCompra, precioVenta:precioVenta, observaciones:observaciones }); mostrarPrendas(); limpiarDatosPrenda(); } /* ========================================================= */ /* AGREGAR CURVA */ /* ========================================================= */ function agregarCurva( genero, categoria, subcategoria, precioCompra, precioVenta, observaciones ){ const bloques = document.querySelectorAll( ".curva-talle" ); let total = 0; bloques.forEach(function(bloque){ const cantidadInput = bloque.querySelector( ".cantidad-talle" ); const cantidad = parseInt( cantidadInput.value, 10 ) || 0; const talle = cantidadInput.dataset.talle; if(cantidad <= 0){ return; } const filas = bloque.querySelectorAll( ".curva-prenda" ); if(filas.length !== cantidad){ alert( "Hay un problema con la cantidad del talle " + talle + "." ); return; } filas.forEach(function(fila){ const color = fila.querySelector( ".color-curva" ).value; const diseno = fila.querySelector( ".diseno-curva" ).value; if(!color){ throw new Error( "Falta seleccionar color en " + talle ); } if(!diseno){ throw new Error( "Falta seleccionar diseño en " + talle ); } prendas.push({ genero:genero, categoria:categoria, subcategoria:subcategoria, talle:talle, color:color, diseno:diseno, precioCompra:precioCompra, precioVenta:precioVenta, observaciones:observaciones }); total++; }); }); if(total === 0){ alert( "Ingrese al menos una cantidad." ); return; } mostrarPrendas(); limpiarDatosPrenda(); } /* ========================================================= */ /* MOSTRAR PRENDAS */ /* ========================================================= */ function mostrarPrendas(){ const div = document.getElementById( "listaPrendas" ); if(prendas.length === 0){ div.innerHTML = ""; return; } div.innerHTML = "<h3>Prendas cargadas: " + prendas.length + "</h3>"; prendas.forEach(function(p,i){ const item = document.createElement("div"); item.className = "resumen-item"; item.innerHTML = "<strong>" + (i+1) + ". " + p.genero + " - " + p.categoria + " - " + p.subcategoria + "</strong>" + "Talle: " + p.talle + "<br>" + "Color: " + p.color + "<br>" + "Diseño: " + p.diseno + "<br>" + "Compra: $" + (p.precioCompra || 0) + "<br>" + "Venta: $" + (p.precioVenta || 0); div.appendChild(item); }); } /* ========================================================= */ /* LIMPIAR PRENDA */ /* ========================================================= */ function limpiarDatosPrenda(){ document.getElementById( "precioCompra" ).value = ""; document.getElementById( "precioVenta" ).value = ""; document.getElementById( "obsProducto" ).value = ""; if(tipoCarga === "individual"){ document.getElementById( "talle" ).value = ""; document.getElementById( "colorIndividual" ).value = ""; document.getElementById( "disenoIndividual" ).value = ""; }else{ document .querySelectorAll( ".cantidad-talle" ) .forEach(function(input){ input.value = "1"; const bloque = input.closest( ".curva-talle" ); const prendasDiv = bloque.querySelector( ".prendas-curva" ); actualizarPrendasCurva( bloque, input.dataset.talle, input, prendasDiv ); }); } } /* ========================================================= */ /* GUARDAR COMPRA */ /* ========================================================= */ function guardarCompra(){ if(prendas.length === 0){ alert( "No hay prendas cargadas." ); return; } const compra = { fecha: document.getElementById( "fechaCompra" ).value, proveedor: document.getElementById( "proveedor" ).value, observaciones: document.getElementById( "obsCompra" ).value }; if(!compra.proveedor){ alert( "Seleccione un proveedor." ); return; } const boton = document.querySelector( "#pantallaCarga button.azul" ); if(boton){ boton.disabled = true; } fetch( URL_SCRIPT, { method:"POST", headers:{ "Content-Type": "text/plain;charset=utf-8" }, body:JSON.stringify({ accion:"guardarCompra", compra:compra, prendas:prendas }) } ) .then(function(r){ return r.json(); }) .then(function(resp){ if(resp.ok){ alert( resp.mensaje + "\n\nPrendas guardadas: " + resp.cantidad ); prendas = []; mostrarPrendas(); volverNuevaCompra(); }else{ alert( resp.mensaje || "No se pudo guardar." ); } }) .catch(function(error){ alert( "Error al guardar: " + error ); }) .finally(function(){ if(boton){ boton.disabled = false; } }); } /* ========================================================= */ /* ESTADOS */ /* ========================================================= */ function mostrarEstado( id, mensaje, correcto ){ const elemento = document.getElementById(id); if(!elemento){ return; } elemento.textContent = mensaje; elemento.className = "estado " + ( correcto ? "ok" : "error" ); } /* ========================================================= */ /* BUSQUEDA */ /* ========================================================= */ function buscarProducto(){ const codigo = document.getElementById( "codigoBusqueda" ).value.trim(); if(!codigo){ alert( "Ingrese un código." ); return; } const resultado = document.getElementById( "resultadoBusqueda" ); resultado.innerHTML = "Buscando..."; fetch( URL_SCRIPT + "?codigo=" + encodeURIComponent(codigo) ) .then(function(r){ return r.json(); }) .then(function(p){ mostrarResultado(p); }) .catch(function(error){ resultado.innerHTML = "<b>Error:</b><br>" + error; }); } function mostrarResultado(p){ const resultado = document.getElementById( "resultadoBusqueda" ); if(!p){ resultado.innerHTML = "<h3>Producto no encontrado</h3>"; return; } resultado.innerHTML = "<h3>Producto encontrado</h3>" + "<b>Código:</b> " + p.codigo + "<br><br>" + "<b>Género:</b> " + p.genero + "<br>" + "<b>Categoría:</b> " + p.categoria + "<br>" + "<b>Subcategoría:</b> " + p.subcategoria + "<br>" + "<b>Talle:</b> " + p.talle + "<br>" + "<b>Color:</b> " + p.color + "<br>" + "<b>Diseño:</b> " + p.diseño + "<br>" + "<b>Precio compra:</b> $" + p.precioCompra + "<br>" + "<b>Precio venta:</b> $" + p.precioVenta + "<br>" + "<b>Estado:</b> " + p.estado + "<br><br>" + "<span class='codigo'>" + p.codigo + "</span>"; } /* ========================================================= */ /* CAMARA */ /* ========================================================= */ function cargarLibreriaCamara(){ return new Promise(function(resolve,reject){ if(window.Html5Qrcode){ resolve(); return; } const script = document.createElement("script"); script.src = "https://unpkg.com/html5-qrcode"; script.onload = function(){ resolve(); }; script.onerror = function(){ reject( new Error( "No se pudo cargar html5-qrcode." ) ); }; document.head.appendChild( script ); }); } function iniciarCamara(){ const reader = document.getElementById( "reader" ); reader.innerHTML = "<div style='padding:15px;text-align:center'>" + "Solicitando cámara..." + "</div>"; cargarLibreriaCamara() .then(function(){ if( !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia ){ throw new Error( "El navegador no permite acceder a la cámara." ); } return navigator.mediaDevices.getUserMedia({ video:{ facingMode:{ ideal:"environment" } } }); }) .then(function(stream){ stream .getTracks() .forEach(function(track){ track.stop(); }); reader.innerHTML = ""; html5QrCode = new Html5Qrcode("reader"); const formatos = []; if( typeof Html5QrcodeSupportedFormats !== "undefined" ){ formatos.push( Html5QrcodeSupportedFormats.CODE_128 ); formatos.push( Html5QrcodeSupportedFormats.EAN_13 ); formatos.push( Html5QrcodeSupportedFormats.EAN_8 ); formatos.push( Html5QrcodeSupportedFormats.CODE_39 ); formatos.push( Html5QrcodeSupportedFormats.UPC_A ); formatos.push( Html5QrcodeSupportedFormats.UPC_E ); } const config = { fps:10, qrbox:{ width:280, height:120 } }; if(formatos.length > 0){ config.formatsToSupport = formatos; } return html5QrCode.start( { facingMode:{ ideal:"environment" } }, config, function(codigo){ document.getElementById( "codigoBusqueda" ).value = codigo; detenerCamara(); buscarProducto(); }, function(error){ /* Error normal de lectura */ } ); }) .catch(function(error){ reader.innerHTML = "<div style='color:#c62828;padding:15px'>" + "<b>No se pudo iniciar la cámara.</b><br>" + error.message + "</div>"; }); } function detenerCamara(){ if(html5QrCode){ try{ html5QrCode .stop() .then(function(){ html5QrCode = null; }) .catch(function(){ html5QrCode = null; }); }catch(error){ html5QrCode = null; } } const reader = document.getElementById( "reader" ); if(reader){ reader.innerHTML = ""; } } </script>
 </body>
-
 </html>
+
